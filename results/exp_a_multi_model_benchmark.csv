@@ -1,0 +1,6 @@
+Model Family,Model Name,MAE,RMSE,WAPE (%),MASE
+GBDT Ensemble,LightGBM Quantile (P50),8725.8,11374.44,26.01,1.3544
+Hybrid Ensemble,Weighted Ensemble (LGBM+Ridge+DTR),8835.07,11587.93,26.34,1.3713
+Kernel SVM,Support Vector Regressor (SVR),10473.82,12903.59,31.22,1.6257
+Linear,Ridge Linear Regression (LR),10642.92,13486.72,31.73,1.6519
+Single Tree,Decision Tree Regressor (DTR),11164.52,13889.62,33.28,1.7329

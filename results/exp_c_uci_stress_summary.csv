@@ -1,0 +1,8 @@
+Scenario,Sales Impact,COGS Impact,Collection Lag Shift,First Breach Date,Total Breach Days,First Insolvent Date,Insolvent Days,Min Cash Balance ($),Max Cash Shortfall ($),Ending Cash Balance ($)
+Base Case (Status Quo),+0%,+0%,+0 days,2011-01-16,2,None,0,43075.3,6924.7,2311921.91
+C1: Sales Contraction (-20%),-20%,+0%,+0 days,2011-01-15,4,None,0,30060.24,19939.76,1707137.53
+C1: Severe Sales Drop (-30%),-30%,+0%,+0 days,2011-01-15,6,None,0,23552.71,26447.29,1404745.34
+C2: Supplier Cost Spike (+20%),+0%,+20%,+0 days,2011-01-08,71,2011-01-09,35,-203826.56,253826.56,1196396.96
+C3: Liquidity Freeze (+7d Delay),+0%,+0%,+7 days,None,0,None,0,94800.96,0.0,2330442.89
+C3: Severe Delay (+14d Delay),+0%,+0%,+14 days,None,0,None,0,94800.96,0.0,2306779.49
+C4: Compound Crisis (Black Swan),-25%,+15%,+7 days,None,0,None,0,58795.77,0.0,942349.39

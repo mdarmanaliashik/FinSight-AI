@@ -1,0 +1,4 @@
+model_name,Evaluations,Tool_Dispatch_Acc,Parameter_Exact_Acc,Zero_Hallucination_Rate,Mean_Rubric_Score,Mean_Latency_ms
+GPT-4o,6000,98.27%,97.48%,99.80%,9.87 / 10,667.0 ms
+Gemini-1.5-Pro,6000,98.32%,97.38%,99.83%,9.87 / 10,502.0 ms
+Qwen-2.5-72B,6000,97.17%,96.25%,99.63%,9.80 / 10,602.6 ms

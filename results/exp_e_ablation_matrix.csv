@@ -1,0 +1,6 @@
+Variant ID,Architecture,Forecast WAPE,Breach PR-AUC,Lead Time,Copilot Advisory Score,Marginal Improvement (vs Prior Step)
+E0,Static Dashboard (Status Quo),37.56%,0.784,0.0d,N/A,Reference Baseline
+E1,Forecast Dashboard Alone,25.72%,0.861,1.7d,N/A,Forecast error drops by ~28%; gives initial lead time
+E2,Financial Risk Engine,25.72%,0.853,1.6d,N/A,State engine preserves GAAP invariants; shortfall error -51.9%
+E3,Scenario Stress Engine,25.72%,0.853,1.6d,3.60 (Vanilla),"Unlocks multi-shock testing, but unaugmented LLM hallucinates 100%"
+E4,FinSight AI (Full Architecture),25.72%,0.853,1.6d,9.60 (Grounded),Tool contracts eliminate hallucinations (0%); advisory score +166%

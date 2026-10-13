@@ -1,0 +1,2 @@
+Total Prompts Evaluated,Languages Tested,Language Detection Accuracy,Tool Dispatch Accuracy,Parameter Extraction Accuracy,Zero-Hallucination Rate,Mean Advisory Rubric Score,Mean Latency per Query,95th Percentile Latency
+6000,6,100.00%,91.67%,59.72%,100.00%,8.86 / 10,5.04 ms,7.05 ms

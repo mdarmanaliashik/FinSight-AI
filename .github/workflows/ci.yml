@@ -1,0 +1,47 @@
+name: FinSight AI CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Test Suite & Reproducibility Audit
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run PyTest Golden Test Suite
+        run: |
+          pytest tests -v
+
+      - name: Verify 5 Canonical Research Notebooks
+        run: |
+          python -c "
+          import os, glob, json
+          notebooks = sorted(glob.glob('notebooks/*.ipynb'))
+          assert len(notebooks) == 5, f'Expected 5 canonical notebooks, found {len(notebooks)}: {notebooks}'
+          for nb in notebooks:
+              with open(nb, 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+              assert 'cells' in data, f'{nb} missing cells'
+              print(f'[OK] Verified {nb} ({len(data[\"cells\"])} cells)')
+          "

@@ -1,0 +1,7 @@
+language,language_name,Prompts,Lang_Detect_Acc,Tool_Dispatch_Acc,Param_Extract_Acc,Zero_Hallucination,Mean_Score,Mean_Latency_ms
+bn,Bengali (বাংলা),1000,100.0%,100.0%,52.7%,100.0%,9.05 / 10,6.00 ms
+en,English (Reference),1000,100.0%,100.0%,75.0%,100.0%,9.50 / 10,4.34 ms
+hi,Hindi (हिन्दी),1000,100.0%,75.0%,75.0%,100.0%,8.50 / 10,3.42 ms
+ja,Japanese (日本語),1000,100.0%,100.0%,50.0%,100.0%,9.00 / 10,5.59 ms
+ur,Urdu (اردو),1000,100.0%,75.0%,53.2%,100.0%,8.06 / 10,4.68 ms
+zh,Chinese (中文),1000,100.0%,100.0%,52.4%,100.0%,9.05 / 10,6.17 ms

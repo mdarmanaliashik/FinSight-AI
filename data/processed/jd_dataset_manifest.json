@@ -1,0 +1,26 @@
+{
+  "dataset_name": "JD.com Retail Transaction & Fulfillment Dataset",
+  "provenance": "INFORMS MSOM Data-Driven Research Challenge (JD.com)",
+  "currency": "CNY (\u00a5)",
+  "total_order_rows": 549989,
+  "total_unique_orders": 486928,
+  "total_unique_skus": 9159,
+  "total_gmv_rmb": 45538530.79,
+  "empirical_fulfillment_lag_days": 0.992,
+  "date_range": "2018-03-01 to 2018-03-31",
+  "artifacts": {
+    "platform_series": {
+      "file": "jd_daily_sales_platform.parquet",
+      "sha256": "2a5d18254c0a4e25365ad575ab17904423ff151f6cf542aeeed121430cec7718",
+      "n_days": 31,
+      "total_sales": 45538530.78999999
+    },
+    "sme_series": {
+      "file": "jd_daily_sales_top_sku.parquet",
+      "sha256": "2bece8b6f8d880b58fce676b812462ef736d33cbdcb00748c348dff24d6dc30a",
+      "n_days": 31,
+      "total_sales": 5615431.529999999,
+      "target_sku_id": "068f4481b3"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+Test Name,Status,Max Absolute Error,Variance (100 runs)
+zero_inflow_runway,PASS,0.000000,0.000000
+payroll_collision,PASS,0.000000,0.000000
+settlement_shift_conservation,PASS,0.000000,0.000000
+negative_floor_invariance,PASS,0.000000,0.000000
+idempotency,PASS,0.000000,0.000000

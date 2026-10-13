@@ -1,0 +1,4 @@
+Variant ID,Variant Name,Numerical Correctness (/2),Evidence Grounding (/2),Actionability (/2),Total Score (/10) [95% CI],Critical Failure Rate (%),Inter-Rater Cohen's kappa
+D0,D0: Unaugmented Vanilla LLM,0.50,0.00,1.20,"3.60 [3.60, 3.60]",100.0%,0.72
+D1,D1: FinSight AI Tool-Grounded Copilot,2.00,2.00,1.80,"9.60 [9.60, 9.60]",0.0%,0.94
+D2,D2: Tool-Grounded + RAG Playbook,2.00,2.00,1.90,"9.70 [9.70, 9.70]",0.0%,0.96

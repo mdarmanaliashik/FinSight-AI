@@ -1,0 +1,25 @@
+Dataset,Horizon,Model ID,Model Name,MAE,RMSE,WAPE (%),sMAPE (%),MASE,80% Coverage,MPIW,DM p-value
+Olist Platform (B2C),14 Days,A0,Last-Value Naive,12087.69,15674.25,35.94%,39.20%,1.9327,N/A,N/A,0.1645 (stat=1.40)
+Olist Platform (B2C),14 Days,A1,Seasonal Naive (7d),13908.58 ± 0.00,17765.43,41.36%,43.87%,2.2238,N/A,N/A,Ref
+Olist Platform (B2C),14 Days,A2,EMA / Rolling MA (28d),11219.30,14719.81 ± 0.00,33.36%,35.45%,1.7938 ± 0.0000,N/A,N/A,0.0553 (stat=1.94)
+Olist Platform (B2C),14 Days,A3,LightGBM Quantile (Ours),8916.22,11126.31,26.51%,30.24%,1.4256,42.86% ± 0.00%,14215.24 ± 0.00,0.0430 (stat=2.06)
+Olist Platform (B2C),30 Days,A0,Last-Value Naive,14665.23,18282.10,43.72%,46.48%,2.2994,N/A,N/A,0.5464 (stat=-0.61)
+Olist Platform (B2C),30 Days,A1,Seasonal Naive (7d),13860.97 ± 0.00,17187.97,41.32%,43.91%,2.1733,N/A,N/A,Ref
+Olist Platform (B2C),30 Days,A2,EMA / Rolling MA (28d),10761.09,13191.61,32.08%,35.27%,1.6873,N/A,N/A,0.0695 (stat=1.84)
+Olist Platform (B2C),30 Days,A3,LightGBM Quantile (Ours),9162.44,11596.21,27.31% ± 0.00%,31.27%,1.4366,55.56% ± 0.00%,19201.68 ± 0.00,0.0259 (stat=2.27)
+Olist Platform (B2C),7 Days,A0,Last-Value Naive,9349.14,12091.70,27.81% ± 0.00%,31.84% ± 0.00%,1.5053,N/A,N/A,0.0138 (stat=2.51)
+Olist Platform (B2C),7 Days,A1,Seasonal Naive (7d),12626.17,16313.02,37.56%,40.15%,2.0329,N/A,N/A,Ref
+Olist Platform (B2C),7 Days,A2,EMA / Rolling MA (28d),11095.47,14499.36,33.01%,35.00%,1.7864,N/A,N/A,0.1937 (stat=1.31)
+Olist Platform (B2C),7 Days,A3,LightGBM Quantile (Ours),8646.30,11065.24,25.72%,29.47%,1.3921,43.53% ± 0.00%,12939.21 ± 0.00,0.0022 (stat=3.16)
+UCI (B2B SME OOD),14 Days,A0,Last-Value Naive,15821.61,28555.10,36.47%,29.85%,2.1703,N/A,N/A,0.0001 (stat=4.17)
+UCI (B2B SME OOD),14 Days,A1,Seasonal Naive (7d),26923.32,40999.46,62.06%,87.13%,3.6931,N/A,N/A,Ref
+UCI (B2B SME OOD),14 Days,A2,EMA / Rolling MA (28d),22052.93,32302.80,50.84%,63.95%,3.0251,N/A,N/A,0.0502 (stat=2.01)
+UCI (B2B SME OOD),14 Days,A3,LightGBM Quantile (Ours),26587.17 ± 0.00,37981.76,61.29%,94.74%,3.6470,34.69% ± 0.00%,20795.70 ± 0.00,0.8973 (stat=0.13)
+UCI (B2B SME OOD),30 Days,A0,Last-Value Naive,29274.76,39661.77,65.11%,86.88%,4.0446,N/A,N/A,0.7695 (stat=-0.29)
+UCI (B2B SME OOD),30 Days,A1,Seasonal Naive (7d),27532.72,36660.91,61.23%,90.14%,3.8039,N/A,N/A,Ref
+UCI (B2B SME OOD),30 Days,A2,EMA / Rolling MA (28d),23288.57,33917.83,51.79%,65.08%,3.2175,N/A,N/A,0.5462 (stat=0.61)
+UCI (B2B SME OOD),30 Days,A3,LightGBM Quantile (Ours),28824.01,40120.05,64.10%,101.52%,3.9823,17.02% ± 0.00%,15911.86 ± 0.00,0.8779 (stat=-0.15)
+UCI (B2B SME OOD),7 Days,A0,Last-Value Naive,13822.63,25822.58,31.69% ± 0.00%,26.44% ± 0.00%,1.8899 ± 0.0000,N/A,N/A,0.0001 (stat=4.19)
+UCI (B2B SME OOD),7 Days,A1,Seasonal Naive (7d),26413.09 ± 0.00,40770.27,60.55%,86.28%,3.6113,N/A,N/A,Ref
+UCI (B2B SME OOD),7 Days,A2,EMA / Rolling MA (28d),21284.82,31792.59 ± 0.00,48.79%,61.24% ± 0.00%,2.9102,N/A,N/A,0.0055 (stat=2.91)
+UCI (B2B SME OOD),7 Days,A3,LightGBM Quantile (Ours),28368.20,39222.58,65.03%,99.59%,3.8786,40.00% ± 0.00%,24993.79 ± 0.00,0.2585 (stat=-1.14)

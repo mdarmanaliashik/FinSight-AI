@@ -1,0 +1,5 @@
+category,Prompts,Tool_Dispatch_Acc,Param_Extract_Acc,Mean_Score
+Category_1,1500,100.0%,100.0%,10.00 / 10
+Category_2,1500,100.0%,100.0%,10.00 / 10
+Category_3,1500,100.0%,38.9%,8.78 / 10
+Category_4,1500,66.7%,0.0%,6.67 / 10

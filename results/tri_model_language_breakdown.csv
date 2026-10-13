@@ -1,0 +1,9 @@
+,Tool_Accuracy,Tool_Accuracy,Tool_Accuracy,Mean_Score,Mean_Score,Mean_Score,Mean_Latency,Mean_Latency,Mean_Latency
+model_name,GPT-4o,Gemini-1.5-Pro,Qwen-2.5-72B,GPT-4o,Gemini-1.5-Pro,Qwen-2.5-72B,GPT-4o,Gemini-1.5-Pro,Qwen-2.5-72B
+language,,,,,,,,,
+bn,98.3%,99.5%,95.5%,9.86,9.95,9.68,665ms,499ms,602ms
+en,98.7%,98.5%,98.4%,9.89,9.88,9.88,667ms,501ms,601ms
+hi,98.9%,99.7%,95.0%,9.92,9.96,9.67,667ms,503ms,606ms
+ja,97.0%,96.2%,99.2%,9.81,9.75,9.93,669ms,503ms,603ms
+ur,98.5%,100.0%,95.5%,9.88,9.97,9.71,666ms,502ms,604ms
+zh,98.2%,96.0%,99.4%,9.87,9.74,9.92,668ms,503ms,599ms
