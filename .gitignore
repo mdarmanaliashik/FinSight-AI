@@ -51,6 +51,8 @@ Thumbs.db
 scratch/
 temp/
 tmp/
+catboost_info/
+**/catboost_info/
 
 # ==============================================================================
 # Large Raw E-Commerce Datasets (Exceeding GitHub 100MB Limit)
