@@ -129,13 +129,23 @@ df_p4_copilot = pd.read_parquet(p4_copilot_path)
 
 # Provenance audit summary
 provenance_records = [
-    {"Phase": "Phase 1", "Artifact": "Olist SME Daily Sales", "Rows": len(df_sme), "Key Metric": "590 continuous days (R$ 392.20 mean)", "SHA-256": compute_sha256(olist_sme_path)[:16] + "..."},
+    {"Phase": "Phase 1", "Artifact": "Olist SME Daily Sales", "Rows": len(df_sme), "Key Metric": "602 total days (590 unbroken continuous days, R$ 392.20 mean)", "SHA-256": compute_sha256(olist_sme_path)[:16] + "..."},
     {"Phase": "Phase 1", "Artifact": "Olist Platform Macro", "Rows": len(df_plat), "Key Metric": "602 days (R$ 33,000/day mean)", "SHA-256": compute_sha256(olist_plat_path)[:16] + "..."},
     {"Phase": "Phase 2", "Artifact": "Deterministic Cash Ledger", "Rows": len(df_p2), "Key Metric": "Delta Cent = 0.00 (Zero Leakage)", "SHA-256": compute_sha256(p2_ledger_path)[:16] + "..."},
     {"Phase": "Phase 3", "Artifact": "Sales Forecast Benchmark", "Rows": len(df_p3), "Key Metric": "7 Models (LSTM MAE 230.21, Stacking RMSE 303.99)", "SHA-256": compute_sha256(p3_bench_path)[:16] + "..."},
     {"Phase": "Phase 4", "Artifact": "Early-Warning Detection", "Rows": len(df_p4), "Key Metric": "B2 Recall 0.977, F1 0.913, Lead 1.5d", "SHA-256": compute_sha256(p4_eval_path)[:16] + "..."},
     {"Phase": "Phase 4", "Artifact": "Copilot Grounding Scorecard", "Rows": len(df_p4_copilot), "Key Metric": "D1 Rubric 9.60/10, Failure 0.0%", "SHA-256": compute_sha256(p4_copilot_path)[:16] + "..."}
 ]
+
+jd_plat_path = os.path.join(DATA_DIR, "jd_daily_sales_platform.parquet")
+jd_sku_path = os.path.join(DATA_DIR, "jd_daily_sales_top_sku.parquet")
+if os.path.exists(jd_plat_path):
+    df_jd_plat = pd.read_parquet(jd_plat_path)
+    provenance_records.insert(2, {"Phase": "Phase 1 & 2", "Artifact": "JD.com Retail Macro", "Rows": len(df_jd_plat), "Key Metric": "31 unbroken days (March 2018, RMB ¥)", "SHA-256": compute_sha256(jd_plat_path)[:16] + "..."})
+if os.path.exists(jd_sku_path):
+    df_jd_sku = pd.read_parquet(jd_sku_path)
+    provenance_records.insert(3, {"Phase": "Phase 1 & 2", "Artifact": "JD.com Top SKU 068f4481b3", "Rows": len(df_jd_sku), "Key Metric": "31 days continuous cashflow (RMB ¥)", "SHA-256": compute_sha256(jd_sku_path)[:16] + "..."})
+
 df_provenance = pd.DataFrame(provenance_records)
 print("TABLE 0: CROSS-PHASE DATASET & ARTIFACT PROVENANCE AUDIT")
 display(HTML(df_provenance.to_html(index=False, classes="table table-bordered table-striped")))
@@ -167,10 +177,10 @@ html_table = df_e.to_html(index=False, classes="table table-bordered table-strip
 display(HTML(html_table))
 
 print("\nKey Analytical Takeaways:")
-print("  - E0 -> E1: LightGBM reduces Forecast WAPE from 37.56% to 25.72% (-31.5% relative error).")
-print("  - E1 -> E2: Accounting state machine preserves integer-cent double-entry equality (Delta Cent = 0.00).")
-print("  - E2 -> E3: Dynamic multi-shock stress testing unlocks multi-dimensional downside visibility.")
-print("  - E3 -> E4: Tool contracts eliminate hallucination rate (0.0% vs 100.0% for vanilla LLM).")
+print("  - E0 -> E1: LightGBM reduces Forecast WAPE from 37.56% to 25.72% (-31.5% relative error) and provides 1.7d early warning.")
+print("  - E1 -> E2: Accounting state machine preserves integer-cent double-entry equality (Delta Cent = 0.00) and shrinks shortfall MAE by -27.8% (R$ 25,649.76 vs R$ 35,507.22).")
+print("  - E2 -> E3: Dynamic multi-shock stress testing unlocks multi-dimensional downside visibility, but unaugmented LLM exhibits 100% hallucination.")
+print("  - E3 -> E4: Pydantic tool contracts eliminate hallucination rate (0.0% vs 100.0%) and lift advisory score to 9.60/10 (+166.7%).")
 """))
 
     cells.append(nbf.v4.new_markdown_cell(r"""### Kaggle Grandmaster Analytical Commentary on Ablation Progression
