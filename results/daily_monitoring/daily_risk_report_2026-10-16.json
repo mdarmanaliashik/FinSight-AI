@@ -1,0 +1,25 @@
+{
+  "timestamp_utc": "2026-10-16T19:30:04.366510+00:00",
+  "run_date": "2026-10-16",
+  "opening_cash_brl": 60000.0,
+  "reserve_floor_brl": 50000.0,
+  "baseline_projection": {
+    "ending_cash_brl": -69594.35,
+    "minimum_cash_brl": -69594.35,
+    "breach_risk": true,
+    "breach_days_count": 17,
+    "max_shortfall_brl": 119594.35,
+    "runway_days": 28
+  },
+  "stress_projection": {
+    "scenario": "Moderate Compound Stress",
+    "ending_cash_brl": -64205.05,
+    "minimum_cash_brl": -64205.05,
+    "breach_risk": true,
+    "breach_days_count": 29,
+    "max_shortfall_brl": 114205.05,
+    "runway_days": 6
+  },
+  "alert_triggered": true,
+  "severity": "CRITICAL"
+}
