@@ -136,7 +136,39 @@ if str(PROJECT_ROOT) not in sys.path:
 
 print(f"✅ Project Root successfully initialized: {PROJECT_ROOT}")
 print(f"   Python Executable: {sys.executable}")
-print(f"   Pandas Version: {pd.__version__} | NumPy: {np.__version__}")"""))
+print(f"   Pandas Version: {pd.__version__} | NumPy: {np.__version__}")
+
+# =====================================================================
+# Strict Raw Dataset Upload Verification Gate
+# FinSight AI requires genuine raw uploaded datasets for 100% live computation.
+# Running without raw datasets is strictly prohibited (no mock fallbacks).
+# =====================================================================
+from src.data_pipeline.config import OLIST_DIR, JD_RETAIL_DIR
+
+required_files = {
+    "JD.com Orders": JD_RETAIL_DIR / "JD_order_data.csv",
+    "JD.com Delivery": JD_RETAIL_DIR / "JD_delivery_data.csv",
+    "JD.com Users": JD_RETAIL_DIR / "JD_user_data.csv",
+    "Olist Orders": OLIST_DIR / "olist_orders_dataset.csv",
+    "Olist Order Items": OLIST_DIR / "olist_order_items_dataset.csv",
+    "Olist Payments": OLIST_DIR / "olist_order_payments_dataset.csv",
+}
+
+missing_files = [f"{name} -> {path}" for name, path in required_files.items() if not path.exists()]
+if missing_files:
+    raise FileNotFoundError(
+        "❌ [CRITICAL ERROR] RAW DATASETS NOT FOUND!\\n"
+        "This notebook strictly requires genuine raw uploaded datasets and computes everything 100% live.\\n"
+        "Execution without raw datasets is blocked to guarantee scientific integrity.\\n\\n"
+        "Missing required raw CSV files:\\n  - " + "\\n  - ".join(missing_files) + "\\n\\n"
+        "Please upload the raw CSV files into their respective folders before running:\\n"
+        f"  - Olist directory: {OLIST_DIR}\\n"
+        f"  - JD.com directory: {JD_RETAIL_DIR}"
+    )
+
+print("✅ Strict Raw Dataset Verification Passed (100% Live Ingestion Mode):")
+for name, path in required_files.items():
+    print(f"   [FOUND] {name}: {path.name} ({path.stat().st_size / (1024*1024):.2f} MB)")"""))
 
     # =========================================================================
     # Cell 3: Methodological Foundations & Cross-Market Comparison
@@ -177,45 +209,18 @@ The **JD.com Retail** dataset captures 549,989 transactions across 486,928 order
     # Cell 5: JD.com Pricing & Fulfillment Audit Code
     # =========================================================================
     cells.append(nbf.v4.new_code_cell("""# 3.1 Execute JD.com Retail Pricing Reconciliation & Fulfillment Network Audit
-from src.data_pipeline.config import JD_RETAIL_DIR, PROCESSED_DATA_DIR
+from src.data_pipeline.config import JD_RETAIL_DIR
 from src.data_pipeline.jd_loader import audit_jd_pricing_reconciliation, audit_jd_delivery_fulfillment
-import json
 
 orders_csv = JD_RETAIL_DIR / "JD_order_data.csv"
 deliv_csv = JD_RETAIL_DIR / "JD_delivery_data.csv"
 
-# Dual-Mode Execution: Compute from raw CSV if present, else load audited manifest
-if orders_csv.exists() and deliv_csv.exists():
-    pricing_audit = audit_jd_pricing_reconciliation(orders_csv)
-    deliv_audit = audit_jd_delivery_fulfillment(deliv_csv, orders_csv)
-else:
-    with open(PROCESSED_DATA_DIR / "jd_dataset_manifest.json", "r", encoding="utf-8") as f:
-        jd_man = json.load(f)
-    pricing_audit = {
-        "total_order_rows": jd_man["total_order_rows"],
-        "unique_orders": jd_man["total_unique_orders"],
-        "unique_skus": jd_man["total_unique_skus"],
-        "total_units_sold": 669155,
-        "gross_gmv_rmb": 66921390.79,
-        "direct_discount_rmb": 13058231.45,
-        "quantity_discount_rmb": 6077339.42,
-        "bundle_discount_rmb": 423383.58,
-        "coupon_discount_rmb": 1823905.55,
-        "net_gmv_rmb": jd_man["total_gmv_rmb"],
-        "max_pricing_discrepancy": 5.6843e-14
-    }
-    deliv_audit = {
-        "delivery_records": 293229,
-        "unique_delivered_orders": 293204,
-        "mean_fulfillment_days": 1.441,
-        "median_fulfillment_days": jd_man["empirical_fulfillment_lag_days"],
-        "median_fulfillment_hours": 23.8,
-        "p25_fulfillment_days": 0.728,
-        "p75_fulfillment_days": 1.839,
-        "p90_fulfillment_days": 2.925,
-        "same_day_pct": 50.67,
-        "next_day_pct": 78.58
-    }
+if not orders_csv.exists() or not deliv_csv.exists():
+    raise FileNotFoundError(f"❌ Required raw JD.com CSVs not found: {orders_csv}, {deliv_csv}")
+
+# Strictly compute live from raw CSV files (Zero fallback mode)
+pricing_audit = audit_jd_pricing_reconciliation(orders_csv)
+deliv_audit = audit_jd_delivery_fulfillment(deliv_csv, orders_csv)
 
 print("=" * 95)
 print("TABLE 1A: JD.COM MICRO-PRICING DECOMPOSITION & ZERO-ERROR RECONCILIATION")
@@ -256,30 +261,28 @@ display(df_deliv_summary)"""))
     # =========================================================================
     cells.append(nbf.v4.new_code_cell("""# 3.2 JD.com Customer Demographics & Plus Membership Spending Analysis
 users_csv = JD_RETAIL_DIR / "JD_user_data.csv"
-if users_csv.exists() and orders_csv.exists():
-    orders_df = pd.read_csv(orders_csv, usecols=['order_ID', 'user_ID', 'final_unit_price', 'quantity'])
-    orders_df['gmv'] = orders_df['quantity'] * orders_df['final_unit_price']
-    user_orders = orders_df.groupby('user_ID').agg(user_gmv=('gmv', 'sum'), user_orders=('order_ID', 'nunique')).reset_index()
+if not users_csv.exists() or not orders_csv.exists():
+    raise FileNotFoundError(f"❌ Required raw JD.com CSVs not found: {users_csv}, {orders_csv}")
 
-    users_df = pd.read_csv(users_csv)
-    merged_users = pd.merge(users_df, user_orders, on='user_ID', how='inner')
+# Strictly compute live demographics from raw users and orders CSV files
+orders_df = pd.read_csv(orders_csv, usecols=['order_ID', 'user_ID', 'final_unit_price', 'quantity'])
+orders_df['gmv'] = orders_df['quantity'] * orders_df['final_unit_price']
+user_orders = orders_df.groupby('user_ID').agg(user_gmv=('gmv', 'sum'), user_orders=('order_ID', 'nunique')).reset_index()
 
-    plus_stats = merged_users.groupby('plus').agg(
-        n_users=('user_ID', 'count'),
-        mean_gmv=('user_gmv', 'mean'),
-        median_gmv=('user_gmv', 'median'),
-        mean_orders=('user_orders', 'mean')
-    ).reset_index()
-    plus_stats['plus_label'] = plus_stats['plus'].map({0: "Regular Customers", 1: "JD Plus Members"})
-    plus_stats['user_share'] = (plus_stats['n_users'] / len(merged_users) * 100).round(2).astype(str) + "%"
-    plus_stats['mean_gmv'] = "¥" + plus_stats['mean_gmv'].round(2).astype(str)
-    plus_stats['median_gmv'] = "¥" + plus_stats['median_gmv'].round(2).astype(str)
-    plus_stats['mean_orders'] = plus_stats['mean_orders'].round(3)
-else:
-    plus_stats = pd.DataFrame([
-        {"plus_label": "Regular Customers", "n_users": 374663, "user_share": "82.36%", "mean_gmv": "¥95.99", "median_gmv": "¥69.00", "mean_orders": 1.065},
-        {"plus_label": "JD Plus Members", "n_users": 80234, "user_share": "17.64%", "mean_gmv": "¥119.35", "median_gmv": "¥79.90", "mean_orders": 1.096}
-    ])
+users_df = pd.read_csv(users_csv)
+merged_users = pd.merge(users_df, user_orders, on='user_ID', how='inner')
+
+plus_stats = merged_users.groupby('plus').agg(
+    n_users=('user_ID', 'count'),
+    mean_gmv=('user_gmv', 'mean'),
+    median_gmv=('user_gmv', 'median'),
+    mean_orders=('user_orders', 'mean')
+).reset_index()
+plus_stats['plus_label'] = plus_stats['plus'].map({0: "Regular Customers", 1: "JD Plus Members"})
+plus_stats['user_share'] = (plus_stats['n_users'] / len(merged_users) * 100).round(2).astype(str) + "%"
+plus_stats['mean_gmv'] = "¥" + plus_stats['mean_gmv'].round(2).astype(str)
+plus_stats['median_gmv'] = "¥" + plus_stats['median_gmv'].round(2).astype(str)
+plus_stats['mean_orders'] = plus_stats['mean_orders'].round(3)
 
 print("=" * 95)
 print("TABLE 1C: JD.COM CUSTOMER DEMOGRAPHICS & PLUS MEMBERSHIP SPENDING PREMIUM")
@@ -293,11 +296,11 @@ print(f"✅ JD Plus Members spend +24.3% higher average GMV and order +2.9% more
     cells.append(nbf.v4.new_code_cell("""# 3.3 JD.com Daily Aggregation & Unbroken Calendar Series (March 2018)
 from src.data_pipeline.jd_loader import aggregate_jd_daily
 
-if orders_csv.exists() and deliv_csv.exists():
-    daily_jd_plat, daily_jd_sku = aggregate_jd_daily(orders_csv, deliv_csv)
-else:
-    daily_jd_plat = pd.read_parquet(PROCESSED_DATA_DIR / "jd_daily_sales_platform.parquet")
-    daily_jd_sku = pd.read_parquet(PROCESSED_DATA_DIR / "jd_daily_sales_top_sku.parquet")
+if not orders_csv.exists() or not deliv_csv.exists():
+    raise FileNotFoundError(f"❌ Required raw JD.com CSVs not found: {orders_csv}, {deliv_csv}")
+
+# Strictly compute live unbroken daily aggregations directly from raw CSV files
+daily_jd_plat, daily_jd_sku = aggregate_jd_daily(orders_csv, deliv_csv)
 
 print(f"✅ JD.com Platform Macro Series Reindexed: {len(daily_jd_plat)} unbroken days (2018-03-01 to 2018-03-31)")
 print(f"   Platform Total Net Sales: RMB ¥{daily_jd_plat['sales'].sum():,.2f} | Average Daily GMV: RMB ¥{daily_jd_plat['sales'].mean():,.2f}")
@@ -359,40 +362,18 @@ $$\\text{Orders} \\bowtie \\text{Order Items} \\bowtie \\text{Order Payments}$$
     # =========================================================================
     cells.append(nbf.v4.new_code_cell("""# 4.1 Empirical Proof of Join Inflation & Order Status Distribution
 from src.data_pipeline.config import OLIST_DIR
-from src.data_pipeline.olist_loader import audit_join_inflation, analyze_delivery_bias, load_clean_olist_items
+from src.data_pipeline.olist_loader import audit_join_inflation, analyze_delivery_bias
 
 olist_orders_path = OLIST_DIR / "olist_orders_dataset.csv"
 olist_items_path = OLIST_DIR / "olist_order_items_dataset.csv"
 olist_pmts_path = OLIST_DIR / "olist_order_payments_dataset.csv"
 
-if olist_orders_path.exists() and olist_items_path.exists() and olist_pmts_path.exists():
-    join_audit = audit_join_inflation(olist_orders_path, olist_items_path, olist_pmts_path)
-    delivery_bias_df = analyze_delivery_bias(olist_orders_path)
-else:
-    join_audit = {
-        "true_rows": 110197,
-        "naive_rows": 115035,
-        "row_inflation_pct": 4.39,
-        "true_inflow": 15419773.75,
-        "naive_inflow": 16114019.06,
-        "rev_inflation_pct": 4.50,
-        "phantom_revenue": 694245.31,
-        "multi_pmt_orders": 2961,
-        "multi_pmt_pct": 2.98,
-        "multi_item_orders": 9803,
-        "multi_item_pct": 9.86,
-        "both_multi_orders": 275
-    }
-    delivery_bias_df = pd.DataFrame([
-        {"OrderStatus": "delivered", "Count": 96478, "Percentage": 97.02},
-        {"OrderStatus": "shipped", "Count": 1107, "Percentage": 1.11},
-        {"OrderStatus": "canceled", "Count": 625, "Percentage": 0.63},
-        {"OrderStatus": "unavailable", "Count": 609, "Percentage": 0.61},
-        {"OrderStatus": "invoiced", "Count": 314, "Percentage": 0.32},
-        {"OrderStatus": "processing", "Count": 301, "Percentage": 0.30},
-        {"OrderStatus": "created", "Count": 5, "Percentage": 0.01},
-        {"OrderStatus": "approved", "Count": 2, "Percentage": 0.00}
-    ])
+if not olist_orders_path.exists() or not olist_items_path.exists() or not olist_pmts_path.exists():
+    raise FileNotFoundError(f"❌ Required raw Olist CSVs not found in {OLIST_DIR}")
+
+# Strictly compute live join inflation and order status distribution directly from raw CSV files
+join_audit = audit_join_inflation(olist_orders_path, olist_items_path, olist_pmts_path)
+delivery_bias_df = analyze_delivery_bias(olist_orders_path)
 
 print("=" * 95)
 print("TABLE 2A: OLIST JOIN-INFLATION EMPIRICAL AUDIT")
@@ -414,32 +395,19 @@ display(delivery_bias_df.round(2))"""))
     # Cell 11: Olist Seller Slicing Code
     # =========================================================================
     cells.append(nbf.v4.new_code_cell("""# 4.2 Clean Ingestion & Train-Period Seller Selection (k=3)
-from src.data_pipeline.olist_loader import select_sellers_train_only, aggregate_olist_daily
+from src.data_pipeline.olist_loader import load_clean_olist_items, select_sellers_train_only, aggregate_olist_daily
 
-if olist_orders_path.exists() and olist_items_path.exists():
-    df_olist_items = load_clean_olist_items(olist_orders_path, olist_items_path, end_date="2018-08-20")
-    top_sellers_df = select_sellers_train_only(df_olist_items, train_cutoff="2017-12-31", k=3)
-    daily_platform_full = aggregate_olist_daily(df_olist_items, seller_id=None, end_date="2018-08-20")
-    primary_sme_id = top_sellers_df.index[2]  # 4a3ca9315b744ce9f8e9374361493884
-    daily_sme_bench_full = aggregate_olist_daily(df_olist_items, seller_id=primary_sme_id, end_date="2018-08-20")
-    seller_rank1_id = top_sellers_df.index[0]
-    daily_seller1_full = aggregate_olist_daily(df_olist_items, seller_id=seller_rank1_id, end_date="2018-08-20")
-else:
-    daily_platform_full = pd.read_parquet(PROCESSED_DATA_DIR / "olist_daily_sales_platform.parquet")
-    daily_sme_bench_full = pd.read_parquet(PROCESSED_DATA_DIR / "olist_daily_sales_top_seller.parquet")
-    primary_sme_id = "4a3ca9315b744ce9f8e9374361493884"
-    seller_rank1_id = "53243585a1d6dc2643021fd1853d8905"
-    k3_path = PROCESSED_DATA_DIR / "olist_daily_sales_top_sellers_k3.parquet"
-    if k3_path.exists():
-        df_k3 = pd.read_parquet(k3_path)
-        daily_seller1_full = df_k3[df_k3["train_rank"] == 1].copy()
-    else:
-        daily_seller1_full = daily_sme_bench_full.copy()
-    top_sellers_df = pd.DataFrame([
-        {"seller_id": "53243585...", "train_revenue": 185858.39, "train_orders": 238, "train_active_days": 90, "full_revenue": 230587.50, "full_active_days": 147, "full_active_ratio": 0.25},
-        {"seller_id": "7e93a43e...", "train_revenue": 155059.42, "train_orders": 268, "train_active_days": 160, "full_revenue": 170550.00, "full_active_days": 198, "full_active_ratio": 0.33},
-        {"seller_id": "4a3ca931...", "train_revenue": 145094.22, "train_orders": 1097, "train_active_days": 312, "full_revenue": 230702.52, "full_active_days": 529, "full_active_ratio": 0.89}
-    ]).set_index("seller_id")
+if not olist_orders_path.exists() or not olist_items_path.exists():
+    raise FileNotFoundError(f"❌ Required raw Olist CSVs not found in {OLIST_DIR}")
+
+# Strictly compute live clean ingestion, train-only seller ranking, and daily aggregations directly from raw CSV files
+df_olist_items = load_clean_olist_items(olist_orders_path, olist_items_path, end_date="2018-08-20")
+top_sellers_df = select_sellers_train_only(df_olist_items, train_cutoff="2017-12-31", k=3)
+daily_platform_full = aggregate_olist_daily(df_olist_items, seller_id=None, end_date="2018-08-20")
+primary_sme_id = top_sellers_df.index[2]  # 4a3ca9315b744ce9f8e9374361493884
+daily_sme_bench_full = aggregate_olist_daily(df_olist_items, seller_id=primary_sme_id, end_date="2018-08-20")
+seller_rank1_id = top_sellers_df.index[0]
+daily_seller1_full = aggregate_olist_daily(df_olist_items, seller_id=seller_rank1_id, end_date="2018-08-20")
 
 print("=" * 95)
 print("TABLE 3: TOP 3 SME SELLERS IDENTIFIED STRICTLY FROM TRAINING PERIOD (2017)")
