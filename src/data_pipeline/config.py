@@ -31,17 +31,37 @@ def get_project_root() -> Path:
 PROJECT_ROOT = get_project_root()
 DATA_DIR = PROJECT_ROOT / "data"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
-JD_RETAIL_DIR = PROJECT_ROOT / "jd_retail"
-if not JD_RETAIL_DIR.exists():
-    fallback_jd = Path(r"d:\Others\jd_retail")
-    if fallback_jd.exists():
-        JD_RETAIL_DIR = fallback_jd
-    else:
-        JD_RETAIL_DIR = PROJECT_ROOT / "data" / "raw" / "jd_retail"
 
-OLIST_DIR = PROJECT_ROOT / "olist"
-if not OLIST_DIR.exists():
-    OLIST_DIR = Path(r"d:\Others\olist")
+def _resolve_data_dir(candidates):
+    for c in candidates:
+        if c and c.exists():
+            return c
+    return candidates[0]
 
-# Ensure processed directories exist
+# Multi-Environment Candidates for JD Retail
+JD_RETAIL_DIR = _resolve_data_dir([
+    PROJECT_ROOT / "jd_retail",
+    PROJECT_ROOT / "data" / "raw" / "jd_retail",
+    PROJECT_ROOT / "data" / "jd_retail",
+    Path("/kaggle/input/jd-retail"),
+    Path("/kaggle/input/jd-order-data"),
+    Path("/content/jd_retail"),
+    Path(r"d:\Others\jd_retail")
+])
+
+# Multi-Environment Candidates for Olist E-Commerce
+OLIST_DIR = _resolve_data_dir([
+    PROJECT_ROOT / "olist",
+    PROJECT_ROOT / "data" / "raw" / "olist",
+    PROJECT_ROOT / "data" / "raw",
+    PROJECT_ROOT / "data" / "olist",
+    Path("/kaggle/input/brazilian-ecommerce"),
+    Path("/kaggle/input/olist"),
+    Path("/content/olist"),
+    Path("/content/data/raw"),
+    Path(r"d:\Others\olist")
+])
+
+# Ensure processed directory exists
 PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
