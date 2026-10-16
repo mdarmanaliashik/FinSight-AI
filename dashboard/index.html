@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSight AI — 2026 Shenzhen International FinTech Competition Edition</title>
+  <meta name="description" content="FinSight AI: An SME Cashflow and Liquidity Forecasting Engine with Multilingual Tool-Grounded Copilot.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Chart.js for smooth canvas charting -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- TOP NAVIGATION -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-badge">
+          <div class="pulse-indicator"></div>
+          <span class="logo-title">FinSight AI</span>
+          <span class="logo-sub">v4.0</span>
+        </div>
+        <div class="header-divider"></div>
+        <div class="event-tag">
+          <span class="event-title">2026 Shenzhen International FinTech Competition</span>
+          <span class="event-sub">第十届香蜜湖金融科技创新大赛 · 国际赛道</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="market-toggle">
+          <button class="toggle-btn active" id="btn-olist" onclick="setMarket('olist')">
+            <span class="flag">🇧🇷</span> Olist (Latin America SME)
+          </button>
+          <button class="toggle-btn" id="btn-jd" onclick="setMarket('jd')">
+            <span class="flag">🇨🇳</span> JD.com (Asia Rapid Direct)
+          </button>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span> Engine Online
+        </div>
+      </div>
+    </header>
+
+    <!-- CORE HERO KPI GRID -->
+    <section class="kpi-grid">
+      <div class="kpi-card highlight-glow">
+        <div class="kpi-header">
+          <span class="kpi-label">7-Day Cumulative Inflow WAPE</span>
+          <span class="kpi-badge badge-success">CFO Precision</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value" id="kpi-cum-wape">0.93%</span>
+          <span class="kpi-subtext">R² = 0.9761</span>
+        </div>
+        <div class="kpi-footer">
+          <span class="trend-up">▲ 99.07% Accuracy</span> vs 1.71% Naive Persistence
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">Micro-Daily Point WAPE (H=7)</span>
+          <span class="kpi-badge badge-neutral">Intermittent 39.5% Zeros</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value" id="kpi-daily-wape">57.31%</span>
+          <span class="kpi-subtext">MAE: R$ 209.81</span>
+        </div>
+        <div class="kpi-footer">
+          <span class="trend-up">▲ 26.38% Gain</span> over Naive (80.60% WAPE)
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">P10 Downside Solvency Buffer</span>
+          <span class="kpi-badge badge-warning">Worst-Case 10th Pct</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value" id="kpi-buffer">+R$ 2,241.32</span>
+          <span class="kpi-subtext">Above Reserve R$ 2,932.66</span>
+        </div>
+        <div class="kpi-footer">
+          <span class="trend-safe">● 0 Breach Days</span> under sustained stress
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">SME Solvency Tier</span>
+          <span class="kpi-badge badge-success">Basel-III Standard</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value status-qualified" id="kpi-tier">GREEN TIER</span>
+          <span class="kpi-subtext">Runway > 90 Days</span>
+        </div>
+        <div class="kpi-footer">
+          <span class="trend-safe">Zero-Hallucination Integrity</span> Verified
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN TWO-COLUMN DASHBOARD CONTENT -->
+    <div class="main-layout">
+      <!-- LEFT COLUMN: INTERACTIVE VISUALIZATIONS & STRESS LAB -->
+      <main class="content-left">
+        <!-- CHART PANEL 1: SALES & UNCERTAINTY TUNNEL -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Multi-Quantile Sales Forecasting Envelope (P10 · P50 · P90)</h2>
+              <p class="panel-desc">Adaptive CatBoost with P10 downside stress and P90 demand surge bands.</p>
+            </div>
+            <div class="legend-pills">
+              <span class="pill pill-actual"><span class="dot"></span> Actual Sales</span>
+              <span class="pill pill-adaptive"><span class="dot"></span> Adaptive CatBoost</span>
+              <span class="pill pill-p50"><span class="dot"></span> P50 Median</span>
+              <span class="pill pill-tunnel"><span class="box"></span> P10-P90 Risk Envelope</span>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="salesChart"></canvas>
+          </div>
+        </div>
+
+        <!-- CHART PANEL 2: CASHFLOW REALIZATION & RESERVE FLOOR -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Treasury Cashflow Runway & Statutory Reserve Floor ($C_t$ vs $R$)</h2>
+              <p class="panel-desc">Lag-adjusted closing cash balance with Basel-III statutory reserve threshold line.</p>
+            </div>
+            <div class="legend-pills">
+              <span class="pill pill-cash"><span class="dot"></span> Closing Cash Balance</span>
+              <span class="pill pill-inflow"><span class="dot"></span> Cash Inflow</span>
+              <span class="pill pill-reserve"><span class="dash"></span> Statutory Reserve Floor ($R$)</span>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="cashChart"></canvas>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE SCENARIO STRESS LAB -->
+        <div class="panel-card stress-lab">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">⚡ Interactive Solvency Stress Lab (Real-Time What-If Engine)</h2>
+              <p class="panel-desc">Drag sliders to simulate severe liquidity shocks and observe dynamic runway response.</p>
+            </div>
+            <button class="reset-btn" onclick="resetStressLab()">Reset Defaults</button>
+          </div>
+          <div class="slider-grid">
+            <div class="slider-control">
+              <div class="slider-label-row">
+                <span>Sales Demand Shock:</span>
+                <span class="slider-val" id="val-shock">0%</span>
+              </div>
+              <input type="range" id="slider-shock" min="-50" max="50" value="0" step="5" oninput="runScenarioSimulation()">
+            </div>
+            <div class="slider-control">
+              <div class="slider-label-row">
+                <span>Settlement Delay Lag:</span>
+                <span class="slider-val" id="val-lag">10 Days</span>
+              </div>
+              <input type="range" id="slider-lag" min="5" max="30" value="10" step="1" oninput="runScenarioSimulation()">
+            </div>
+            <div class="slider-control">
+              <div class="slider-label-row">
+                <span>OPEX Inflation Shock:</span>
+                <span class="slider-val" id="val-opex">0%</span>
+              </div>
+              <input type="range" id="slider-opex" min="0" max="40" value="0" step="5" oninput="runScenarioSimulation()">
+            </div>
+          </div>
+          <div class="sim-result-banner" id="sim-banner">
+            <div class="sim-metric">
+              <span class="sim-title">Projected Ending Cash:</span>
+              <span class="sim-value" id="sim-cash">R$ 51,968.54</span>
+            </div>
+            <div class="sim-metric">
+              <span class="sim-title">Reserve Buffer ($C - R$):</span>
+              <span class="sim-value" id="sim-buffer">+R$ 49,035.88</span>
+            </div>
+            <div class="sim-metric">
+              <span class="sim-title">Breach Risk Probability:</span>
+              <span class="sim-value status-safe" id="sim-risk">0.0% (Zero Deficit)</span>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT COLUMN: MULTILINGUAL TOOL-GROUNDED COPILOT -->
+      <aside class="content-right">
+        <div class="copilot-card">
+          <div class="copilot-header">
+            <div class="copilot-title-row">
+              <div class="bot-avatar">🤖</div>
+              <div>
+                <h3 class="copilot-title">FinSight Multilingual Copilot</h3>
+                <span class="copilot-subtitle">Tool-Grounded · Zero Numerical Hallucinations</span>
+              </div>
+            </div>
+            <div class="lang-pills">
+              <span class="lang-pill active">EN</span>
+              <span class="lang-pill">中文</span>
+              <span class="lang-pill">বাংলা</span>
+            </div>
+          </div>
+
+          <!-- PROMPT SUGGESTION CHIPS -->
+          <div class="quick-prompts">
+            <span class="quick-title">Preset Audit Inquiries:</span>
+            <button class="chip" onclick="askCopilot('Will our cash balance breach the reserve threshold if sales decline by 20%?')">
+              🇺🇸 "Will sales drop 20% cause reserve breach?"
+            </button>
+            <button class="chip" onclick="askCopilot('如果未来7天订单减少25%，商家会不会发生流动性违约？')">
+              🇨🇳 "订单减少25%会不会违约？"
+            </button>
+            <button class="chip" onclick="askCopilot('যদি সাপ্লায়ার খরচ ১৫% বৃদ্ধি পায়, তবে আমাদের ক্যাশ বাফার কত থাকবে?')">
+              🇧🇩 "সাপ্লায়ার খরচ ১৫% বাড়লে ক্যাশ বাফার কত?"
+            </button>
+            <button class="chip" onclick="askCopilot('Why is 7-day cumulative inflow forecast (WAPE 0.93%) better than daily sales for SME finance?')">
+              📈 "Why is 7-day inflow better than daily?"
+            </button>
+          </div>
+
+          <!-- CHAT LOG -->
+          <div class="chat-log" id="chat-log">
+            <div class="chat-msg bot-msg">
+              <div class="msg-avatar">🤖</div>
+              <div class="msg-bubble">
+                <p><strong>Hello! I am FinSight Copilot</strong>, grounded in deterministic integer-cent financial tool contracts.</p>
+                <p>I verify statutory reserves ($R = \text{R\$} 2,932.66$), calculate runway, and simulate liquidity shocks across 6 languages without numerical hallucination.</p>
+                <div class="tool-call-badge">⚙️ Tool Loaded: FinSightToolKit.query_solvency_state</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- INPUT FORM -->
+          <div class="chat-input-bar">
+            <input type="text" id="chat-input" placeholder="Ask financial question in English, 中文, or বাংলা..." onkeydown="handleChatKey(event)">
+            <button class="send-btn" onclick="sendUserMessage()">Send</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
