@@ -1,24 +1,25 @@
 """
-FinSight AI — Master Programmatic Builder for Phase 4 Notebook
-==============================================================
+FinSight AI — Master Programmatic Builder for Phase 4 Notebook (Kaggle Grandmaster Edition)
+==========================================================================================
 Compiles and pre-renders:
 d:\\Others\\notebooks\\Phase4_Risk_Warning_And_Copilot.ipynb
 
 Features:
  1. Rigorous framing of Hypotheses H2 (Early Warning Superiority) and H4 (Tool Grounding & Zero Hallucination).
  2. Autonomous Dataset Ingestion Gate: Runs end-to-end from uploaded raw dataset or pre-processed parquets.
- 3. Explicit integration with Phase 3 Multi-Quantile Sales Forecasting Outputs (P10 downside, P50 median, P90 upside).
- 4. Experiment B: Cash-flow risk detection benchmark across 4 architectures (B0, B1, B2, B3) with 5-seed zero-leakage holdout evaluation.
- 5. Publication Figures 1A & 1B: 30-Day Liquidity Trajectory, Shaded Breach Window, and Architecture Scorecard.
- 6. Formal Pydantic Function Calling Tool Contracts (get_sales_forecast, get_cashflow_projection, simulate_scenario, get_reserve_status).
- 7. Experiment D: 60-prompt multi-category benchmark comparing D0, D1, D2 with blinded rubric, bootstrap 95% CI, and Cohen's kappa.
- 8. Publication Figures 2A & 2B: 5-Axis Spider Radar Chart and Category-Wise Performance Heatmap.
- 9. Comprehensive Multilingual Omni-Model Suite:
+ 3. Fully portable cross-platform path resolution (Windows, Linux, Colab, Kaggle).
+ 4. Explicit integration with Phase 3 Multi-Quantile Sales Forecasting Outputs (P10 downside, P50 median, P90 upside).
+ 5. Experiment B: Cash-flow risk detection benchmark across 4 architectures (B0, B1, B2, B3) with 5-seed zero-leakage holdout evaluation.
+ 6. Publication Figures 1A, 1B & 1C: 3-Panel Suite (30-Day Runway Breach Window, F1-Score Scorecard, Shortfall MAE Drop).
+ 7. Formal Pydantic Function Calling Tool Contracts (get_sales_forecast, get_cashflow_projection, simulate_scenario, get_reserve_status).
+ 8. Experiment D: 60-prompt multi-category benchmark comparing D0, D1, D2 with blinded rubric, bootstrap 95% CI, and Cohen's kappa.
+ 9. Publication Figures 2A & 2B: 5-Axis Spider Radar Chart and Category-Wise Performance Heatmap.
+ 10. Comprehensive Multilingual Omni-Model Suite:
     - Table 3: 6,000-Prompt Benchmark across 6 Global Languages (English, Bengali, Hindi, Chinese, Urdu, Japanese).
     - Table 3B: Tri-Model LLM Foundation Evaluation (GPT-4o, Gemini 1.5 Pro, Qwen 2.5 72B).
     - Live Interactive Multi-Turn Queries across 4 Scripts (English, Bengali বাংলা, Hindi हिन्दी, Chinese 中文).
- 10. Complete persistence of audited Phase 4 Parquet artifacts for Phase 5.
- 11. ZERO CODE COMMENTS in any code cells (self-documenting, clean Python code).
+ 11. Complete persistence of audited Phase 4 Parquet artifacts for Phase 5.
+ 12. ZERO CODE COMMENTS in any code cells (self-documenting, clean Python code).
 """
 
 import os
@@ -106,7 +107,16 @@ plt.rcParams['font.size'] = 11
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['figure.figsize'] = (14, 6)
 
-PROJECT_ROOT = r"d:\Others"
+current_directory = os.getcwd()
+if os.path.exists(r"d:\Others"):
+    PROJECT_ROOT = r"d:\Others"
+elif os.path.exists(os.path.join(current_directory, "src")):
+    PROJECT_ROOT = current_directory
+elif os.path.exists(os.path.join(os.path.dirname(current_directory), "src")):
+    PROJECT_ROOT = os.path.dirname(current_directory)
+else:
+    PROJECT_ROOT = current_directory
+
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
@@ -310,9 +320,10 @@ print(f"  • Shortfall Estimation Error: R$ {b0_mae:,.2f} (B0) → R$ {b2_mae:,
     # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 3. Publication-Grade Visualizations for Experiment B
 
-The dual-panel figure below illustrates the empirical foundations of Hypothesis $H_2$:
+The 3-panel publication figure below illustrates the empirical foundations of Hypothesis $H_2$:
 1. **Panel A (Left):** 30-Day Forward Cash Runway Trajectory comparing Expected Cash ($P_{50}$ Sales) vs Downside Stress Cash ($P_{10}$ Sales from Phase 3), highlighting the **Actionable Lead-Time Breach Window** prior to minimum reserve violation ($R = \text{R\$} 50,000$).
-2. **Panel B (Right):** Comparative F1-Score and Liquidity Shortfall Estimation Error across all 4 candidate architectures.
+2. **Panel B (Center):** Comparative F1-Score across all 4 candidate architectures showing $B_2$'s superiority.
+3. **Panel C (Right):** Liquidity Shortfall Estimation Error (MAE in R$) showing the **-31.5% deficit reduction** achieved by $B_2$.
 """))
 
     # =======================================================================
@@ -337,11 +348,11 @@ eng_retail = CashFlowEngine(cfg_retail)
 ledger_p50 = eng_retail.simulate(sample_sales, sample_dates)
 ledger_p10 = eng_retail.simulate(sample_sales * 0.72, sample_dates)
 
-fig, axes = plt.subplots(1, 2, figsize=(18, 6), dpi=150)
+fig, axes = plt.subplots(1, 3, figsize=(21, 5.8), dpi=150)
 
-axes[0].plot(sample_dates, ledger_p50["closing_cash"], color="#1f77b4", linewidth=2.5, label="Expected Cash Balance ($P_{50}$ Median Sales)")
-axes[0].plot(sample_dates, ledger_p10["closing_cash"], color="#d62728", linestyle="--", linewidth=2.2, label="Downside Stress Cash ($P_{10}$ Quantile Sales)")
-axes[0].axhline(cfg_retail.min_reserve, color="black", linestyle=":", linewidth=2, label=f"Minimum Reserve Threshold ($R$ = R$ {cfg_retail.min_reserve:,.0f})")
+axes[0].plot(sample_dates, ledger_p50["closing_cash"], color="#1f77b4", linewidth=2.5, label="Expected Cash Balance ($P_{50}$ Median)")
+axes[0].plot(sample_dates, ledger_p10["closing_cash"], color="#d62728", linestyle="--", linewidth=2.2, label="Downside Stress Cash ($P_{10}$ Quantile)")
+axes[0].axhline(cfg_retail.min_reserve, color="black", linestyle=":", linewidth=2, label=f"Reserve Floor ($R$ = R$ {cfg_retail.min_reserve:,.0f})")
 
 axes[0].fill_between(
     sample_dates,
@@ -350,29 +361,42 @@ axes[0].fill_between(
     where=(ledger_p10["closing_cash"] < cfg_retail.min_reserve),
     color="#d62728",
     alpha=0.25,
-    label="Downside Reserve Breach Zone (Actionable Lead Window)"
+    label="Downside Breach Zone (Actionable Lead Window)"
 )
-axes[0].set_title("Figure 1A: 30-Day Forward Cash Runway & Downside Breach Window", fontsize=13, fontweight="bold", pad=12)
-axes[0].set_xlabel("Calendar Date", fontsize=11)
-axes[0].set_ylabel("Closing Cash (R$)", fontsize=11)
-axes[0].legend(loc="lower left", fontsize=10, frameon=True)
+axes[0].set_title("Figure 1A: 30-Day Runway & Breach Window", fontsize=12, fontweight="bold", pad=10)
+axes[0].set_xlabel("Calendar Date", fontsize=10)
+axes[0].set_ylabel("Closing Cash (R$)", fontsize=10)
+axes[0].legend(loc="lower left", fontsize=8.5, frameon=True)
 axes[0].grid(True, alpha=0.3)
 
-arch_names = ["B0: Static", "B1: P50 Forecast", "B2: P10 Engine (Ours)", "B3: Burn Rate"]
+arch_names = ["B0: Static", "B1: P50 Forecast", "B2: P10 Engine", "B3: Burn Rate"]
 f1_scores = [parse_num(df_b.loc[i, "F1-Score"]) for i in range(4)]
 bar_colors = ["#7f7f7f", "#aec7e8", "#2ca02c", "#ffbb78"]
 
-bars = axes[1].bar(arch_names, f1_scores, color=bar_colors, width=0.52, edgecolor="black", linewidth=0.8)
-axes[1].set_title("Figure 1B: Reserve Breach Detection F1-Score Across Architectures", fontsize=13, fontweight="bold", pad=12)
-axes[1].set_ylabel("F1-Score (Holdout Test)", fontsize=11)
+bars1 = axes[1].bar(arch_names, f1_scores, color=bar_colors, width=0.52, edgecolor="black", linewidth=0.8)
+axes[1].set_title("Figure 1B: Breach Detection F1-Score", fontsize=12, fontweight="bold", pad=10)
+axes[1].set_ylabel("F1-Score (Holdout Test)", fontsize=10)
 axes[1].set_ylim(0, 1.15)
 axes[1].grid(True, axis="y", alpha=0.3)
 
-for bar in bars:
+for bar in bars1:
     yval = bar.get_height()
-    axes[1].text(bar.get_x() + bar.get_width() / 2.0, yval + 0.03, f"{yval:.3f}", ha="center", va="bottom", fontweight="bold", fontsize=11)
+    axes[1].text(bar.get_x() + bar.get_width() / 2.0, yval + 0.02, f"{yval:.3f}", ha="center", va="bottom", fontweight="bold", fontsize=10)
 
-plt.subplots_adjust(top=0.90, bottom=0.12, left=0.07, right=0.97, wspace=0.22)
+shortfall_maes = [parse_num(df_b.loc[i, "Shortfall MAE (R$)"]) for i in range(4)]
+mae_colors = ["#d62728", "#aec7e8", "#2ca02c", "#ffbb78"]
+
+bars2 = axes[2].bar(arch_names, shortfall_maes, color=mae_colors, width=0.52, edgecolor="black", linewidth=0.8)
+axes[2].set_title("Figure 1C: Shortfall Estimation Error (MAE R$)", fontsize=12, fontweight="bold", pad=10)
+axes[2].set_ylabel("Shortfall MAE (R$)", fontsize=10)
+axes[2].set_ylim(0, max(shortfall_maes) * 1.20)
+axes[2].grid(True, axis="y", alpha=0.3)
+
+for bar in bars2:
+    yval = bar.get_height()
+    axes[2].text(bar.get_x() + bar.get_width() / 2.0, yval + 800, f"R$ {yval:,.0f}", ha="center", va="bottom", fontweight="bold", fontsize=9.5)
+
+plt.subplots_adjust(top=0.90, bottom=0.14, left=0.06, right=0.98, wspace=0.25)
 plt.show()
 """))
 
@@ -384,13 +408,13 @@ plt.show()
 The empirical testing presented in **Table 1** and **Figure 1** confirms fundamental econometric advantages of proactive quantile cash forecasting over reactive heuristics:
 
 1. **The Cost of Reactive Threshold Monitoring ($B_0$):**
-   * The baseline static threshold rule ($B_0$) achieves a Precision of **0.913**, but its Recall collapses to **0.488 (48.8%)**, meaning that **more than half (51.2%) of all reserve breaches occur completely unheralded**.
+   * The baseline static threshold rule ($B_0$) achieves a Precision of **0.913** and an F1-Score of **0.636**, but its Recall collapses to **0.488 (48.8%)**, meaning that **more than half (51.2%) of all reserve breaches occur completely unheralded**.
    * Critically, $B_0$'s warning lead time is identically **0.0 days**. Because it only flags insolvency after $C_t < R$ has already occurred, the merchant has zero time to deploy defensive liquidity hedges, resulting in technical default.
    * Shortfall estimation error is highest under $B_0$ with an MAE of **R$ 35,507.24**.
 
 2. **The Asymmetry of Financial Risk ($B_2$ vs $B_1$ vs $B_3$):**
    * While point-forecast extrapolation ($B_1$, $P_{50}$) improves Recall to **0.860** and F1 to **0.892**, it misses $14.0\%$ of breaches due to retail demand volatility.
-   * **FinSight AI's Downside Quantile Stress Engine ($B_2$, $P_{10}$)** achieves the highest Recall across all candidates (**0.977 / 97.7%**, a **+100.2% gain** over $B_0$), achieving an overall F1-Score of **0.903–0.913 (+42.0% gain)** and unlocking **1.5 days (36 hours) of actionable lead time**.
+   * **FinSight AI's Downside Quantile Stress Engine ($B_2$, $P_{10}$)** achieves the highest Recall across all candidates (**0.977 / 97.7%**, a **+100.2% gain** over $B_0$), achieving an overall F1-Score of **0.903–0.913 (+42.0% gain over 0.636)** and unlocking **1.5 days (36 hours) of actionable lead time**.
    * In SME treasury operations, financial risk is strictly asymmetric: **a false alarm (Type I error, 3.69/month) incurs minor administrative review, whereas an unannounced liquidity breach (Type II error) triggers catastrophic bankruptcy**.
    * Furthermore, $B_2$ achieves the lowest shortfall error with an MAE of **R$ 24,333.29** (**-31.5% reduction** compared to $B_0$), accurately predicting the magnitude of the capital deficit.
 """))
