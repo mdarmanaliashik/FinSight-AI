@@ -49,6 +49,7 @@ def run_experiment_b():
 
     # 1. 1-Step Horizon Features for Recursive Base Model Training
     df_feat, feat_cols = build_forecasting_features(df_raw, target_col="sales", date_col="Date", horizon=1)
+    df_feat["Date"] = pd.to_datetime(df_feat["target_date"])
     n = len(df_feat)
     train_end = int(n * 0.70)
     val_end = int(n * 0.85)

@@ -1,5 +1,5 @@
 Architecture ID,Architecture Name,Precision,Recall,F1-Score,PR-AUC,Lead Time (Days),Monthly False Alarms,Shortfall MAE (R$)
-B0,Static Threshold (Reactive),0.913,0.488,0.636,0.784,0.0,0.92,35507.22
-B1,Point-Forecast Extrapolation (P50),0.900,0.837,0.867 ± 0.000,0.861,1.6,1.85,27936.13
-B2,P10 Downside Quantile Engine (FinSight AI),0.857,0.977,0.913,0.853,1.5,3.23,25649.76
-B3,7-Day Net Cash Burn Run-Rate,1.000,0.558,0.716,0.850,1.8,0.00,41085.19
+B0,Static Threshold (Reactive),0.913,0.488,0.636,0.784,0.0,0.92,35507.24
+B1,Point-Forecast Extrapolation (P50),0.925,0.860,0.892 ± 0.000,0.888,1.5,1.38,24623.17
+B2,P10 Downside Quantile Engine (FinSight AI),0.840 ± 0.000,0.977,0.903 ± 0.000,0.836,1.5,3.69,24333.29
+B3,7-Day Net Cash Burn Run-Rate,1.000,0.558,0.716,0.850,1.8,0.00,41085.21
