@@ -1,0 +1,62 @@
+{
+  "Primary Micro-Daily Forecasting Benchmark (Table 2A)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_forecasting_benchmark.parquet",
+    "downstream_phase": "Phase 4 (Risk Warning Engine)",
+    "records": 13,
+    "sha256": "c070761b1b93f3912ad630147aaf8c6d8c8c797831b112608a6e6b4c896acbe3"
+  },
+  "Multi-Model Prediction Ledger": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_multi_model_predictions.parquet",
+    "downstream_phase": "Phase 4 (Ensemble Warning Evaluation)",
+    "records": 225,
+    "sha256": "92bf241c15ed6437383bad1d7edd1a4bf3aea20e9101e756957bb3a72421e389"
+  },
+  "Rolling-Origin Chronological Backtesting (Table 2B-1)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_rolling_backtest.parquet",
+    "downstream_phase": "Phase 4 (Temporal Robustness)",
+    "records": 4,
+    "sha256": "647017b4eddc858f77410390fc13db1b0f5aa39f2e0baad9fc219d00a1e552eb"
+  },
+  "Multi-Quantile Uncertainty Ledger (P10/P50/P90)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_quantile_uncertainty.parquet",
+    "downstream_phase": "Phase 4 (Downside Solvency Stress Testing)",
+    "records": 225,
+    "sha256": "91600619f6e552b6354f8711c9f70c1aa4af8f3da2d57582c7a18b4f8c903dc4"
+  },
+  "Dedicated Macro-Treasury Cumulative Scorecard (Table 2B-2)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_cumulative_forecasting_benchmark.parquet",
+    "downstream_phase": "Phase 4 (CFO Treasury Verification)",
+    "records": 5,
+    "sha256": "60cd1e3cafba0dec53983bdf00f005e0ca48ea9e9b4bd7e57ba428487d30f4c9"
+  },
+  "Dual-Resolution Grandmaster Scorecard (Table 2C)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_dual_resolution_benchmark.parquet",
+    "downstream_phase": "Phase 5 (System Architecture)",
+    "records": 3,
+    "sha256": "33b08d8f0acd041a073c194c89f37cbfc3ddde1eb1a6459d7c120416d6ff5989"
+  },
+  "JD.com Empirical Benchmark Scorecard (Table 2D-1)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_jd_forecasting_benchmark.parquet",
+    "downstream_phase": "Phase 4 (Cross-Market AI Copilot)",
+    "records": 8,
+    "sha256": "985a520e2d1d0066354e933543aed08374b2425955c1207cc9aed3150084bde8"
+  },
+  "Cross-Market Synthesis Scorecard (Table 2D-2)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_cross_market_scorecard.parquet",
+    "downstream_phase": "Phase 5 (Cross-Border Ablation)",
+    "records": 7,
+    "sha256": "813906d0a0670dfc4c66b75ff02c73876ebe4de08cbec28a660b35f01d279ffb"
+  },
+  "Olist Platform Macro Scorecard (Table 2E-1)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_platform_forecasting_benchmark.parquet",
+    "downstream_phase": "Phase 5 (Scale Invariance)",
+    "records": 6,
+    "sha256": "ae5bcb5e579dc1b950fda56efce97cd36003ae3c4e65e6cca09743273bcc1874"
+  },
+  "Hierarchical Multi-Scale Synthesis Scorecard (Table 2E-2)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_hierarchical_benchmark.parquet",
+    "downstream_phase": "Phase 5 (System Synthesis)",
+    "records": 3,
+    "sha256": "198fae1bf1d86ddcf4cb0d6cde3b50523731061bda35f03fad8eb3774ed3c3a2"
+  }
+}
