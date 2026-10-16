@@ -263,6 +263,21 @@ To strictly enforce temporal filtration ($\mathcal{F}_t$) and prevent lookahead 
 | **Macro-Treasury (Inflow)** | Training Set | 2017-01-05 to 2018-04-24 | 456 days | 15 | R$ 73,431.06 | Cumulative $Y_{t+7}$ |
 | **Macro-Treasury (Inflow)** | Holdout Test Set | 2018-04-25 to 2018-08-20 | 114 days | 15 | R$ 2,00,948.71 | Cumulative $Y_{t+7}$ |
 
+### Table 1B: Olist Selected Data (Micro-SME) vs. Olist Full Data (Marketplace Macro)
+
+| Dimension / Characteristic | Olist Selected Data (Representative SME) | Olist Full Data (Marketplace Macro Platform) | Analytical & Underwriting Rationale |
+| :--- | :--- | :--- | :--- |
+| **Merchant Scope** | **1 Representative SME Merchant** (`4a3ca931...`) | **3,095 Marketplace Merchants Combined** | Micro-enterprise survival vs Macro-network scale |
+| **Total Commercial Volume** | ~1,984 delivered items across active lifecycle | 112,650 order items across 99,441 orders | Single seller fulfillment vs Marketplace logistics |
+| **Gross Revenue (R$)** | **R$ 230,702.52** (BRL) | **R$ 15,254,445.66** (Censorship-free cutoff) | Micro cash balance vs Platform treasury flow |
+| **Operational Calendar** | 593 calendar days (590 active window days) | 593 continuous calendar days (602 raw span) | Lifecycle onboarding vs Platform operation |
+| **Daily Mean Sales** | **R$ 389.04** (Active mean) / **R$ 366.11** (Test holdout) | **R$ 25,724.19** (Overall) / **R$ 35,230.82** (Test holdout) | Scale disparity: Platform is ~96x larger |
+| **Zero-Sales Days Ratio** | **39.53% Zero Days** (Intermittent / Lumpy) | **0.00% Zero Days** (Continuous non-zero volume) | Central Limit Theorem eliminates intermittency |
+| **Syntetos-Boylan Class** | **Erratic / Intermittent** ($ADI = 1.12$, $CV^2 = 0.76$) | **Smooth** ($ADI = 1.00$, $CV^2 = 0.31$) | Intermittent SME risk vs continuous platform drift |
+| **Daily Forecast Best WAPE** | **59.80% WAPE** (Adaptive CatBoost) | **21.12% WAPE** (LightGBM) | Micro demand volatility vs aggregated predictability |
+| **Cumulative Inflow ($H=7$)** | **0.93% WAPE** ($R^2 = 0.9761$) | **0.39% WAPE** ($R^2 = 0.9966$) | Inflow integration low-pass filter operates at both scales |
+| **FinSight AI Core Function** | **Micro-Tactical:** Working capital solvency, default risk ($PD$) | **Macro-Treasury:** Credit facility sizing, carrier SLAs | Eliminates the "Aggregation Fallacy" in banking |
+
 ### Engineered Feature Suite ($P = 40$ Features):
 * **Autoregressive Lags:** $lag_0, lag_1, lag_2, lag_7, lag_{14}, lag_{21}, lag_{28}$
 * **Rolling Volatility & Extrema:** 7, 14, 28-day moving averages, standard deviations, min, max, and skew
@@ -342,6 +357,21 @@ partition_df = pd.DataFrame([
     {"Resolution": "Macro-Treasury", "Partition": "Holdout Test Set", "Date Range": f"{str(test_cum['Date'].min())[:10]} to {str(test_cum['Date'].max())[:10]}", "Samples (N)": len(test_cum), "Features (P)": len(feats_cum_core), "Mean Target (R$)": round(test_cum['target_cum_h7'].mean(), 2), "Role": "CFO Inflow Verification"}
 ])
 display(partition_df)
+
+df_olist_comparison = pd.DataFrame([
+    {"Dimension": "Merchant Scope", "Olist Selected Data (Micro-SME)": "1 SME Merchant (4a3ca931...)", "Olist Full Data (Platform Macro)": "3,095 Marketplace Merchants", "Underwriting Rationale": "Micro-survival vs Network scale"},
+    {"Dimension": "Total Revenue", "Olist Selected Data (Micro-SME)": "R$ 230,702.52", "Olist Full Data (Platform Macro)": "R$ 15,254,445.66", "Underwriting Rationale": "Micro cashflow vs Treasury volume"},
+    {"Dimension": "Test Mean Sales", "Olist Selected Data (Micro-SME)": "R$ 366.11 / day", "Olist Full Data (Platform Macro)": "R$ 35,230.82 / day", "Underwriting Rationale": "Platform volume is ~96x larger"},
+    {"Dimension": "Zero-Sales Days (%)", "Olist Selected Data (Micro-SME)": "39.53% (Intermittent)", "Olist Full Data (Platform Macro)": "0.00% (Continuous)", "Underwriting Rationale": "CLT aggregation eliminates zeros"},
+    {"Dimension": "Demand Classification", "Olist Selected Data (Micro-SME)": "Erratic / Intermittent (CV²=0.76)", "Olist Full Data (Platform Macro)": "Smooth (CV²=0.31)", "Underwriting Rationale": "SME demand lumpiness vs smooth macro"},
+    {"Dimension": "Best Daily Forecast WAPE", "Olist Selected Data (Micro-SME)": "59.80% (Adaptive CatBoost)", "Olist Full Data (Platform Macro)": "21.12% (LightGBM)", "Underwriting Rationale": "High micro-noise vs predictable aggregate"},
+    {"Dimension": "Cumulative Inflow WAPE (H=7)", "Olist Selected Data (Micro-SME)": "0.93% (Trend-Adjusted)", "Olist Full Data (Platform Macro)": "0.39% (Platform Drift)", "Underwriting Rationale": "Low-pass filter achieves CFO target (<10%)"},
+    {"Dimension": "Operational Role", "Olist Selected Data (Micro-SME)": "Working capital solvency & PD", "Olist Full Data (Platform Macro)": "Credit line underwriting & SLAs", "Underwriting Rationale": "Solves Aggregation Fallacy"}
+])
+print("\n" + "=" * 90)
+print("TABLE 1B: OLIST SELECTED DATA (MICRO-SME) VS. FULL DATA (PLATFORM MACRO)")
+print("=" * 90)
+display(df_olist_comparison)
 """))
 
     # =========================================================================
