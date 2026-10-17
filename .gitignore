@@ -69,3 +69,7 @@ data/raw/
 *.zip
 *.tar.gz
 *.7z
+
+# Word documents
+*.docx
+
