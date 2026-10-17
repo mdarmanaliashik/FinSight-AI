@@ -151,7 +151,7 @@
 
     <!-- 4-STEP BUSINESS INTELLIGENCE WORKFLOW BAR -->
     <div class="workflow-step-bar">
-      <div class="step-item active" id="wf-step-1">
+      <div class="step-item active" id="wf-step-1" onclick="switchDecisionModule('overview')" style="cursor: pointer;">
         <div class="step-num">1</div>
         <div class="step-content">
           <span class="step-title">Monitor</span>
@@ -159,7 +159,7 @@
         </div>
       </div>
       <span class="step-arrow">→</span>
-      <div class="step-item active" id="wf-step-2">
+      <div class="step-item" id="wf-step-2" onclick="switchDecisionModule('forecasts')" style="cursor: pointer;">
         <div class="step-num">2</div>
         <div class="step-content">
           <span class="step-title">Predict</span>
@@ -167,7 +167,7 @@
         </div>
       </div>
       <span class="step-arrow">→</span>
-      <div class="step-item active" id="wf-step-3">
+      <div class="step-item" id="wf-step-3" onclick="switchDecisionModule('cashflow')" style="cursor: pointer;">
         <div class="step-num">3</div>
         <div class="step-content">
           <span class="step-title">Detect Risk</span>
@@ -175,7 +175,7 @@
         </div>
       </div>
       <span class="step-arrow">→</span>
-      <div class="step-item active" id="wf-step-4">
+      <div class="step-item" id="wf-step-4" onclick="switchDecisionModule('scenarios')" style="cursor: pointer;">
         <div class="step-num">4</div>
         <div class="step-content">
           <span class="step-title">Recommend Actions</span>
@@ -184,7 +184,38 @@
       </div>
     </div>
 
-    <!-- 1. MONITOR: BUSINESS OVERVIEW KPI TICKER -->
+    <!-- PRIMARY DECISION INTELLIGENCE MODULE TABS -->
+    <div style="display: flex; justify-content: flex-start; margin-bottom: 22px;">
+      <div class="decision-intel-tabs">
+        <button class="d-tab active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
+          <span>📊</span> Overview
+        </button>
+        <button class="d-tab" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">
+          <span>📈</span> Forecasts
+        </button>
+        <button class="d-tab" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">
+          <span>🏦</span> Cash flow
+        </button>
+        <button class="d-tab" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">
+          <span>⚡</span> Scenarios
+        </button>
+        <button class="d-tab" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">
+          <span>🤖</span> AI advisor
+        </button>
+      </div>
+    </div>
+
+    
+
+    <!-- MAIN COMMERCIAL WORKSPACE -->
+    <div class="workspace-grid">
+      <!-- LEFT COLUMN: PREDICT + DETECT RISK + RECOMMEND ACTIONS + SCENARIOS -->
+      <main class="studio-column">
+        <!-- ============================================== -->
+        <!-- VIEW 1: OVERVIEW (BUSINESS INTELLIGENCE COCKPIT) -->
+        <!-- ============================================== -->
+        <div class="module-view active-view" id="view-overview">
+          <!-- 1. MONITOR: BUSINESS OVERVIEW KPI TICKER -->
     <section class="hero-summary-grid">
       <div class="hero-summary-card highlight">
         <div class="h-card-label">
@@ -223,31 +254,79 @@
       </div>
     </section>
 
-    <!-- MAIN COMMERCIAL WORKSPACE -->
-    <div class="workspace-grid">
-      <!-- LEFT COLUMN: PREDICT + DETECT RISK + RECOMMEND ACTIONS + SCENARIOS -->
-      <main class="studio-column">
+          <!-- EXECUTIVE COCKPIT SUMMARY CARD -->
+          <div class="control-matrix-card" style="margin-bottom: 20px;">
+            <div class="matrix-header">
+              <div class="matrix-title-group">
+                <span style="font-size: 20px;">📊</span>
+                <div>
+                  <h2 class="matrix-title">Business Decision Intelligence Cockpit</h2>
+                  <p class="matrix-desc">Comprehensive SME status: current liquidity health, horizon forecast, and risk stance.</p>
+                </div>
+              </div>
+              <span class="risk-badge risk-badge-green" style="font-size: 12px; padding: 6px 14px;">● OPERATING NORMALLY</span>
+            </div>
 
-        <!-- DECISION INTELLIGENCE MODULE TABS -->
-        <div class="decision-intel-tabs">
-          <button class="d-tab active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
-            <span>📊</span> Overview
-          </button>
-          <button class="d-tab" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">
-            <span>📈</span> Forecasts
-          </button>
-          <button class="d-tab" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">
-            <span>🏦</span> Cash flow
-          </button>
-          <button class="d-tab" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">
-            <span>⚡</span> Scenarios
-          </button>
-          <button class="d-tab" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">
-            <span>🤖</span> AI advisor
-          </button>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px;">
+              <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('forecasts')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 13px; font-weight: 700; color: #fff;">📈 Sales Forecast</span>
+                  <span style="font-size: 11px; color: var(--accent-cyan);">View Tab →</span>
+                </div>
+                <div style="font-size: 18px; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono);">30-Day Outlook</div>
+                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">P10 floor ৳8,400 · P50 expected ৳14,000 · P90 surge ৳21,000</div>
+              </div>
+
+              <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('cashflow')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 13px; font-weight: 700; color: #fff;">🏦 Cash Flow & Risks</span>
+                  <span style="font-size: 11px; color: var(--accent-emerald);">Audit Tab →</span>
+                </div>
+                <div style="font-size: 18px; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono);">+৳79,200 Buffer</div>
+                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Zero reserve breach · 10 days receivables delay</div>
+              </div>
+
+              <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('scenarios')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 13px; font-weight: 700; color: #fff;">⚡ Scenarios & Target</span>
+                  <span style="font-size: 11px; color: var(--accent-amber);">Simulate Tab →</span>
+                </div>
+                <div style="font-size: 18px; font-weight: 800; color: var(--accent-amber); font-family: var(--font-mono);">৳500,000 Target</div>
+                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Required growth gap: +19.05% · 4 execution strategies</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROTOTYPE NOTE -->
+        <div class="prototype-note-box">
+          <strong>Prototype note:</strong> The controls are interactive, but the sample data is synthetic. The dashboard is not connected to a bank account or live business database, and its scenario formulas are not a substitute for a transaction-level cash-flow engine.
         </div>
 
-        <!-- 2. PREDICT: SALES TREND & FORECAST STUDIO -->
+        <!-- WHAT THE PRODUCTION VERSION SHOULD CONTAIN -->
+        <div class="production-table-card">
+          <h3 style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px;">What the Production Version Contains</h3>
+          <table class="production-spec-table">
+            <thead>
+              <tr><th>Dashboard Section</th><th>Key Outputs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Business overview</strong></td><td>Revenue, gross margin, expenses, cash balance and KPI trends</td></tr>
+              <tr><td><strong>Sales intelligence</strong></td><td>7/14/30-day forecasts, prediction intervals and backtest results</td></tr>
+              <tr><td><strong>Cash-flow intelligence</strong></td><td>Daily inflow/outflow, cash runway, reserve-breach date</td></tr>
+              <tr><td><strong>Risk center</strong></td><td>Sales decline, payment delays, expense shocks and liquidity alerts</td></tr>
+              <tr><td><strong>Target planner</strong></td><td>Monthly targets, weekly milestones, KPI gaps and recommended actions</td></tr>
+              <tr><td><strong>AI copilot</strong></td><td>Natural-language questions grounded in actual model and financial calculations</td></tr>
+              <tr><td><strong>Statistical reports</strong></td><td>Confidence/prediction intervals, forecast errors, calibration and model limitations</td></tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- VIEW 2: FORECASTS -->
+        <!-- ============================================== -->
+        <div class="module-view" id="view-forecasts" style="display: none;">
+          <!-- 2. PREDICT: SALES TREND & FORECAST STUDIO -->
         <div class="studio-card" id="sec-forecast">
           <div class="studio-toolbar">
             <div>
@@ -292,8 +371,13 @@
             * Illustrative daily sales pattern grounded in empirical quantile intervals. Replace with out-of-sample merchant ledger.
           </div>
         </div>
+        </div>
 
-        <!-- 3. DETECT RISK: AUTONOMOUS RISK CENTER -->
+        <!-- ============================================== -->
+        <!-- VIEW 3: CASH FLOW -->
+        <!-- ============================================== -->
+        <div class="module-view" id="view-cashflow" style="display: none;">
+          <!-- 3. DETECT RISK: AUTONOMOUS RISK CENTER -->
         <div class="control-matrix-card" id="sec-risk">
           <div class="matrix-header">
             <div class="matrix-title-group">
@@ -343,8 +427,48 @@
             </div>
           </div>
         </div>
+          <!-- 30-DAY DAY-BY-DAY CASHFLOW & SOLVENCY LEDGER -->
+        <div class="ledger-container" id="sec-ledger">
+          <div class="ledger-header">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
+                Granular Day-by-Day Cashflow Ledger
+              </h3>
+              <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
+                Calculated daily revenue, operational disbursements, closing balance, and reserve compliance.
+              </p>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-cyan); background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25); padding: 6px 12px; border-radius: 8px;">
+              Autonomous 30-Day Forward Ledger
+            </div>
+          </div>
+          <div class="ledger-scroll">
+            <table id="business-ledger-table">
+              <thead>
+                <tr>
+                  <th style="width: 100px;">Day</th>
+                  <th>Projected Sales</th>
+                  <th>Downside Floor</th>
+                  <th>Surge Ceiling</th>
+                  <th>Net Daily Flow</th>
+                  <th>Closing Cash</th>
+                  <th>Reserve Cushion</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="business-ledger-tbody">
+                <!-- Dynamically generated via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        </div>
 
-        <!-- SCENARIO SIMULATOR: WHAT-IF STUDIO -->
+        <!-- ============================================== -->
+        <!-- VIEW 4: SCENARIOS -->
+        <!-- ============================================== -->
+        <div class="module-view" id="view-scenarios" style="display: none;">
+          <!-- SCENARIO SIMULATOR: WHAT-IF STUDIO -->
         <div class="control-matrix-card" id="sec-simulator">
           <div class="matrix-header">
             <div class="matrix-title-group">
@@ -426,8 +550,7 @@
             </div>
           </div>
         </div>
-
-        <!-- 4. RECOMMEND ACTIONS: BUSINESS TARGET PLANNER & ACTIONABLE STRATEGY -->
+          <!-- 4. RECOMMEND ACTIONS: BUSINESS TARGET PLANNER & ACTIONABLE STRATEGY -->
         <div class="target-planner-box" id="sec-target-planner">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
             <div>
@@ -503,65 +626,47 @@
             </div>
           </div>
         </div>
-
-        <!-- 30-DAY DAY-BY-DAY CASHFLOW & SOLVENCY LEDGER -->
-        <div class="ledger-container" id="sec-ledger">
-          <div class="ledger-header">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
-                Granular Day-by-Day Cashflow Ledger
-              </h3>
-              <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
-                Calculated daily revenue, operational disbursements, closing balance, and reserve compliance.
-              </p>
-            </div>
-            <div style="font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-cyan); background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25); padding: 6px 12px; border-radius: 8px;">
-              Autonomous 30-Day Forward Ledger
-            </div>
-          </div>
-          <div class="ledger-scroll">
-            <table id="business-ledger-table">
-              <thead>
-                <tr>
-                  <th style="width: 100px;">Day</th>
-                  <th>Projected Sales</th>
-                  <th>Downside Floor</th>
-                  <th>Surge Ceiling</th>
-                  <th>Net Daily Flow</th>
-                  <th>Closing Cash</th>
-                  <th>Reserve Cushion</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="business-ledger-tbody">
-                <!-- Dynamically generated via app.js -->
-              </tbody>
-            </table>
-          </div>
         </div>
 
-        <!-- PROTOTYPE NOTE -->
-        <div class="prototype-note-box">
-          <strong>Prototype note:</strong> The controls are interactive, but the sample data is synthetic. The dashboard is not connected to a bank account or live business database, and its scenario formulas are not a substitute for a transaction-level cash-flow engine.
-        </div>
+        <!-- ============================================== -->
+        <!-- VIEW 5: AI ADVISOR -->
+        <!-- ============================================== -->
+        <div class="module-view" id="view-copilot" style="display: none;">
+          <div class="control-matrix-card">
+            <div class="matrix-header">
+              <div class="matrix-title-group">
+                <span style="font-size: 20px;">🤖</span>
+                <div>
+                  <h2 class="matrix-title">Autonomous AI Financial Copilot Hub</h2>
+                  <p class="matrix-desc">Mathematical tool-grounded financial advisory with zero numerical hallucination.</p>
+                </div>
+              </div>
+              <span class="risk-badge risk-badge-green">● LIVE COPILOT ONLINE</span>
+            </div>
 
-        <!-- WHAT THE PRODUCTION VERSION SHOULD CONTAIN -->
-        <div class="production-table-card">
-          <h3 style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px;">What the Production Version Contains</h3>
-          <table class="production-spec-table">
-            <thead>
-              <tr><th>Dashboard Section</th><th>Key Outputs</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Business overview</strong></td><td>Revenue, gross margin, expenses, cash balance and KPI trends</td></tr>
-              <tr><td><strong>Sales intelligence</strong></td><td>7/14/30-day forecasts, prediction intervals and backtest results</td></tr>
-              <tr><td><strong>Cash-flow intelligence</strong></td><td>Daily inflow/outflow, cash runway, reserve-breach date</td></tr>
-              <tr><td><strong>Risk center</strong></td><td>Sales decline, payment delays, expense shocks and liquidity alerts</td></tr>
-              <tr><td><strong>Target planner</strong></td><td>Monthly targets, weekly milestones, KPI gaps and recommended actions</td></tr>
-              <tr><td><strong>AI copilot</strong></td><td>Natural-language questions grounded in actual model and financial calculations</td></tr>
-              <tr><td><strong>Statistical reports</strong></td><td>Confidence/prediction intervals, forecast errors, calibration and model limitations</td></tr>
-            </tbody>
-          </table>
+            <div style="margin-top: 16px; font-size: 13.5px; color: var(--text-secondary); line-height: 1.6;">
+              Ask high-conviction financial questions grounded in real business parameters. Supports <strong>Bengali (বাংলা)</strong>, <strong>English</strong>, <strong>Chinese (中文)</strong>, and <strong>Spanish (Español)</strong>.
+            </div>
+
+            <div style="margin-top: 18px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+              <div class="strategy-item" style="cursor: pointer; transition: all 0.2s;" onclick="askCopilot('বিক্রয় ২০% কমলে আমাদের কি নগদ ঘাটতি হবে?')">
+                <div class="strategy-item-title">🔍 Stress Test: Sales Fall by 20%</div>
+                <div class="strategy-item-desc">Ask the copilot to audit whether a 20% revenue drop will breach the ৳260,400 statutory reserve.</div>
+              </div>
+              <div class="strategy-item" style="cursor: pointer; transition: all 0.2s;" onclick="askCopilot('ব্যবসায়িক লক্ষ্যমাত্রা পূরণ করার কৌশল কি?')">
+                <div class="strategy-item-title">🎯 Strategic Roadmap Execution</div>
+                <div class="strategy-item-desc">Generate actionable execution guidance for pricing, inventory, and payment lag compression.</div>
+              </div>
+              <div class="strategy-item" style="cursor: pointer; transition: all 0.2s;" onclick="askCopilot('আমাদের বর্তমান ক্যাশ ব্যালেন্স ও রানওয়ে কত?')">
+                <div class="strategy-item-title">⏱️ Cash Runway & Burn Rate</div>
+                <div class="strategy-item-desc">Calculate remaining operating runway days before reaching the insolvency threshold.</div>
+              </div>
+              <div class="strategy-item" style="cursor: pointer; transition: all 0.2s;" onclick="askCopilot('অপারেটিং খরচ ১০% বৃদ্ধি পেলে কি প্রভাব পড়বে?')">
+                <div class="strategy-item-title">📈 Cost Inflation Shock Analysis</div>
+                <div class="strategy-item-desc">Assess the impact of rising inventory costs or supplier price hikes on monthly operating surplus.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 

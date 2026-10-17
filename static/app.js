@@ -95,63 +95,50 @@ function setForecastHorizonDays(days) {
 function switchDecisionModule(mod) {
   const tabs = ['overview', 'forecasts', 'cashflow', 'scenarios', 'copilot'];
   tabs.forEach(m => {
+    // 1. Toggle tab button active state
     const btn = document.getElementById(`tab-mod-${m}`);
     if (btn) btn.classList.toggle('active', m === mod);
+
+    // 2. Toggle dedicated section view display
+    const view = document.getElementById(`view-${m}`);
+    if (view) {
+      view.style.display = (m === mod) ? 'block' : 'none';
+    }
   });
 
-  const secForecast = document.getElementById('sec-forecast');
-  const secRisk = document.getElementById('sec-risk');
-  const secSimulator = document.getElementById('sec-simulator');
-  const secTarget = document.getElementById('sec-target-planner');
-  const secLedger = document.getElementById('sec-ledger');
+  // 3. Keep 4-Step workflow bar synchronized
+  const stepMap = {
+    overview: 1,
+    forecasts: 2,
+    cashflow: 3,
+    scenarios: 4,
+    copilot: 1
+  };
+  [1, 2, 3, 4].forEach(s => {
+    const stepEl = document.getElementById(`wf-step-${s}`);
+    if (stepEl) {
+      stepEl.classList.toggle('active', s <= (stepMap[mod] || 1));
+    }
+  });
 
-  if (mod === 'overview') {
-    // Show all modules for full comprehensive dashboard overview
-    if (secForecast) secForecast.style.display = 'block';
-    if (secRisk) secRisk.style.display = 'block';
-    if (secSimulator) secSimulator.style.display = 'block';
-    if (secTarget) secTarget.style.display = 'block';
-    if (secLedger) secLedger.style.display = 'block';
-    if (businessForecastChart) businessForecastChart.resize();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else if (mod === 'forecasts') {
-    // Focus specifically on Sales Trend & Forecast Studio
-    if (secForecast) secForecast.style.display = 'block';
-    if (secRisk) secRisk.style.display = 'none';
-    if (secSimulator) secSimulator.style.display = 'none';
-    if (secTarget) secTarget.style.display = 'none';
-    if (secLedger) secLedger.style.display = 'none';
-    if (businessForecastChart) businessForecastChart.resize();
-    if (secForecast) secForecast.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (mod === 'cashflow') {
-    // Focus on Risk Center & Day-by-Day Solvency Ledger
-    if (secForecast) secForecast.style.display = 'none';
-    if (secRisk) secRisk.style.display = 'block';
-    if (secSimulator) secSimulator.style.display = 'none';
-    if (secTarget) secTarget.style.display = 'none';
-    if (secLedger) secLedger.style.display = 'block';
-    if (secRisk) secRisk.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (mod === 'scenarios') {
-    // Focus on Scenario Simulator & Target Planner
-    if (secForecast) secForecast.style.display = 'none';
-    if (secRisk) secRisk.style.display = 'none';
-    if (secSimulator) secSimulator.style.display = 'block';
-    if (secTarget) secTarget.style.display = 'block';
-    if (secLedger) secLedger.style.display = 'none';
-    if (secSimulator) secSimulator.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (mod === 'copilot') {
-    // Show overview and focus AI Copilot chatbot
-    if (secForecast) secForecast.style.display = 'block';
-    if (secRisk) secRisk.style.display = 'block';
-    if (secSimulator) secSimulator.style.display = 'block';
-    if (secTarget) secTarget.style.display = 'block';
-    if (secLedger) secLedger.style.display = 'block';
-    if (businessForecastChart) businessForecastChart.resize();
+  // 4. Resize Chart.js canvas whenever forecast or overview is shown
+  if (mod === 'forecasts' || mod === 'overview') {
+    if (businessForecastChart) {
+      setTimeout(() => {
+        businessForecastChart.resize();
+      }, 30);
+    }
+  }
+
+  // 5. Special Copilot focus
+  if (mod === 'copilot') {
     const input = document.getElementById('copilot-user-input');
     if (input) {
       input.focus();
       input.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+  } else {
+    window.scrollTo({ top: 100, behavior: 'smooth' });
   }
 }
 
