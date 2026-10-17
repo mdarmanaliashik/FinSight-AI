@@ -384,14 +384,43 @@
               <h1 style="font-size: 24px; font-weight: 800; color: #fff; margin: 8px 0 4px;">
                 FinSight AI: A Dual-Resolution Liquidity Forecasting Engine & Tool-Grounded Copilot
               </h1>
-              <p style="font-size: 13px; color: var(--accent-cyan); font-family: var(--font-mono); margin: 0;">
+              <p style="font-size: 13px; color: var(--accent-cyan); font-family: var(--font-mono); margin: 0 0 12px 0;">
                 Competition Submission Dossier · 2026 8th Shenzhen International FinTech Competition
               </p>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="model-toggle-btn active" onclick="window.print()" style="display: flex; align-items: center; gap: 6px;">
+                  🖨️ Export / Print Proposal PDF
+                </button>
+                <button class="model-toggle-btn" onclick="document.getElementById('pitch-slide-deck').scrollIntoView({behavior: 'smooth'})" style="display: flex; align-items: center; gap: 6px;">
+                  📊 Jump to 10-Minute Slide Pitch
+                </button>
+              </div>
             </div>
             <div style="text-align: right;">
               <span style="font-size: 11px; background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 6px; font-weight: 700;">
                 ALL 15 UNIT TESTS PASSING
               </span>
+            </div>
+          </div>
+
+          <!-- INTERACTIVE 10-MINUTE PITCH SLIDE DECK CARD -->
+          <div class="slide-deck-card" id="pitch-slide-deck">
+            <div class="slide-deck-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 22px;">📊</span>
+                <div>
+                  <span style="font-weight: 800; color: #fff; font-size: 14px; letter-spacing: 0.5px;">OFFICIAL 10-MINUTE PITCH DECK (FINALIST EDITION)</span>
+                  <div style="font-size: 11px; color: #94a3b8;">Click Next/Previous to review slide-by-slide judge presentation</div>
+                </div>
+              </div>
+              <div class="slide-nav-controls">
+                <button class="slide-btn" onclick="prevSlide()">◀ Previous</button>
+                <span class="slide-counter" id="slide-num-indicator">Slide 1 of 10</span>
+                <button class="slide-btn" onclick="nextSlide()">Next ▶</button>
+              </div>
+            </div>
+            <div class="slide-content-area" id="slide-viewport">
+              <!-- Rendered dynamically by app.js -->
             </div>
           </div>
 

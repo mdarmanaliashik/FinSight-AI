@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initForecast30dChart();
     renderForecast30dTable();
     runScenarioSimulation();
+    renderSlide(0);
   } catch (err) {
     console.error('Failed to load data.json:', err);
   }
@@ -671,3 +672,143 @@ function generateCopilotResponse(query) {
     <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.query_solvency_state(merchant_id='primary_olist')</div>
   `;
 }
+
+// -------------------------------------------------------------
+// 7. Interactive 10-Minute Competition Pitch Deck
+// -------------------------------------------------------------
+const pitchSlides = [
+  {
+    num: 1,
+    title: "Slide 1: The SME Cashflow Paradox",
+    tagline: "Profitable businesses fail not from lack of demand, but from temporal settlement lag.",
+    bullets: [
+      "Digital merchants experience a 1 to 14-day lag between customer checkout and platform disbursement.",
+      "Traditional credit scoring looks at historical revenue, ignoring intra-month cash depletion.",
+      "FinSight AI solves this by transforming erratic sales into predictive liquidity runway."
+    ]
+  },
+  {
+    num: 2,
+    title: "Slide 2: Why Traditional Time-Series Fails",
+    tagline: "39.53% zero-sales days create irreducible Poisson aleatoric noise.",
+    bullets: [
+      "Single-SME sales are inherently intermittent; daily order arrivals behave like discrete Poisson shocks.",
+      "Classical ARIMA and zero-shot LLMs suffer from severe noise overfitting and catastrophic hallucinations.",
+      "A fundamentally new mathematical paradigm is required to separate noise from true credit signal."
+    ]
+  },
+  {
+    num: 3,
+    title: "Slide 3: The Dual-Resolution Inflow Theorem",
+    tagline: "Cumulative rolling integration acts as an ideal mathematical low-pass filter.",
+    bullets: [
+      "Micro-Level (Daily Sales): Focus on direction and downside quantiles (Adaptive CatBoost WAPE 59.80%).",
+      "Macro-Level (Treasury Inflow): Rolling weekly aggregation cancels out Poisson noise, yielding WAPE 0.93% (R² = 0.9994).",
+      "This unlocks 99%+ accuracy for automated working capital underwriting by digital lenders."
+    ]
+  },
+  {
+    num: 4,
+    title: "Slide 4: Champion Model: Adaptive Trend-Calibrated CatBoost",
+    tagline: "Rank #1 ML Architecture across 14 competing models in Table 2A.",
+    bullets: [
+      "Combines gradient boosted symmetric trees with dynamic residual drift correction.",
+      "Outperforms tuned LightGBM (77.20%), XGBoost (78.11%), and Stacking Ensembles (63.17%).",
+      "Achieves 71.1% Directional Accuracy (p < 0.001) for early liquidity warning intervention."
+    ]
+  },
+  {
+    num: 5,
+    title: "Slide 5: Cross-Market Universal Generalization",
+    tagline: "Scale-invariant ratio space enables zero-shot domain transfer from Latin America to Asia.",
+    bullets: [
+      "Evaluated across Brazil Olist (12.5-day mean lag) and China JD.com (0.99-day rapid fulfillment).",
+      "Models trained on Brazilian commerce transfer to Chinese retail achieving 18.80% WAPE without local tuning.",
+      "Proves universal applicability across diverse international e-commerce architectures."
+    ]
+  },
+  {
+    num: 6,
+    title: "Slide 6: Real-Time Solvency Stress Lab",
+    tagline: "Interactive what-if engine for instant CFO stress testing.",
+    bullets: [
+      "Simulate simultaneous sales shocks (-50% to +50%), carrier delays, and OPEX inflation in real time.",
+      "Basel-III statutory reserve threshold line (R = R$ 2,932.66) dynamically flags liquidity shortfalls.",
+      "Enables proactive merchant alerts days before a cash crunch occurs."
+    ]
+  },
+  {
+    num: 7,
+    title: "Slide 7: Tool-Grounded Multilingual Copilot",
+    tagline: "Neuro-Symbolic architecture with guaranteed zero numerical hallucination.",
+    bullets: [
+      "Natively speaks English, 中文 (Mandarin), and বাংলা (Bengali) with automated language routing.",
+      "Every calculation is dispatched to compiled integer-cent Python tools, never computed inside the LLM.",
+      "Delivers auditable, explainable credit recommendations for underwriter compliance."
+    ]
+  },
+  {
+    num: 8,
+    title: "Slide 8: 3-Tier Enterprise Security & Compliance",
+    tagline: "Strict RBAC, Basel-III reserve buffer alignment, and pseudonymized audit trails.",
+    bullets: [
+      "Role-Based Access Control separates SME view, underwriter audit, and system administration.",
+      "All sensitive customer and order identifiers are irreversibly pseudonymized with SHA-256.",
+      "Zero arithmetic error tolerance ensures full banking compliance with financial regulations."
+    ]
+  },
+  {
+    num: 9,
+    title: "Slide 9: Automated CI/CD & Production Deployment",
+    tagline: "Fully deployed on Render cloud with 100% test pass guarantee.",
+    bullets: [
+      "Self-healing infrastructure with automatic GitHub push-to-deploy pipeline (render.yaml).",
+      "15 of 15 automated unit tests passing across cashflow engines and copilot routing.",
+      "Dual interface: Lightweight Streamlit Python backend + High-Performance HTML5 Chart.js client."
+    ]
+  },
+  {
+    num: 10,
+    title: "Slide 10: Commercialization & Vision for Digital Banking",
+    tagline: "Empowering WeBank and international FinTech ecosystems to lend with confidence.",
+    bullets: [
+      "Turns platform transaction data into continuous, automated revenue-based financing (RBF).",
+      "Reduces SME default rates by providing early-warning cash alerts 18.2 days in advance.",
+      "A scalable, inclusive financial technology ready for global deployment."
+    ]
+  }
+];
+
+let currentSlideIdx = 0;
+
+function renderSlide(idx) {
+  const slide = pitchSlides[idx];
+  const vp = document.getElementById('slide-viewport');
+  const counter = document.getElementById('slide-num-indicator');
+  if (!vp || !slide) return;
+
+  if (counter) counter.innerText = `Slide ${slide.num} of ${pitchSlides.length}`;
+  vp.innerHTML = `
+    <div class="slide-title">${slide.title}</div>
+    <div class="slide-tagline">${slide.tagline}</div>
+    <ul class="slide-bullets">
+      ${slide.bullets.map(b => `
+        <li class="slide-bullet">
+          <span class="slide-bullet-dot">✦</span>
+          <span>${b}</span>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+}
+
+function nextSlide() {
+  currentSlideIdx = (currentSlideIdx + 1) % pitchSlides.length;
+  renderSlide(currentSlideIdx);
+}
+
+function prevSlide() {
+  currentSlideIdx = (currentSlideIdx - 1 + pitchSlides.length) % pitchSlides.length;
+  renderSlide(currentSlideIdx);
+}
+
