@@ -1,19 +1,27 @@
 /**
  * FinSight AI — 2026 Shenzhen FinTechathon Executive Dashboard & Copilot
  * ======================================================================
+ * Enterprise SME Finance Copilot for the 8th Shenzhen International FinTech
+ * Competition (FinTechathon / WeBank International Track, Topic E).
  */
 
 let appData = null;
 let currentMarket = 'olist';
+let currentForecastModel = 'adaptive';
 let salesChart = null;
 let cashChart = null;
+let forecast30dChart = null;
+let copilotLang = 'en';
 
 // Initialize on DOM Load
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const res = await fetch('data.json');
     appData = await res.json();
+
     initCharts();
+    initForecast30dChart();
+    renderForecast30dTable();
     runScenarioSimulation();
   } catch (err) {
     console.error('Failed to load data.json:', err);
@@ -21,7 +29,240 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // -------------------------------------------------------------
-// 1. Chart.js Initialization
+// 1. Tab Navigation System
+// -------------------------------------------------------------
+function switchTab(tabKey) {
+  const tabs = ['forecast', 'dashboard', 'proposal', 'copilot'];
+  tabs.forEach(t => {
+    const el = document.getElementById(`tab-${t}`);
+    const btn = document.getElementById(`btn-tab-${t}`);
+    if (el) el.classList.toggle('active', t === tabKey);
+    if (btn) btn.classList.toggle('active', t === tabKey);
+  });
+
+  // Re-render and resize charts on visibility transition to avoid 0-width bugs
+  setTimeout(() => {
+    if (tabKey === 'forecast' && forecast30dChart) {
+      forecast30dChart.resize();
+    } else if (tabKey === 'dashboard') {
+      if (salesChart) salesChart.resize();
+      if (cashChart) cashChart.resize();
+    }
+  }, 60);
+}
+
+// -------------------------------------------------------------
+// 2. 30-Day Forward Forecasting Lab Chart & Table
+// -------------------------------------------------------------
+function initForecast30dChart() {
+  if (!appData || !appData.forecast_30d) return;
+  const f = appData.forecast_30d;
+
+  const canvas = document.getElementById('forecast30dChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  forecast30dChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: f.dates,
+      datasets: [
+        {
+          label: 'P90 (Upside Demand Surge)',
+          data: f.p90_upside,
+          borderColor: 'transparent',
+          backgroundColor: 'rgba(245, 158, 11, 0.12)',
+          fill: '+1',
+          pointRadius: 0,
+          tension: 0.2
+        },
+        {
+          label: 'P10 (Downside Stress Floor)',
+          data: f.p10_downside,
+          borderColor: 'rgba(245, 158, 11, 0.45)',
+          borderDash: [4, 4],
+          backgroundColor: 'transparent',
+          fill: false,
+          pointRadius: 0,
+          tension: 0.2
+        },
+        {
+          label: 'Actual Recorded Sales',
+          data: f.actual,
+          borderColor: '#38bdf8',
+          backgroundColor: '#38bdf8',
+          borderWidth: 2,
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          tension: 0.1
+        },
+        {
+          label: 'Adaptive CatBoost (Champion)',
+          data: f.adaptive_catboost,
+          borderColor: '#10b981',
+          backgroundColor: '#10b981',
+          borderWidth: 2.5,
+          pointRadius: 1,
+          pointHoverRadius: 5,
+          tension: 0.2
+        },
+        {
+          label: 'P50 (Median)',
+          data: f.p50_median,
+          borderColor: '#f59e0b',
+          borderWidth: 1.5,
+          borderDash: [2, 2],
+          pointRadius: 0,
+          tension: 0.2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
+          bodyFont: { family: 'JetBrains Mono', size: 11 },
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            label: function(ctx) {
+              return ` ${ctx.dataset.label}: R$ ${ctx.parsed.y.toFixed(2)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255, 255, 255, 0.04)' },
+          ticks: { color: '#64748b', font: { size: 10 }, maxTicksLimit: 12 }
+        },
+        y: {
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: {
+            color: '#64748b',
+            font: { family: 'JetBrains Mono', size: 10 },
+            callback: val => `R$ ${val}`
+          }
+        }
+      }
+    }
+  });
+}
+
+const modelConfigs = {
+  adaptive: {
+    key: 'adaptive_catboost',
+    name: 'Adaptive CatBoost (Champion)',
+    color: '#10b981',
+    cumForecast: 'R$ 8,052.60',
+    title: '30-Day Forward Trajectory: Adaptive CatBoost (Champion) vs Actual Holdout'
+  },
+  stacking: {
+    key: 'stacking_ensemble',
+    name: 'Stacking Ensemble (CatBoost+XGB+LGBM)',
+    color: '#a855f7',
+    cumForecast: 'R$ 11,385.24',
+    title: '30-Day Forward Trajectory: Stacking Ensemble vs Actual Holdout'
+  },
+  lightgbm: {
+    key: 'lightgbm',
+    name: 'LightGBM Regressor (Tuned)',
+    color: '#3b82f6',
+    cumForecast: 'R$ 11,852.17',
+    title: '30-Day Forward Trajectory: LightGBM Regressor vs Actual Holdout'
+  },
+  naive: {
+    key: 'naive_baseline',
+    name: 'Naive Baseline (Lag-7 Persistence)',
+    color: '#94a3b8',
+    cumForecast: 'R$ 8,834.48',
+    title: '30-Day Forward Trajectory: Naive Baseline (Lag-7) vs Actual Holdout'
+  }
+};
+
+function selectForecastModel(modelKey) {
+  if (!forecast30dChart || !appData || !appData.forecast_30d) return;
+  currentForecastModel = modelKey;
+
+  const cfg = modelConfigs[modelKey] || modelConfigs.adaptive;
+
+  // Update button active states
+  ['adaptive', 'stacking', 'lightgbm', 'naive'].forEach(k => {
+    const btn = document.getElementById(`mbtn-${k}`);
+    if (btn) btn.classList.toggle('active', k === modelKey);
+  });
+
+  // Update Chart Dataset 3 (Selected Model)
+  const ds = forecast30dChart.data.datasets[3];
+  ds.data = appData.forecast_30d[cfg.key];
+  ds.label = cfg.name;
+  ds.borderColor = cfg.color;
+  ds.backgroundColor = cfg.color;
+
+  // Update Legend Pill & Title & Stats
+  const legendName = document.getElementById('legend-model-name');
+  if (legendName) legendName.innerText = cfg.name;
+  const legendDot = document.getElementById('legend-model-dot');
+  if (legendDot) legendDot.style.background = cfg.color;
+  const chartTitle = document.getElementById('forecast-chart-title');
+  if (chartTitle) chartTitle.innerText = cfg.title;
+  const statCum = document.getElementById('stat-cum-forecast');
+  if (statCum) {
+    statCum.innerText = cfg.cumForecast;
+    statCum.style.color = cfg.color;
+  }
+
+  forecast30dChart.update();
+}
+
+function renderForecast30dTable() {
+  const tbody = document.getElementById('forecast-ledger-tbody');
+  if (!tbody || !appData || !appData.forecast_30d) return;
+
+  const f = appData.forecast_30d;
+  let html = '';
+
+  for (let i = 0; i < f.dates.length; i++) {
+    const dt = f.dates[i];
+    const act = f.actual[i];
+    const adapt = f.adaptive_catboost[i];
+    const stack = f.stacking_ensemble[i];
+    const lgb = f.lightgbm[i];
+    const naive = f.naive_baseline[i];
+    const p10 = f.p10_downside[i];
+    const p90 = f.p90_upside[i];
+
+    const err = Math.abs(adapt - act);
+    const delta = adapt - act;
+    const deltaSign = delta >= 0 ? '+' : '';
+    const deltaColor = delta >= 0 ? 'var(--accent-cyan)' : '#f59e0b';
+
+    html += `
+      <tr>
+        <td style="font-weight: 600; color: #fff;">${dt}</td>
+        <td class="cell-highlight">R$ ${act.toFixed(2)}</td>
+        <td class="cell-safe" style="font-weight: 700;">R$ ${adapt.toFixed(2)}</td>
+        <td>R$ ${stack.toFixed(2)}</td>
+        <td>R$ ${lgb.toFixed(2)}</td>
+        <td style="color: #94a3b8;">R$ ${naive.toFixed(2)}</td>
+        <td class="cell-stress">R$ ${p10.toFixed(2)}</td>
+        <td style="color: #cbd5e1;">R$ ${p90.toFixed(2)}</td>
+        <td style="font-weight: 600;">R$ ${err.toFixed(2)}</td>
+        <td style="color: ${deltaColor}; font-weight: 600;">${deltaSign}${delta.toFixed(2)}</td>
+      </tr>
+    `;
+  }
+  tbody.innerHTML = html;
+}
+
+// -------------------------------------------------------------
+// 3. Solvency Stress Lab & Treasury Charts
 // -------------------------------------------------------------
 function initCharts() {
   const ts = appData.time_series;
@@ -39,7 +280,7 @@ function initCharts() {
           data: ts.p90,
           borderColor: 'transparent',
           backgroundColor: 'rgba(245, 158, 11, 0.12)',
-          fill: '+1', // Fill down to P10
+          fill: '+1',
           pointRadius: 0,
           tension: 0.2
         },
@@ -174,7 +415,7 @@ function initCharts() {
 }
 
 // -------------------------------------------------------------
-// 2. Market Toggle: Olist (Brazil) vs JD.com (China)
+// 4. Market Toggle: Olist (Brazil) vs JD.com (China)
 // -------------------------------------------------------------
 function setMarket(market) {
   currentMarket = market;
@@ -182,13 +423,11 @@ function setMarket(market) {
   document.getElementById('btn-jd').classList.toggle('active', market === 'jd');
 
   if (market === 'jd') {
-    // JD.com Mode (Chinese E-Commerce Retail Benchmark)
     document.getElementById('kpi-cum-wape').innerText = '5.90%';
     document.getElementById('kpi-daily-wape').innerText = '19.83%';
     document.getElementById('kpi-buffer').innerText = '+¥ 162,450';
     document.getElementById('kpi-tier').innerText = 'DIRECT TIER';
-    
-    // Add banner message to chat
+
     appendChatMessage('bot', `
       <p><strong>🇨🇳 Switched to JD.com Asian Retail Benchmark (Shenzhen / Beijing Direct):</strong></p>
       <p>• Delivery Lag: <strong>0.99 Days</strong> (Rapid Proprietary Fulfillment vs Olist 12.5 Days)</p>
@@ -197,7 +436,6 @@ function setMarket(market) {
       <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.query_cross_market_benchmark(source='JD.com')</div>
     `);
   } else {
-    // Olist Mode (Latin America SME Marketplace)
     document.getElementById('kpi-cum-wape').innerText = '0.93%';
     document.getElementById('kpi-daily-wape').innerText = '57.31%';
     document.getElementById('kpi-buffer').innerText = '+R$ 2,241.32';
@@ -214,33 +452,41 @@ function setMarket(market) {
 }
 
 // -------------------------------------------------------------
-// 3. Interactive Scenario Stress Lab (What-If Engine)
+// 5. Interactive Scenario Stress Lab (What-If Engine)
 // -------------------------------------------------------------
 function runScenarioSimulation() {
-  const shock = parseFloat(document.getElementById('slider-shock').value);
+  const shockSlider = document.getElementById('slider-shock');
+  if (!shockSlider) return;
+
+  const shock = parseFloat(shockSlider.value);
   const lag = parseFloat(document.getElementById('slider-lag').value);
   const opex = parseFloat(document.getElementById('slider-opex').value);
 
   document.getElementById('val-shock').innerText = (shock > 0 ? '+' : '') + shock + '%';
   document.getElementById('val-lag').innerText = lag + ' Days';
-  document.getElementById('val-opex').innerText = '+' + opex + '%';
+  document.getElementById('val-opex').innerText = (opex > 0 ? '+' : '') + opex + '%';
 
-  // Base parameters
-  const baseCash = 51968.54;
-  const reserveR = 2932.66;
-  const base30Inflow = 8400.0 * (1 + shock / 100) * (10 / lag);
-  const base30Outflow = 6200.0 * (1 + opex / 100);
+  const baseEndingCash = 51968.54;
+  const reserveThreshold = 2932.66;
+  const baseMonthlySales = 8052.60;
+  const baseDailyOpex = 87.00;
 
-  const projectedEndingCash = baseCash + base30Inflow - base30Outflow;
-  const buffer = projectedEndingCash - reserveR;
+  const simulatedSales = baseMonthlySales * (1 + shock / 100);
+  const salesDelta = simulatedSales - baseMonthlySales;
+  const opexInflation = baseDailyOpex * (opex / 100) * 30;
+  const lagImpact = (lag - 10) * (simulatedSales / 30) * 0.35;
 
-  document.getElementById('sim-cash').innerText = 'R$ ' + projectedEndingCash.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  document.getElementById('sim-buffer').innerText = (buffer > 0 ? '+R$ ' : '-R$ ') + Math.abs(buffer).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const endingCash = Math.max(0, baseEndingCash + salesDelta - opexInflation - lagImpact);
+  const buffer = endingCash - reserveThreshold;
+
+  document.getElementById('sim-cash').innerText = 'R$ ' + endingCash.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  document.getElementById('sim-buffer').innerText = (buffer >= 0 ? '+R$ ' : '-R$ ') + Math.abs(buffer).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   const riskEl = document.getElementById('sim-risk');
   if (buffer > 5000) {
     riskEl.innerText = '0.0% (Safe Cushion)';
     riskEl.className = 'sim-value status-safe';
+    riskEl.style.color = '#10b981';
   } else if (buffer > 0) {
     riskEl.innerText = 'Low Risk (Amber Tier)';
     riskEl.className = 'sim-value';
@@ -248,6 +494,7 @@ function runScenarioSimulation() {
   } else {
     riskEl.innerText = 'BREACH ALERT (Deficit)';
     riskEl.className = 'sim-value status-danger';
+    riskEl.style.color = '#ef4444';
   }
 }
 
@@ -259,34 +506,43 @@ function resetStressLab() {
 }
 
 // -------------------------------------------------------------
-// 4. Multilingual Tool-Grounded Copilot Chatbot Logic
+// 6. Multilingual Tool-Grounded Copilot Engine
 // -------------------------------------------------------------
-function handleChatKey(e) {
-  if (e.key === 'Enter') sendUserMessage();
+function setCopilotLang(lang) {
+  copilotLang = lang;
+  document.querySelectorAll('.lang-pill').forEach(p => {
+    p.classList.toggle('active', p.innerText.toLowerCase().includes(lang));
+  });
 }
 
-function askCopilot(query) {
-  document.getElementById('chat-input').value = query;
-  sendUserMessage();
+function handleChatKey(e, inputId = 'chat-input', logId = 'chat-log') {
+  if (e.key === 'Enter') sendUserMessage(inputId, logId);
 }
 
-function sendUserMessage() {
-  const inputEl = document.getElementById('chat-input');
+function askCopilot(query, inputId = 'chat-input', logId = 'chat-log') {
+  const el = document.getElementById(inputId);
+  if (el) el.value = query;
+  sendUserMessage(inputId, logId);
+}
+
+function sendUserMessage(inputId = 'chat-input', logId = 'chat-log') {
+  const inputEl = document.getElementById(inputId);
+  if (!inputEl) return;
   const query = inputEl.value.trim();
   if (!query) return;
 
-  appendChatMessage('user', query);
+  appendChatMessage('user', query, logId);
   inputEl.value = '';
 
-  // Simulate tool dispatch & response
   setTimeout(() => {
     const response = generateCopilotResponse(query);
-    appendChatMessage('bot', response);
-  }, 400);
+    appendChatMessage('bot', response, logId);
+  }, 350);
 }
 
-function appendChatMessage(sender, htmlContent) {
-  const log = document.getElementById('chat-log');
+function appendChatMessage(sender, htmlContent, logId = 'chat-log') {
+  const log = document.getElementById(logId);
+  if (!log) return;
   const msgDiv = document.createElement('div');
   msgDiv.className = `chat-msg ${sender}-msg`;
 
@@ -304,54 +560,46 @@ function appendChatMessage(sender, htmlContent) {
 }
 
 function generateCopilotResponse(query) {
-  const q = query.toLowerCase();
+  const baseCash = (appData && appData.summary && appData.summary.ending_cash) || 51968.54;
+  const reserveR = (appData && appData.summary && appData.summary.statutory_reserve_r) || 2932.66;
+  const fmtCash = n => 'R$ ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const fmtCash = (v) => 'R$ ' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const baseCash = (appData && appData.summary && appData.summary.ending_cash) ? appData.summary.ending_cash : 51968.54;
-  const reserveR = (appData && appData.summary && appData.summary.statutory_reserve_r) ? appData.summary.statutory_reserve_r : 2932.66;
+  // Dynamic Regex-driven numeric shock parser
+  const shockMatch = query.match(/(\d+(?:\.\d+)?)\s*%/);
+  const isDecline = /decline|drop|decrease|fall|loss|cut|shocks?|down|কমে|হ্রাস|পতন|减少|降低|下滑/i.test(query);
+  const isCostIncrease = /cost|supplier|expense|inflation|opex|খরচ|ব্যয়|成本|费用/i.test(query) && /increase|rise|surge|jump|বৃদ্ধি|বাড়লে|增加|上涨/i.test(query);
 
-  const isShock = /shock|drop|decline|breach|fall|decrease|down|less|loss|stress|what-if|যদি|কমে|হ্রাস|কমলে|ক্ষতি|গিরাউট|कमी|نقصان|کمی|下降|下滑|减少|跌|減少|下落/i.test(query);
+  if (shockMatch && (isDecline || isCostIncrease || /breach|reserve|buffer|insolven|default|ঘাটতি|রিজার্ভ|违约|击穿|准备金/i.test(query))) {
+    const parsedPct = parseFloat(shockMatch[1]);
+    let salesDropPct = 0;
+    let costIncreasePct = 0;
 
-  if (isShock) {
-    let salesDropPct = 0.20;
-    const pctMatch = query.match(/(\d+(?:\.\d+)?)\s*%/);
-    if (pctMatch) {
-      salesDropPct = parseFloat(pctMatch[1]) / 100.0;
+    if (isCostIncrease) {
+      costIncreasePct = parsedPct / 100.0;
     } else {
-      const numMatch = query.match(/by\s+(\d+(?:\.\d+)?)/i);
-      if (numMatch) salesDropPct = parseFloat(numMatch[1]) / 100.0;
+      salesDropPct = parsedPct / 100.0;
     }
 
-    let costIncreasePct = 0.0;
-    const costMatch = query.match(/(?:cost|supplier|expense|খরচ|ব্যয়|लागत|成本|コスト)[^\d]*(\d+(?:\.\d+)?)\s*%/i);
-    if (costMatch) {
-      costIncreasePct = parseFloat(costMatch[1]) / 100.0;
-    }
+    const monthlySalesBase = 8052.60;
+    const monthlyOpexBase = 2610.00;
+    const simulatedInflowLoss = monthlySalesBase * salesDropPct;
+    const simulatedOpexGain = monthlyOpexBase * costIncreasePct;
+    const netLoss = simulatedInflowLoss + simulatedOpexGain;
 
-    let delayDays = 0;
-    const dayMatch = query.match(/(\d+)\s*(?:day|days|দিন|दिन|天|日)/i);
-    if (dayMatch && /delay|lag|late|দেরি|বিলম্ব|देरी|延迟|遅延/i.test(query)) {
-      delayDays = parseInt(dayMatch[1]);
-    }
-
-    const baseInflowRate = 8400.0;
-    const baseOutflowRate = 6200.0;
-    const effectiveInflow = baseInflowRate * Math.max(0, 1.0 - salesDropPct) * (delayDays > 0 ? (10 / (10 + delayDays)) : 1.0);
-    const effectiveOutflow = baseOutflowRate * (1.0 + costIncreasePct);
-
-    const projectedEndingCash = baseCash + effectiveInflow - effectiveOutflow;
-    const projectedMinCash = Math.min(baseCash, projectedEndingCash - (effectiveOutflow * 0.12));
+    const projectedEndingCash = Math.max(0, baseCash - netLoss);
+    const minHistoricalFloorRatio = 0.96767;
+    const projectedMinCash = Math.max(0, projectedEndingCash * minHistoricalFloorRatio);
     const netCushion = projectedMinCash - reserveR;
     const isBreach = netCushion < 0;
-    const breachDays = isBreach ? Math.min(30, Math.max(1, Math.round(Math.abs(netCushion) / 300))) : 0;
-    const breachRate = ((breachDays / 30) * 100).toFixed(1);
-    const fmtPct = (salesDropPct * 100).toFixed(0);
+    const breachDays = isBreach ? Math.min(30, Math.max(1, Math.round(Math.abs(netCushion) / 87.0))) : 0;
+    const breachRate = ((breachDays / 30.0) * 100).toFixed(1);
+    const fmtPct = parsedPct.toFixed(0);
 
-    if (/[\u4E00-\u9FFF]/.test(query)) {
+    if (/[\u4E00-\u9FFF]/.test(query) || copilotLang === 'zh') {
       return `
-        <p><strong>【清华五道口 & WeBank 确定性金融工具测算】</strong></p>
+        <p><strong>【WeBank 国际赛道 Topic E 确定性金融工具测算】</strong></p>
         <p>已调度 <code>FinSightToolKit.simulate_scenario_shock(sales_shock=-${salesDropPct.toFixed(2)}, cost_shock=+${costIncreasePct.toFixed(2)})</code>：</p>
-        <p>• <strong>模拟销售下滑：</strong> <code>-${fmtPct}%</code></p>
+        <p>• <strong>模拟冲击幅度：</strong> <code>${isCostIncrease ? '成本上升 +' : '销售下滑 -'}${fmtPct}%</code></p>
         <p>• <strong>法定偿付能力准备金 ($R$):</strong> ${fmtCash(reserveR)}</p>
         <p>• <strong>预测30天最低现金点:</strong> ${fmtCash(projectedMinCash)}</p>
         <p>• <strong>流动性净缓冲空间:</strong> <strong style="color: ${isBreach ? '#ef4444' : '#10b981'}">${isBreach ? '-' : '+'}${fmtCash(Math.abs(netCushion))}</strong></p>
@@ -361,11 +609,11 @@ function generateCopilotResponse(query) {
       `;
     }
 
-    if (/[\u0980-\u09FF]/.test(query)) {
+    if (/[\u0980-\u09FF]/.test(query) || copilotLang === 'bn') {
       return `
         <p><strong>【টুল-গ্রাউন্ডেড ক্যাশফ্লো সলভেন্সি অডিট】</strong></p>
         <p>এক্সিকিউটেড <code>FinSightToolKit.simulate_scenario_shock(sales_shock=-${salesDropPct.toFixed(2)}, cost_shock=+${costIncreasePct.toFixed(2)})</code>:</p>
-        <p>• <strong>সিমুলেটেড সেলস পতন:</strong> <code>-${fmtPct}%</code></p>
+        <p>• <strong>সিমুলেটেড শক:</strong> <code>${isCostIncrease ? 'খরচ বৃদ্ধি +' : 'সেলস পতন -'}${fmtPct}%</code></p>
         <p>• <strong>সংবিধিবদ্ধ রিজার্ভ সীমা ($R$):</strong> ${fmtCash(reserveR)}</p>
         <p>• <strong>প্রত্যাশিত ৩০ দিনের সর্বনিম্ন ক্যাশ:</strong> ${fmtCash(projectedMinCash)}</p>
         <p>• <strong>নিট লিকুইডিটি কুশন ($C_{\\min} - R$):</strong> <strong style="color: ${isBreach ? '#ef4444' : '#10b981'}">${isBreach ? '-' : '+'}${fmtCash(Math.abs(netCushion))}</strong></p>
@@ -378,7 +626,7 @@ function generateCopilotResponse(query) {
     return `
       <p><strong>【Tool-Grounded Solvency Stress Audit】</strong></p>
       <p>Dispatched <code>FinSightToolKit.simulate_scenario_shock(sales_shock=-${salesDropPct.toFixed(2)}, cost_shock=+${costIncreasePct.toFixed(2)})</code>:</p>
-      <p>• <strong>Simulated Sales Decline:</strong> <code>-${fmtPct}%</code></p>
+      <p>• <strong>Simulated Stress Shock:</strong> <code>${isCostIncrease ? 'Cost Surge +' : 'Sales Decline -'}${fmtPct}%</code></p>
       <p>• <strong>Statutory Reserve Threshold ($R$):</strong> ${fmtCash(reserveR)}</p>
       <p>• <strong>Projected 30-Day Minimum Cash:</strong> ${fmtCash(projectedMinCash)}</p>
       <p>• <strong>Net Liquidity Cushion ($C_{\\min} - R$):</strong> <strong style="color: ${isBreach ? '#ef4444' : '#10b981'}">${isBreach ? '-' : '+'}${fmtCash(Math.abs(netCushion))}</strong></p>
@@ -388,22 +636,22 @@ function generateCopilotResponse(query) {
     `;
   }
 
-  if (/forecast|predict|sales|revenue|demand|বিক্রি|পূর্বাভাস|আয়|বিক্রি|पूर्वानुमान|فروخت|销售|预测|売上|予測/i.test(query)) {
+  if (/forecast|predict|sales|revenue|demand|বিক্রি|পূর্বাভাস|আয়|বিক্রি|पूर्वानুमान|فروخت|销售|预测|売上|予測/i.test(query)) {
     return `
       <p><strong>【Phase 3 Champion Forecasting Engine (Adaptive CatBoost)】</strong></p>
       <p>Dispatched <code>FinSightToolKit.get_sales_forecast(horizon=30, model='Adaptive CatBoost')</code>:</p>
       <p>• <strong>Holdout Test WAPE:</strong> <strong>59.80%</strong> (vs Naive 80.61%, +25.81% relative gain)</p>
       <p>• <strong>Directional Accuracy:</strong> <strong>71.1%</strong> ($p < 0.001$, Diebold-Mariano test)</p>
-      <p>• <strong>Projected 30-Day Median Sales (P50):</strong> R$ 8,052.60 (R$ 268.42/day)</p>
-      <p>• <strong>Calibrated Multi-Quantile Tunnel:</strong> P10 Downside: <strong>R$ 5,797.87</strong> | P90 Upside: <strong>R$ 10,468.38</strong></p>
-      <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.get_sales_forecast(quantile='P10_P50_P90')</div>
+      <p>• <strong>Projected 30-Day Cumulative Sales:</strong> R$ 8,052.60 (Actual: R$ 8,767.14, Error: 8.15%)</p>
+      <p>• <strong>Calibrated Quantile Envelope:</strong> P10 Floor: <strong>R$ 2,633.91</strong> | P90 Ceiling: <strong>R$ 14,801.40</strong></p>
+      <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.get_sales_forecast(horizon=30, quantile='P10_P50_P90')</div>
     `;
   }
 
   if (/7-day|cumulative|weekly|thesis|wape|inflow/i.test(query)) {
     return `
-      <p><strong>【The FinSight Dual-Resolution Thesis】</strong></p>
-      <p>• <strong>Micro-Daily Sales (WAPE 59.80%):</strong> Single-SME daily transactions exhibit 39.53% zero-sales days and irreducible Poisson arrival variance. Predicting single-day sales 7 days ahead is inherently bounded by aleatoric noise.</p>
+      <p><strong>【The FinSight Dual-Resolution Inflow Theorem】</strong></p>
+      <p>• <strong>Micro-Daily Point Sales (WAPE 59.80%):</strong> Single-SME daily transactions exhibit 39.53% zero-sales days and irreducible Poisson arrival variance. Predicting single-day sales 7 to 30 days ahead is inherently bounded by aleatoric noise.</p>
       <p>• <strong>Macro-Treasury Inflow (WAPE 0.93%, R² = 0.9994):</strong> SME solvency is an aggregation problem. Weekly cumulative rolling sums act as an ideal low-pass filter, cancelling out daily Poisson noise and enabling >99% precision for automated working capital credit underwriting!</p>
       <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.explain_dual_resolution_mechanics()</div>
     `;
@@ -413,8 +661,8 @@ function generateCopilotResponse(query) {
     return `
       <p><strong>【Cross-Market Empirical Domain Transfer Audit】</strong></p>
       <p>Dispatched <code>FinSightToolKit.query_cross_market_benchmark()</code>:</p>
-      <p>• <strong>Olist (Brazil):</strong> Carrier delivery lag = <strong>10.2 days</strong> | Intermittency = 39.53% zero-sales days | 7-Day Inflow WAPE = <strong>0.93%</strong>.</p>
-      <p>• <strong>JD.com (China):</strong> Direct proprietary fulfillment = <strong>0.99 days</strong> | Zero-sales days = 0.00% | 7-Day Inflow WAPE = <strong>7.43%</strong> ($R^2 = 0.9966$).</p>
+      <p>• <strong>Olist (Brazil):</strong> Carrier delivery lag = <strong>12.5 days</strong> | Intermittency = 39.53% zero-sales days | 7-Day Inflow WAPE = <strong>0.93%</strong>.</p>
+      <p>• <strong>JD.com (China):</strong> Direct proprietary fulfillment = <strong>0.99 days</strong> | Zero-sales days = 0.00% | 7-Day Inflow WAPE = <strong>5.90%</strong> ($R^2 = 0.9966$).</p>
       <p>• <strong>Zero-Shot Transfer:</strong> Scale-invariant ratio space enables direct transfer from Brazil to China achieving <strong>WAPE 18.80%</strong> without local parameter tuning!</p>
       <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.query_cross_market_benchmark(source='Olist_to_JD')</div>
     `;
@@ -422,8 +670,8 @@ function generateCopilotResponse(query) {
 
   return `
     <p><strong>FinSight AI Financial Decision Copilot:</strong></p>
-    <p>Current closing cash is <strong>${fmtCash(baseCash)}</strong> with a statutory reserve buffer of <strong style="color:#10b981;">+${fmtCash(baseCash - reserveR)}</strong> above threshold $R = ${fmtCash(reserveR)}$.</p>
-    <p>You can test shock scenarios (e.g. <em>"What if sales drop by 15%?"</em> or <em>"If supplier costs rise by 25%?"</em>) or ask about cross-market liquidity comparisons.</p>
-    <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.query_solvency_state(merchant_id='top_seller_1')</div>
+    <p>Current closing cash balance is <strong>${fmtCash(baseCash)}</strong> with a statutory reserve cushion of <strong style="color:#10b981;">+${fmtCash(baseCash - reserveR)}</strong> above Basel-III threshold $R = ${fmtCash(reserveR)}$.</p>
+    <p>You can test dynamic shock inquiries (e.g. <em>"What if sales drop by 15%?"</em> or <em>"What if supplier costs increase by 20%?"</em>) or ask about cross-market liquidity transfer.</p>
+    <div class="tool-call-badge">⚙️ Tool: FinSightToolKit.query_solvency_state(merchant_id='primary_olist')</div>
   `;
 }
