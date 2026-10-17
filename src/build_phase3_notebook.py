@@ -555,8 +555,8 @@ print("✓ All Priority 1, 2 & Modern Foundation Models successfully trained.")
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 4. Resolution 1: Micro-Tactical Sales Forecasting Benchmark (Table 2A & Table 2B)
 
-### ১. Table 2A: Primary Micro-Daily Sales Forecasting Benchmark
-**মূল্যায়ন সেট:** ২০১৮ সালের হোল্ডআউট টেস্ট সেট ($N = 225$ দিন, গড় দৈনিক বিক্রি = R$ 366.11, জিরো-সেলস দিন = 39.53%)
+### 1. Table 2A: Primary Micro-Daily Sales Forecasting Benchmark
+**Evaluation Split:** 2018 Chronological Out-of-Time Holdout Set ($N = 225$ days, Mean Daily Sales = R$ 366.11, Zero-Sales Ratio = 39.53%)
 
 | Rank | Model / Algorithm | Model Family | MAE (R$) | RMSE (R$) | WAPE (%) | $R^2$ Score | Bias / ME (R$) | Zero-Days MAE | Pos-Days MAE | Dir Acc (%) | Rel Imprv | DM Test $p$-val |
 | :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -577,11 +577,11 @@ print("✓ All Priority 1, 2 & Modern Foundation Models successfully trained.")
 | **15** | **Naive Persistence Baseline ($lag_0$)** | Persistence Baseline | 295.10 | 406.00 | 80.60% | -0.8905 | +8.26 | 368.75 | 289.84 | 0.4% | Baseline | — |
 | **16** | **Seasonal Naive Baseline ($lag_7$)** | Periodic Baseline | 299.30 | 407.09 | 81.75% | -0.9007 | +7.72 | 319.32 | 297.87 | 62.2% | Baseline | — |
 
-> **প্রধান সিদ্ধান্ত (Tree Fair Comparison):** ভ্যালিডেশন সেটে টিউনিং করার পর ক্যাটবুস্ট (MAE R$ ২৩৩.২৪) লাইটজিবিএম (R$ ২৪৮.২৩) এবং এক্সজিআইবুস্ট (R$ ২৪০.৩৯)-এর চেয়ে শ্রেষ্ঠত্ব প্রমাণ করেছে। অ্যাডাপটিভ ট্রেন্ড ড্রিফট ক্যালিব্রেশন যোগ করার পর বায়াস +৪২.৩৯ থেকে কমে মাত্র -৫.১০ রিয়ালে নেমে এসেছে এবং Diebold-Mariano টেস্টে $p < 0.0001$ লেভেলে নেইভ মডেলকে পরাস্ত করেছে।
+> **Key Empirical Finding (Fair Tree Architecture Comparison):** Following hyperparameter optimization strictly on the validation partition, CatBoost (MAE R$ 233.24) decisively outperforms LightGBM (R$ 248.23) and XGBoost (R$ 240.39). Incorporating dynamic 28-day adaptive trend calibration compresses residual bias from +42.39 down to -5.10 BRL, defeating the persistence baseline in the Harvey-Leybourne-Newbold Diebold-Mariano test at $p < 0.0001$.
 
 ---
 
-### ২. Table 2B: Specialized Zero-Sales & Intermittent Demand Discrimination
+### 2. Table 2B: Specialized Zero-Sales & Intermittent Demand Discrimination
 
 | Model Architecture | Intermittent Strategy | MAE Overall | WAPE (%) | Bias (ME) | Zero-Days MAE | Positive-Days MAE |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -591,7 +591,7 @@ print("✓ All Priority 1, 2 & Modern Foundation Models successfully trained.")
 | **Croston / SBA Method** | Exponential Demand Inter-Arrival | R$ 218.38 | 59.65% | -13.83 | R$ 352.27 | R$ 208.82 |
 | **Adaptive CatBoost** | Dynamic Macro Residual Drift | R$ 218.93 | 59.80% | -5.10 | R$ 351.28 | R$ 209.48 |
 
-> **অন্তর্দৃষ্টি:** টু-স্টেজ হার্ডল মডেল পজিটিভ বিক্রির দিনে এরর নাটকীয়ভাবে কমিয়ে R$ ২১৭.৩২-এ নামিয়ে আনে। তবে সার্বিক ইন্টারমিটেন্ট প্যাটার্নে Adaptive CatBoost সবচেয়ে সুষম এবং আনবায়াস্ড ফলাফল নিশ্চিত করে।
+> **Empirical Insight:** The Two-Stage Hurdle model substantially lowers conditional positive-day error to R$ 217.32. However, across the full zero-inflated intermittent distribution, Adaptive CatBoost provides the most balanced, low-bias forecasting profile (WAPE 59.80%, Bias -5.10 BRL).
 """))
 
     # =========================================================================
@@ -698,7 +698,7 @@ display(df_intermittent)
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""### Figure 1: Out-of-Time Forecast Trajectories & Model Diagnostic Suite
 
-* **Figure 1 (Radar & Error Distribution):** ১৩টি মডেলের মধ্যে MAE, WAPE, Bias এবং Directional Accuracy-এর বহু-মাত্রিক তুলনামূলক চিত্র।
+* **Figure 1 (Radar & Error Distribution):** Multi-dimensional diagnostic comparison of MAE, WAPE, Bias, and Directional Accuracy across core predictive architectures.
 * **Figure 1A:** Out-of-time 7-day forecast trajectory vs actual sales across the final 60 holdout trading days.
 * **Figure 1B:** Error residual distributions ($y_t - \hat{y}_t$) across core architectures.
 * **Figure 1C:** Optimal convex meta-weights learned by the 5-fold stacking ridge meta-model.
@@ -799,21 +799,21 @@ plt.show()
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 5. Priority 3: Chronological Rolling-Origin Backtesting Scorecard (Table 2C & Figure 2A)
 
-### ৩. Table 2C: Chronological Rolling-Origin Backtesting Scorecard
-৪টি পৃথক ক্রমবর্ধিষ্ণু উইন্ডোতে (Expanding Windows) সময়ের সাথে মডেলের স্থায়িত্ব পরীক্ষা:
+### 3. Table 2C: Chronological Rolling-Origin Backtesting Scorecard
+Evaluation across 4 expanding chronological evaluation windows in 2018:
 
 | Evaluation Window | Evaluation Dates | Samples ($N$) | Mean Sales | Naive MAE | Adaptive MAE | Relative Imprv (%) | Adaptive WAPE | Adaptive $R^2$ | Paired Daily Gain |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Fold 1: Jan–Feb 2018** | 08/01/18 – 28/02/18 | 59 | R$ 461.07 | R$ 358.65 | R$ 260.49 | +27.37% | 56.50% | -0.1112 | +R$ 98.15 / দিন |
-| **Fold 2: Mar–Apr 2018** | 01/03/18 – 30/04/18 | 61 | R$ 365.20 | R$ 269.98 | R$ 217.36 | +19.49% | 59.52% | -0.0901 | +R$ 52.62 / দিন |
-| **Fold 3: May–Jun 2018** | 01/05/18 – 30/06/18 | 61 | R$ 339.94 | R$ 282.54 | R$ 202.82 | +28.21% | 59.66% | -0.1110 | +R$ 79.72 / দিন |
-| **Fold 4: Jul–Aug 2018** | 01/07/18 – 20/08/18 | 44 | R$ 276.29 | R$ 262.13 | R$ 182.27 | +30.47% | 65.97% | -0.0646 | +R$ 79.86 / দিন |
+| **Fold 1: Jan–Feb 2018** | 08/01/18 – 28/02/18 | 59 | R$ 461.07 | R$ 358.65 | R$ 260.49 | +27.37% | 56.50% | -0.1112 | +R$ 98.15 / day |
+| **Fold 2: Mar–Apr 2018** | 01/03/18 – 30/04/18 | 61 | R$ 365.20 | R$ 269.98 | R$ 217.36 | +19.49% | 59.52% | -0.0901 | +R$ 52.62 / day |
+| **Fold 3: May–Jun 2018** | 01/05/18 – 30/06/18 | 61 | R$ 339.94 | R$ 282.54 | R$ 202.82 | +28.21% | 59.66% | -0.1110 | +R$ 79.72 / day |
+| **Fold 4: Jul–Aug 2018** | 01/07/18 – 20/08/18 | 44 | R$ 276.29 | R$ 262.13 | R$ 182.27 | +30.47% | 65.97% | -0.0646 | +R$ 79.86 / day |
 
-> **ব্যাকটেস্টিং পরিসংখ্যানিক ফলাফল:**
+> **Rolling-Origin Statistical Summary:**
 > * **Mean MAE Improvement:** +26.38% ± 4.68%
-> * **৯৫% কনফিডেন্স ইন্টারভাল (CI):** [21.70%, 31.07%]
-> * **Win Rate:** 100.0% (৪টির মধ্যে ৪টি ফোল্ডেই Adaptive CatBoost জয়ী)
-> * **Mean Daily Paired Gain:** প্রতিদিন গড়ে R$ 77.58 কম এরর।
+> * **95% Confidence Interval (CI):** [21.70%, 31.07%]
+> * **Win Rate:** 100.0% (Adaptive CatBoost wins across all 4 out of 4 chronological folds)
+> * **Mean Daily Paired Gain:** R$ 77.58 lower absolute error per day.
 """))
 
     # =========================================================================
@@ -883,22 +883,22 @@ print(f"                         Adaptive CatBoost wins in 100% of rolling windo
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 6. Priority 4: Multi-Quantile Uncertainty & Phase 2 Cashflow Solvency Stress Test (Table 2D-1 & Table 3, Figure 2)
 
-### ৪. Table 2D-1 & Table 3: Multi-Quantile Uncertainty & Phase 2 Cashflow Solvency Stress Test
+### 4. Table 2D-1 & Table 3: Multi-Quantile Uncertainty & Phase 2 Cashflow Solvency Stress Test
 
-#### ক. Table 2D-1: Quantile Uncertainty Metrics (৮০% নমিনাল ইন্টারভাল)
+#### A. Table 2D-1: Quantile Uncertainty Metrics (80% Nominal Coverage Interval)
 * **Observed Coverage (PICP):** 65.78%
 * **Mean Interval Width (MPIW):** R$ 579.44
-* **P10 Downside Scenario Mean:** R$ 140.16 / দিন
-* **P50 Median Expectation Mean:** R$ 390.85 / দিন (MAE: R$ 235.90)
-* **P90 Upside Scenario Mean:** R$ 719.60 / দিন
-* **Actual < P10 (Severe Downside):** 22.67% দিন
-* **Actual > P90 (Severe Upside Spike):** 11.56% দিন
+* **P10 Downside Scenario Mean:** R$ 140.16 / day
+* **P50 Median Expectation Mean:** R$ 390.85 / day (MAE: R$ 235.90)
+* **P90 Upside Scenario Mean:** R$ 719.60 / day
+* **Actual < P10 (Severe Downside Tail):** 22.67% of days
+* **Actual > P90 (Severe Upside Surge):** 11.56% of days
 
 ---
 
-#### খ. Table 3: Phase 2 Cashflow Engine-এ ৩০-দিনের Forward Liquidity Stress Scorecard
-* **সিমুলেশন দিগন্ত:** ৩০ দিন
-* **সংবিধিবদ্ধ লিকুইডিটি রিজার্ভ সীমা ($R$):** R$ 2,932.66 (Calibrated from revenue)
+#### B. Table 3: Forward 30-Day Liquidity Stress Scorecard (Phase 2 Cashflow Integration)
+* **Simulation Horizon:** 30 days
+* **Statutory Liquidity Reserve Floor ($R$):** R$ 2,932.66 (Calibrated from operational revenue)
 
 | Model Forecast Stream | Ending Cash ($C_{30}$) | Min Cash Balance ($C_{\min}$) | Statutory Buffer ($C_{\min} - R$) | Breach Days ($< R$) | Breach % | Solvency Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
@@ -907,7 +907,7 @@ print(f"                         Adaptive CatBoost wins in 100% of rolling windo
 | **Stacking Ensemble** | R$ 8,425.27 | R$ 6,212.90 | +R$ 3,135.57 | 0 | 0.0% | QUALIFIED (Safe) |
 | **P10 Downside Stress ($10^{\text{th}}$ Pct)** | **R$ 5,382.51** | **R$ 5,318.65** | **+R$ 2,241.32** | **0** | **0.0%** | **SAFE (NO DEFICIT)** |
 
-> **ট্রেজারি পর্যবেক্ষণ:** চরমতম প্রতিকূল পরিস্থিতিতেও (ধারাবাহিক P10 সর্বনিম্ন বিক্রি বজায় থাকলেও) মার্চেন্টের ন্যূনতম নগদ ব্যালেন্স R$ ৫,৩১৮.৬৫, যা সংবিধিবদ্ধ লিকুইডিটি রিজার্ভ ($R = \text{R\$}~২,৯৩২.৬৬$)-এর চেয়ে R$ ২,২৪১.৩২ বেশি থাকে। ফলে কোনো প্রকার দেউলিয়াত্ব বা ঋণখেলাপির ঝুঁকি তৈরি হয় না।
+> **Treasury Liquidity Observation:** Even under worst-case downside stress (prolonged P10 sales trajectory), the enterprise maintains a minimum cash balance of R$ 5,318.65, preserving a safe surplus capital buffer of +R$ 2,241.32 above statutory reserve floor ($R = \text{R\$}~2,932.66$) with zero breach days (0.0% breach rate).
 """))
 
     # =========================================================================
@@ -999,8 +999,8 @@ display(runway_df)
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 7. Priority 5: Daily Sales vs Cumulative Inflow Benchmark (Table 2E — Honest Baseline Superiority)
 
-### ৫. Table 2E: Daily Sales vs Cumulative Inflow Benchmark (Honest Baseline Superiority)
-**লক্ষ্য:** ৭ দিনের রোলিং ক্যাশ ইনফ্লো ($Y_{t+7} = \sum_{k=1}^7 y_{t+k}$)
+### 5. Table 2E: Daily Sales vs Cumulative Inflow Benchmark (Honest Baseline Superiority)
+**Target:** 7-Day Rolling Cumulative Cash Inflow ($Y_{t+7} = \sum_{k=1}^7 y_{t+k}$)
 
 | Model / Algorithm | Formulation Class | MAE (R$) | RMSE (R$) | WAPE (%) | $R^2$ Score | Bias / ME (R$) | Directional Acc (%) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -1013,7 +1013,7 @@ display(runway_df)
 | **Salesforce MOIRAI-Small (Zero-Shot)** | **Foundation Transformer** | **R$ 4,203.93** | **R$ 4,850.15** | **1.91%** | **0.9026** | **+R$ 4,203.22** | **100.0%** |
 | **Holt Linear Exponential Smoothing** | Double Exponential Smoothing | R$ 30,791.56 | R$ 36,436.15 | 13.91% | -4.8662 | +R$ 29,880.90 | 100.0% |
 
-> **বৈজ্ঞানিক সততা (Honest Reporting):** কিউমুলেটিভ ক্যাশফ্লোতে মেশিন লার্নিং (Ridge) নয়, বরং Trend-Adjusted Naive (MA-7 Drift) স্পষ্ট বিজয়ী। Ridge মডেলের তুলনায় এর MAE ৪৪.৭% কম এবং WAPE নেমে এসেছে মাত্র ০.৯৩%-এ ($R^2 = 0.9761$)। কারণ ৭ দিনের যোগফল একটি প্রাকৃতিক লো-পাস ফিল্টার হিসেবে কাজ করায় লোকাল ড্রিফট মডেল ওভারফিটিং ছাড়াই ম্যাক্রো ট্র্যাজেক্টরি নির্ভুলভাবে প্রেডিক্ট করতে পারে।
+> **Scientific Integrity & Honest Reporting:** On cumulative cash inflows, statistical drift modeling (Trend-Adjusted Naive MA-7 Drift) decisively outperforms complex machine learning (Ridge L2). Its MAE is 44.7% lower and WAPE reaches an extraordinary 0.93% ($R^2 = 0.9761$). Temporal aggregation acts as a physical low-pass filter, enabling local momentum drift to project the macro liquidity trajectory with exceptional precision without risk of overfitting.
 """))
 
     # =========================================================================
@@ -1089,7 +1089,7 @@ display(dual_comparison_df)
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 8. Feature Ablation Study (Table 2F)
 
-### ৬. Table 2F: Feature Ablation Study ($P = 32$ ফিচার সাবসেট পরীক্ষা)
+### 6. Table 2F: Feature Ablation Study ($P = 32$ Feature Subset Audit)
 
 | Ablation Group | Features Active | Mean MAE (R$) | Std Dev (R$) | 95% Confidence Interval | Delta MAE ($\Delta$) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -1099,7 +1099,7 @@ display(dual_comparison_df)
 | **Drop Calendar & Fourier Cyclical** | 24 | 243.95 | 1.78 | $\pm$ 1.56 | +1.31 (Degradation) |
 | **Drop Institutional & Payday Dummies** | 29 | 242.72 | 2.78 | $\pm$ 2.44 | +0.07 |
 
-> **ফলাফল:** অটোরিগ্রেসিভ ল্যাগ (Lag-1, Lag-7) বাদ দিলে এরর সর্বোচ্চ বৃদ্ধি পায় (+R$ ৩.৭৯), যা প্রমাণ করে যে ক্ষণস্থায়ী বিক্রির ধারাবাহিকতা মডেলের সবচেয়ে শক্তিশালী সংকেত।
+> **Ablation Takeaway:** Dropping autoregressive lags (Lag-1, Lag-7) incurs the steepest performance degradation (+R$ 3.79 MAE), proving that short-term demand continuity provides the single strongest predictive signal.
 """))
 
     # =========================================================================
@@ -1124,7 +1124,7 @@ display(df_ablation)
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 8.1 Modern Open-Weights Foundation Time-Series Models vs. Tree Ensembles (Table 2G)
 
-### ৭. Table 2G: 2024–2026 Foundation Time-Series Models vs. Domain-Calibrated Tree Ensembles Frontier Scorecard
+### 7. Table 2G: 2024–2026 Foundation Time-Series Models vs. Domain-Calibrated Tree Ensembles Frontier Scorecard
 
 | Model Architecture | Foundation Paradigm & Backbone | Pretraining Corpus / Tokens | Model Size (Params) | Micro-Daily WAPE (39.53% Zero) | Macro-Inflow WAPE ($H=7$) | Zero-Day Bias (Over-Smoothing) | Inference Latency (ms) | Edge / SME Device Friendly |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -1164,7 +1164,7 @@ display(df_foundation_frontier)
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 9. Cross-Market Empirical Validation: JD.com China (Table 3 & Figure 3)
 
-### ৭. Table 3 & Cross-Market Scorecard: Olist (Brazil) vs JD.com (China)
+### 8. Table 2H & Cross-Market Scorecard: Olist (Brazil) vs JD.com (China)
 
 | Market Dimension | Olist Brazilian E-Commerce (SME 3P) | JD.com Asian Retail Benchmark (Direct 1P) |
 | :--- | :--- | :--- |
@@ -1339,12 +1339,12 @@ plt.show()
     # =========================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 10. Hierarchical Multi-Scale Resolution: Olist Platform Macro Stream (Figure 4)
 
-### ৮. Hierarchical Reconciliation (SME Merchant vs Platform-Wide Aggregate)
+### 9. Hierarchical Multi-Scale Reconciliation (Single SME vs Platform-Wide Aggregate)
 
 | Hierarchical Scale | Scope & Merchants | Zero-Sales Days (%) | Mean Daily Sales | Best Daily WAPE | Best Daily $R^2$ | Cumulative Inflow WAPE | Strategic Focus |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Micro-SME (Table 2A)** | ১টি নির্দিষ্ট মার্চেন্ট | 39.53% (Intermittent) | R$ 366.11 | 59.80% (CatBoost) | -0.0142 | 0.93% (Trend-Adj) | SME Solvency & Liquidity |
-| **Macro-Platform (Table 2E-1)** | ৩,০৯৫টি মার্চেন্টের মোট বিক্রি | 0.00% (Continuous) | R$ 35,230.82 | 21.12% (LightGBM) | +0.1925 | 0.39% (Platform Drift) | Marketplace Logistics & Capacity |
+| **Micro-SME (Table 2A)** | 1 Specific SME Merchant | 39.53% (Intermittent) | R$ 366.11 | 59.80% (CatBoost) | -0.0142 | 0.93% (Trend-Adj) | SME Solvency & Liquidity |
+| **Macro-Platform (Table 2E-1)** | 3,095 Marketplace Merchants Combined | 0.00% (Continuous) | R$ 35,230.82 | 21.12% (LightGBM) | +0.1925 | 0.39% (Platform Drift) | Marketplace Logistics & Capacity |
 | **Cross-Market (JD.com)** | Direct Rapid-Fulfillment | 0.00% (Continuous) | ¥ 181,142.95 | 19.83% (MA-3) | +0.2540 | 5.90% (Trajectory) | Cross-Border Liquidity Benchmarking |
 """))
 
