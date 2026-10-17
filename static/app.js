@@ -90,6 +90,36 @@ function setForecastHorizonDays(days) {
 }
 
 // -------------------------------------------------------------
+// Decision Intelligence Module Switcher
+// -------------------------------------------------------------
+function switchDecisionModule(mod) {
+  const tabs = ['overview', 'forecasts', 'cashflow', 'scenarios', 'copilot'];
+  tabs.forEach(m => {
+    const btn = document.getElementById(`tab-mod-${m}`);
+    if (btn) btn.classList.toggle('active', m === mod);
+  });
+
+  if (mod === 'overview') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (mod === 'forecasts') {
+    const el = document.querySelector('.matrix-title');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else if (mod === 'cashflow') {
+    const el = document.getElementById('risk-status-badge');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else if (mod === 'scenarios') {
+    const el = document.getElementById('control-sales-growth');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else if (mod === 'copilot') {
+    const el = document.getElementById('copilot-user-input');
+    if (el) {
+      el.focus();
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}
+
+// -------------------------------------------------------------
 // 5. Preset Button Handlers
 // -------------------------------------------------------------
 function setSalesGrowthPreset(val) {
@@ -460,6 +490,15 @@ function generateTargetStrategy() {
     msg = `【সংরক্ষণশীল রাজস্ব সমন্বয় স্ট্র্যাটেজি】\n\nলক্ষ্যমাত্রা বর্তমান বেসলাইনের চেয়ে কম (-${Math.abs(diffPct).toFixed(1)}%)। ঝুঁকি কমাতে অপ্রয়োজনীয় পরিচালন ব্যয় হ্রাস এবং ইনভেন্টরি কমানোর সুপারিশ করা হলো।`;
   }
   alert(msg);
+}
+
+function toggleTargetPlanner() {
+  const body = document.getElementById('target-planner-body');
+  const btn = document.getElementById('btn-toggle-planner');
+  if (!body || !btn) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  btn.textContent = isHidden ? 'Hide target planner' : 'Show target planner';
 }
 
 // -------------------------------------------------------------

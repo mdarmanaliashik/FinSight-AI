@@ -128,6 +128,15 @@
       <!-- LEFT COLUMN: PREDICT + DETECT RISK + RECOMMEND ACTIONS + SCENARIOS -->
       <main class="studio-column">
 
+        <!-- DECISION INTELLIGENCE MODULE TABS -->
+        <div class="decision-intel-tabs">
+          <button class="d-tab active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">Overview</button>
+          <button class="d-tab" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">Forecasts</button>
+          <button class="d-tab" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">Cash flow</button>
+          <button class="d-tab" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">Scenarios</button>
+          <button class="d-tab" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">AI advisor</button>
+        </div>
+
         <!-- 2. PREDICT: SALES TREND & FORECAST STUDIO -->
         <div class="studio-card">
           <div class="studio-toolbar">
@@ -264,8 +273,8 @@
               <input type="range" id="input-cash" min="0" max="500000" value="180000" step="10000" oninput="recomputeBusinessEngine()">
               <div class="preset-chips">
                 <span class="preset-chip" onclick="setCashPreset(0)">৳0</span>
-                <span class="preset-chip" onclick="setCashPreset(250000)">৳2.5L</span>
-                <span class="preset-chip" onclick="setCashPreset(500000)">৳5.0L</span>
+                <span class="preset-chip" onclick="setCashPreset(250000)">৳2.5 lakh</span>
+                <span class="preset-chip" onclick="setCashPreset(500000)">৳5 lakh</span>
               </div>
             </div>
 
@@ -309,8 +318,8 @@
         </div>
 
         <!-- 4. RECOMMEND ACTIONS: BUSINESS TARGET PLANNER & ACTIONABLE STRATEGY -->
-        <div class="target-planner-box">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div class="target-planner-box" id="target-planner-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
             <div>
               <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
                 🎯 Business Target Planner & Actionable Strategy
@@ -319,60 +328,67 @@
                 Set a monthly revenue target to calculate required growth gap and generate customized execution steps.
               </p>
             </div>
-            <button class="cta-btn" onclick="generateTargetStrategy()">
-              ⚡ Generate Target Strategy
-            </button>
-          </div>
-
-          <!-- TARGET INPUT ROW -->
-          <div class="target-input-row">
-            <div>
-              <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
-                Monthly Revenue Target (<span id="curr-target-label">BDT</span>):
-              </span>
-              <input type="number" id="input-target-revenue" class="target-input-field" value="500000" step="10000" oninput="recomputeTargetPlanner()">
-            </div>
-            <div>
-              <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
-                Required Change Over Baseline:
-              </span>
-              <span class="gap-pill gap-pill-pos" id="val-target-diff">+19.05%</span>
-            </div>
-            <div>
-              <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
-                Revenue Gap to Bridge:
-              </span>
-              <span style="font-size: 16px; font-weight: 800; color: #f8fafc; font-family: var(--font-mono);" id="val-target-gap">৳80,000</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="curr-btn" id="btn-toggle-planner" onclick="toggleTargetPlanner()" style="background: rgba(255,255,255,0.06); padding: 6px 14px; border: 1px solid var(--border-subtle); color: #cbd5e1;">
+                Hide target planner
+              </button>
+              <button class="cta-btn" onclick="generateTargetStrategy()">
+                ⚡ Generate Target Strategy
+              </button>
             </div>
           </div>
 
-          <!-- STRATEGY EXECUTION ROADMAP CARDS -->
-          <div class="strategy-list" id="strategy-roadmap-cards">
-            <div class="strategy-item">
-              <div class="strategy-item-title">📦 1. Product & Basket Size Optimization</div>
-              <div class="strategy-item-desc">
-                Focus on the top 20% margin SKUs. Bundle complimentary retail items to increase average transaction basket size by ৳120 to bridge the revenue gap.
+          <div id="target-planner-body">
+            <!-- TARGET INPUT ROW -->
+            <div class="target-input-row">
+              <div>
+                <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+                  Monthly Revenue Target (<span id="curr-target-label">BDT</span>):
+                </span>
+                <input type="number" id="input-target-revenue" class="target-input-field" value="500000" step="10000" oninput="recomputeTargetPlanner()">
+              </div>
+              <div>
+                <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+                  Required Change Over Baseline:
+                </span>
+                <span class="gap-pill gap-pill-pos" id="val-target-diff">+19.05%</span>
+              </div>
+              <div>
+                <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+                  Revenue Gap to Bridge:
+                </span>
+                <span style="font-size: 16px; font-weight: 800; color: #f8fafc; font-family: var(--font-mono);" id="val-target-gap">৳80,000</span>
               </div>
             </div>
 
-            <div class="strategy-item">
-              <div class="strategy-item-title">⚡ 2. Cash Inflow Acceleration</div>
-              <div class="strategy-item-desc">
-                Offer a 2% early-settlement incentive to major retail channels to compress payment delay lag from 10 days down to 4 days, pulling forward liquidity.
+            <!-- STRATEGY EXECUTION ROADMAP CARDS -->
+            <div class="strategy-list" id="strategy-roadmap-cards">
+              <div class="strategy-item">
+                <div class="strategy-item-title">📦 1. Product & Basket Size Optimization</div>
+                <div class="strategy-item-desc">
+                  Focus on the top 20% margin SKUs. Bundle complimentary retail items to increase average transaction basket size by ৳120 to bridge the revenue gap.
+                </div>
               </div>
-            </div>
 
-            <div class="strategy-item">
-              <div class="strategy-item-title">✂️ 3. Cost Containment & Expense Delay</div>
-              <div class="strategy-item-desc">
-                Keep the operating cost ratio capped below 62%. Postpone discretionary marketing outlays until the ৳260,400 reserve cushion is fully locked in.
+              <div class="strategy-item">
+                <div class="strategy-item-title">⚡ 2. Cash Inflow Acceleration</div>
+                <div class="strategy-item-desc">
+                  Offer a 2% early-settlement incentive to major retail channels to compress payment delay lag from 10 days down to 4 days, pulling forward liquidity.
+                </div>
               </div>
-            </div>
 
-            <div class="strategy-item">
-              <div class="strategy-item-title">📆 4. Weekly Milestone Targets</div>
-              <div class="strategy-item-desc" id="strategy-weekly-milestones">
-                Week 1 Target: <strong>৳125,000</strong> · Week 2: <strong>৳125,000</strong> · Week 3: <strong>৳125,000</strong> · Week 4: <strong>৳125,000</strong>. Track daily via ledger.
+              <div class="strategy-item">
+                <div class="strategy-item-title">✂️ 3. Cost Containment & Expense Delay</div>
+                <div class="strategy-item-desc">
+                  Keep the operating cost ratio capped below 62%. Postpone discretionary marketing outlays until the ৳260,400 reserve cushion is fully locked in.
+                </div>
+              </div>
+
+              <div class="strategy-item">
+                <div class="strategy-item-title">📆 4. Weekly Milestone Targets</div>
+                <div class="strategy-item-desc" id="strategy-weekly-milestones">
+                  Week 1 Target: <strong>৳125,000</strong> · Week 2: <strong>৳125,000</strong> · Week 3: <strong>৳125,000</strong> · Week 4: <strong>৳125,000</strong>. Track daily via ledger.
+                </div>
               </div>
             </div>
           </div>
@@ -412,6 +428,30 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <!-- PROTOTYPE NOTE -->
+        <div class="prototype-note-box">
+          <strong>Prototype note:</strong> The controls are interactive, but the sample data is synthetic. The dashboard is not connected to a bank account or live business database, and its scenario formulas are not a substitute for a transaction-level cash-flow engine.
+        </div>
+
+        <!-- WHAT THE PRODUCTION VERSION SHOULD CONTAIN -->
+        <div class="production-table-card">
+          <h3 style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px;">What the Production Version Contains</h3>
+          <table class="production-spec-table">
+            <thead>
+              <tr><th>Dashboard Section</th><th>Key Outputs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Business overview</strong></td><td>Revenue, gross margin, expenses, cash balance and KPI trends</td></tr>
+              <tr><td><strong>Sales intelligence</strong></td><td>7/14/30-day forecasts, prediction intervals and backtest results</td></tr>
+              <tr><td><strong>Cash-flow intelligence</strong></td><td>Daily inflow/outflow, cash runway, reserve-breach date</td></tr>
+              <tr><td><strong>Risk center</strong></td><td>Sales decline, payment delays, expense shocks and liquidity alerts</td></tr>
+              <tr><td><strong>Target planner</strong></td><td>Monthly targets, weekly milestones, KPI gaps and recommended actions</td></tr>
+              <tr><td><strong>AI copilot</strong></td><td>Natural-language questions grounded in actual model and financial calculations</td></tr>
+              <tr><td><strong>Statistical reports</strong></td><td>Confidence/prediction intervals, forecast errors, calibration and model limitations</td></tr>
+            </tbody>
+          </table>
         </div>
       </main>
 

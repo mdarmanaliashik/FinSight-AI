@@ -5,7 +5,7 @@ Implements:
 1. Multilingual Omni-Model Copilot: Automatically detects input language
    across English, Bengali (বাংলা), Hindi (हिन्दी), Urdu (اردو),
    Chinese (中文), and Japanese (日本語).
-2. Extracts shock and financial parameters across all scripts.
+2. Extracts shock, financial parameters, and business target intents across all scripts.
 3. Dispatches Pydantic tool contracts to FinSightToolKit, guaranteeing
    zero numerical hallucinations.
 4. Synthesizes culturally and grammatically natural financial advisory
@@ -68,8 +68,9 @@ class GroundedCopilotAgent:
     Strictly queries deterministic engines before synthesizing localized responses.
     """
 
-    def __init__(self, toolkit: FinSightToolKit):
+    def __init__(self, toolkit: FinSightToolKit, currency_symbol: str = "R$"):
         self.toolkit = toolkit
+        self.currency_symbol = currency_symbol
 
     def route_and_execute(self, prompt: str) -> Tuple[str, List[Dict[str, Any]], Dict[str, Any]]:
         """
@@ -97,6 +98,20 @@ class GroundedCopilotAgent:
             "下降", "下滑", "跌", "减少", "延迟", "延期", "成本", "通胀", "跌破", "击穿",
             # Japanese
             "減少", "下落", "低下", "遅延", "遅れ", "コスト", "原価", "割れ"
+        ]
+
+        target_keywords = [
+            "target", "strategy", "goal", "plan", "milestone", "action", "recommend",
+            # Bengali
+            "টার্গেট", "কৌশল", "পরিকল্পনা", "লক্ষ্য", "পদক্ষেপ", "উন্নতি", "পরামর্শ",
+            # Hindi
+            "रणनीति", "लक्ष्य", "योजना", "कार्रवाई",
+            # Urdu
+            "حکمت عملی", "ہدف", "منصوبہ",
+            # Chinese
+            "目标", "策略", "规划", "建议",
+            # Japanese
+            "目標", "戦略", "計画", "提案"
         ]
 
         forecast_keywords = [
@@ -131,6 +146,7 @@ class GroundedCopilotAgent:
         has_percentage = len(pct_matches) > 0
 
         is_shock = any(k in p_lower for k in shock_keywords) or (has_percentage and any(k in p_lower for k in ["sales", "revenue", "cost", "supplier", "cash", "balance", "reserve", "breach", "বিক্রি", "খরচ", "ক্যাশ", "রিজার্ভ", "बिक्री", "فروخت", "销售", "成本", "売上"]))
+        is_target = any(k in p_lower for k in target_keywords) and not is_shock
         is_forecast = any(k in p_lower for k in forecast_keywords)
         is_reserve = any(k in p_lower for k in reserve_keywords)
 
@@ -140,7 +156,7 @@ class GroundedCopilotAgent:
             cost_shock = 0.0
 
             if pct_matches:
-                is_cost_only = any(c in p_lower for c in ["cost", "cogs", "supplier", "expense", "খরচ", "কাঁচামাল", "लागत", "成本", "原価"]) and not any(s in p_lower for s in ["sales", "revenue", "demand", "বিক্রি", "बिक्री", "فروخت", "销售", "売上"])
+                is_cost_only = any(c in p_lower for c in ["cost", "cogs", "supplier", "expense", "খরচ", "কাঁচামাল", "লাগত", "成本", "原価"]) and not any(s in p_lower for s in ["sales", "revenue", "demand", "বিক্রি", "बिक्री", "فروخت", "销售", "売上"])
                 if is_cost_only:
                     sales_shock = 0.0
                     cost_shock = float(pct_matches[0]) / 100.0
@@ -165,6 +181,11 @@ class GroundedCopilotAgent:
             res = self.toolkit.execute_tool("simulate_scenario", args)
             tool_calls.append({"name": "simulate_scenario", "args": args})
             context_data["simulation"] = res
+
+        elif is_target:
+            res_fc = self.toolkit.execute_tool("get_sales_forecast", {"horizon_days": 30, "quantile": 0.50})
+            tool_calls.append({"name": "get_sales_forecast", "args": {"horizon_days": 30, "quantile": 0.50}})
+            context_data["target_plan"] = res_fc
 
         elif is_forecast and not is_reserve:
             h = 30 if ("30" in p_lower or "month" in p_lower or "মাস" in p_lower or "महीना" in p_lower or "月" in p_lower) else (14 if "14" in p_lower else 7)
@@ -199,6 +220,7 @@ class GroundedCopilotAgent:
     def _synthesize_response(self, prompt: str, context: Dict[str, Any], lang: str = "en") -> str:
         """Synthesizes localized advisory response anchored in exact tool numbers."""
         lines = []
+        c = self.currency_symbol
 
         if "simulation" in context:
             sim = context["simulation"]
@@ -206,15 +228,15 @@ class GroundedCopilotAgent:
             if lang == "bn": # Bengali
                 lines.append("### 📊 আর্থিক স্ট্রেস-টেস্ট বিশ্লেষণ (ডিটারমিনিস্টিক ইঞ্জিন আউটপুট)")
                 lines.append(f"- **সিমুলেটেড শক:** সেলস শক: `{sim['sales_shock_pct'] * 100:+.0f}%` | খরচ বৃদ্ধি: `{sim['cost_shock_pct'] * 100:+.0f}%` | পেআউট বিলম্ব: `{sim['delay_days']}` দিন।")
-                lines.append(f"- **স্বাভাবিক সমাপনী ক্যাশ:** R$ {sim['baseline_ending_cash']:,.2f}")
-                lines.append(f"- **সংকটকালীন সমাপনী ক্যাশ:** R$ {sim['shocked_ending_cash']:,.2f}")
-                lines.append(f"- **নিট আর্থিক ক্ষতি:** R$ {sim['net_cash_impact']:,.2f}")
+                lines.append(f"- **স্বাভাবিক সমাপনী ক্যাশ:** {c} {sim['baseline_ending_cash']:,.2f}")
+                lines.append(f"- **সংকটকালীন সমাপনী ক্যাশ:** {c} {sim['shocked_ending_cash']:,.2f}")
+                lines.append(f"- **নিট আর্থিক ক্ষতি:** {c} {sim['net_cash_impact']:,.2f}")
                 if sim['is_reserve_breach']:
-                    lines.append(f"- 🚨 **রিজার্ভ ব্রিচ অ্যালার্ট:** হ্যাঁ। সর্বোচ্চ লিকুইডিটি ঘাটতি: **R$ {sim['shortfall_amount']:,.2f}**।")
+                    lines.append(f"- 🚨 **রিজার্ভ ব্রিচ অ্যালার্ট:** হ্যাঁ। সর্বোচ্চ লিকুইডিটি ঘাটতি: **{c} {sim['shortfall_amount']:,.2f}**।")
                     lines.append(f"- **ক্যাশ রানওয়ে:** `{sim['baseline_runway_days']}` দিন থেকে কমে `{sim['shocked_runway_days']}` দিন (ঘাটতি: `{abs(sim['runway_change_days'])}` দিন)।")
                     lines.append("\n**SME ব্যবসায়ীর জন্য অ্যাকশনেবল সুপারিশ:**")
                     lines.append("1. **সাপ্লায়ার দেনা বিলম্ব:** নগদ প্রবাহ ঠিক রাখতে অপ্রয়োজনীয় বিল পরিশোধ ৭ কার্যদিবস পিছিয়ে দিন।")
-                    lines.append(f"2. **স্বল্পমেয়াদী ক্রেডিট লাইন:** কর্মচারীদের বেতনের আগে কমপক্ষে **R$ {sim['shortfall_amount']:,.2f}** পরিমাণ র্কিং ক্যাপিটাল বাফার নিশ্চিত করুন।")
+                    lines.append(f"2. **স্বল্পমেয়াদী ক্রেডিট লাইন:** কর্মচারীদের বেতনের আগে কমপক্ষে **{c} {sim['shortfall_amount']:,.2f}** পরিমাণ র্কিং ক্যাপিটাল বাফার নিশ্চিত করুন।")
                 else:
                     lines.append("- ✅ **নিরাপদ স্ট্যাটাস:** এই শক পরিস্থিতিতে রিজার্ভ ফ্লোর অক্ষুণ্ণ রয়েছে।")
                     lines.append(f"- **বর্তমান রানওয়ে:** `{sim['shocked_runway_days']}` দিন।")
@@ -222,15 +244,15 @@ class GroundedCopilotAgent:
             elif lang == "zh": # Chinese
                 lines.append("### 📊 压力测试情景分析（确定性状态引擎测算）")
                 lines.append(f"- **模拟冲击：** 销售下滑：`{sim['sales_shock_pct'] * 100:+.0f}%` | 成本通胀：`{sim['cost_shock_pct'] * 100:+.0f}%` | 回款延迟：`{sim['delay_days']}`天。")
-                lines.append(f"- **基准期末现金：** R$ {sim['baseline_ending_cash']:,.2f}")
-                lines.append(f"- **冲击后期末现金：** R$ {sim['shocked_ending_cash']:,.2f}")
-                lines.append(f"- **净流动性影响：** R$ {sim['net_cash_impact']:,.2f}")
+                lines.append(f"- **基准期末现金：** {c} {sim['baseline_ending_cash']:,.2f}")
+                lines.append(f"- **冲击后期末现金：** {c} {sim['shocked_ending_cash']:,.2f}")
+                lines.append(f"- **净流动性影响：** {c} {sim['net_cash_impact']:,.2f}")
                 if sim['is_reserve_breach']:
-                    lines.append(f"- 🚨 **储备金预警：** 是。最大流动性资金缺口为 **R$ {sim['shortfall_amount']:,.2f}**。")
+                    lines.append(f"- 🚨 **储备金预警：** 是。最大流动性资金缺口为 **{c} {sim['shortfall_amount']:,.2f}**。")
                     lines.append(f"- **现金跑道：** 从 `{sim['baseline_runway_days']}` 天缩短至 `{sim['shocked_runway_days']}` 天（减少 `{abs(sim['runway_change_days'])}` 天）。")
                     lines.append("\n**针对SME店主的行动建议：**")
                     lines.append("1. **供应商账期谈判：** 将非核心应付款顺延7个工作日，以匹配现金回款节奏。")
-                    lines.append(f"2. **短期信用融资：** 在工资发放日前，确保至少 **R$ {sim['shortfall_amount']:,.2f}** 的营运流动资金授信额度。")
+                    lines.append(f"2. **短期信用融资：** 在工资发放日前，确保至少 **{c} {sim['shortfall_amount']:,.2f}** 的营运流动资金授信额度。")
                 else:
                     lines.append("- ✅ **偿债安全：** 在当前情景下，未跌破最低储备金底线。")
                     lines.append(f"- **剩余跑道：** 稳定在 `{sim['shocked_runway_days']}` 天。")
@@ -238,15 +260,15 @@ class GroundedCopilotAgent:
             elif lang == "ja": # Japanese
                 lines.append("### 📊 ストレスシナリオ分析（確定性エンジン出力）")
                 lines.append(f"- **シミュレーション衝撃：** 売上減少: `{sim['sales_shock_pct'] * 100:+.0f}%` | 原価上昇: `{sim['cost_shock_pct'] * 100:+.0f}%` | 回収遅延: `{sim['delay_days']}`日。")
-                lines.append(f"- **基本予測期末現金：** R$ {sim['baseline_ending_cash']:,.2f}")
-                lines.append(f"- **ストレス後手元資金：** R$ {sim['shocked_ending_cash']:,.2f}")
-                lines.append(f"- **純流動性影響額：** R$ {sim['net_cash_impact']:,.2f}")
+                lines.append(f"- **基本予測期末現金：** {c} {sim['baseline_ending_cash']:,.2f}")
+                lines.append(f"- **ストレス後手元資金：** {c} {sim['shocked_ending_cash']:,.2f}")
+                lines.append(f"- **純流動性影響額：** {c} {sim['net_cash_impact']:,.2f}")
                 if sim['is_reserve_breach']:
-                    lines.append(f"- 🚨 **準備金割れ警告：** あり。最大流動性不足額は **R$ {sim['shortfall_amount']:,.2f}** です。")
+                    lines.append(f"- 🚨 **準備金割れ警告：** あり。最大流動性不足額は **{c} {sim['shortfall_amount']:,.2f}** です。")
                     lines.append(f"- **キャッシュランウェイ：** `{sim['baseline_runway_days']}` 日から `{sim['shocked_runway_days']}` 日へ短縮（損失: `{abs(sim['runway_change_days'])}` 日）。")
                     lines.append("\n**中小企業経営者向け推奨アクションプラン：**")
                     lines.append("1. **買掛金の支払い繰り延べ：** 資金流入サイクルに合わせ、緊急性の低い支払いを7営業日延長。")
-                    lines.append(f"2. **短期当座貸越枠の確保：** 給与支払い前に、少なくとも **R$ {sim['shortfall_amount']:,.2f}** の運転資金枠を確保。")
+                    lines.append(f"2. **短期当座貸越枠の確保：** 給与支払い前に、少なくとも **{c} {sim['shortfall_amount']:,.2f}** の運転資金枠を確保。")
                 else:
                     lines.append("- ✅ **財務健全性：** このショック下でも準備金基準を維持しています。")
                     lines.append(f"- **残存ランウェイ：** `{sim['shocked_runway_days']}` 日。")
@@ -254,77 +276,97 @@ class GroundedCopilotAgent:
             elif lang == "hi": # Hindi
                 lines.append("### 📊 तनाव-परीक्षण परिदृश्य विश्लेषण (डिटर्मिनिस्टिक इंजन आउटपुट)")
                 lines.append(f"- **अनुकरण किए गए झटके:** बिक्री झटका: `{sim['sales_shock_pct'] * 100:+.0f}%` | लागत वृद्धि: `{sim['cost_shock_pct'] * 100:+.0f}%` | भुगतान देरी: `{sim['delay_days']}` दिन।")
-                lines.append(f"- **बेसलाइन अंतिम नकदी:** R$ {sim['baseline_ending_cash']:,.2f}")
-                lines.append(f"- **तनाव के बाद अंतिम नकदी:** R$ {sim['shocked_ending_cash']:,.2f}")
-                lines.append(f"- **शुद्ध तरलता प्रभाव:** R$ {sim['net_cash_impact']:,.2f}")
+                lines.append(f"- **बेसलाइन अंतिम नकदी:** {c} {sim['baseline_ending_cash']:,.2f}")
+                lines.append(f"- **तनाव के बाद अंतिम नकदी:** {c} {sim['shocked_ending_cash']:,.2f}")
+                lines.append(f"- **शुद्ध तरलता प्रभाव:** {c} {sim['net_cash_impact']:,.2f}")
                 if sim['is_reserve_breach']:
-                    lines.append(f"- 🚨 **रिज़र्व उल्लंघन चेतावनी:** हाँ। अधिकतम नकदी घाटा: **R$ {sim['shortfall_amount']:,.2f}**।")
+                    lines.append(f"- 🚨 **रिज़र्व उल्लंघन चेतावनी:** हाँ। अधिकतम नकदी घाटा: **{c} {sim['shortfall_amount']:,.2f}**।")
                     lines.append(f"- **कैश रनवे:** `{sim['baseline_runway_days']}` दिनों से घटकर `{sim['shocked_runway_days']}` दिन।")
                     lines.append("\n**व्यवसाय के लिए कार्रवाई योग्य सिफारिशें:**")
                     lines.append("1. **आपूर्तिकर्ता भुगतान में देरी:** गैर-महत्वपूर्ण भुगतानों को 7 कार्य दिवसों के लिए टालें।")
-                    lines.append(f"2. **अल्पकालिक क्रेडिट लाइन:** पेरोल से पहले कम से कम **R$ {sim['shortfall_amount']:,.2f}** की कार्यशील पूंजी बफर सुरक्षित करें।")
+                    lines.append(f"2. **अल्पकालिक क्रेडिट लाइन:** पेरोल से पहले कम से कम **{c} {sim['shortfall_amount']:,.2f}** की कार्यशील पूंजी बफर सुरक्षित करें।")
                 else:
                     lines.append("- ✅ **सुरक्षित स्थिति:** इस तनाव परिदृश्य में रिज़र्व सुरक्षित है।")
 
             elif lang == "ur": # Urdu
                 lines.append("### 📊 فنانشل اسٹریس ٹیسٹ تجزیہ (ڈیٹرمینسٹک انجن آؤٹ پٹ)")
-                lines.append(f"- **فرضی اثرات:** سیلز گراوٹ: `{sim['sales_shock_pct'] * 100:+.0f}%` | لاگت اضافہ: `{sim['cost_shock_pct'] * 100:+.0f}%` | تاخیر: `{sim['delay_days']}` دن۔")
-                lines.append(f"- **بنیادی اختتامی نقد رقم:** R$ {sim['baseline_ending_cash']:,.2f}")
-                lines.append(f"- **اسٹریس کے بعد نقد رقم:** R$ {sim['shocked_ending_cash']:,.2f}")
-                lines.append(f"- **خالص مالی اثر:** R$ {sim['net_cash_impact']:,.2f}")
+                lines.append(f"- **فرضی اثرات:** سیلز گراوٹ: `{sim['sales_shock_pct'] * 100:+.0f}%` | لاگت اضافہ: `{sim['cost_shock_pct'] * 100:+.0f}%` | تاخیر: `{sim['delay_days']}` دن।")
+                lines.append(f"- **بنیادی اختتامی نقد رقم:** {c} {sim['baseline_ending_cash']:,.2f}")
+                lines.append(f"- **اسٹریس کے بعد نقد رقم:** {c} {sim['shocked_ending_cash']:,.2f}")
+                lines.append(f"- **خالص مالی اثر:** {c} {sim['net_cash_impact']:,.2f}")
                 if sim['is_reserve_breach']:
-                    lines.append(f"- 🚨 **ریزرو الرٹ:** ہاں۔ زیادہ سے زیادہ مالی خسارہ: **R$ {sim['shortfall_amount']:,.2f}**۔")
+                    lines.append(f"- 🚨 **ریزرو الرٹ:** ہاں۔ زیادہ سے زیادہ مالی خسارہ: **{c} {sim['shortfall_amount']:,.2f}**।")
                     lines.append("\n**تجاویز:**")
                     lines.append(f"1. غیر ضروری بلوں کی ادائیگی 7 دن کے لیے موخر کریں۔")
-                    lines.append(f"2. تنخواہوں سے پہلے کم از کم **R$ {sim['shortfall_amount']:,.2f}** کا ورکنگ کیپیٹل لون حاصل کریں۔")
+                    lines.append(f"2. تنخواہوں سے پہلے کم از کم **{c} {sim['shortfall_amount']:,.2f}** کا ورکنگ کیپیٹل لون حاصل کریں۔")
                 else:
                     lines.append("- ✅ **محفوظ پوزیشن:** ریزرو فنڈز محفوظ ہیں۔")
 
             else: # English default
                 lines.append("### 📊 Scenario Stress-Test Analysis (Deterministic Engine Output)")
                 lines.append(f"- **Simulated Shocks:** Sales Shock: `{sim['sales_shock_pct'] * 100:+.0f}%` | Cost Shock: `{sim['cost_shock_pct'] * 100:+.0f}%` | Payout Delay: `{sim['delay_days']}` days.")
-                lines.append(f"- **Baseline Ending Cash:** R$ {sim['baseline_ending_cash']:,.2f}")
-                lines.append(f"- **Shocked Ending Cash:** R$ {sim['shocked_ending_cash']:,.2f}")
-                lines.append(f"- **Net Liquidity Impact:** R$ {sim['net_cash_impact']:,.2f}")
+                lines.append(f"- **Baseline Ending Cash:** {c} {sim['baseline_ending_cash']:,.2f}")
+                lines.append(f"- **Shocked Ending Cash:** {c} {sim['shocked_ending_cash']:,.2f}")
+                lines.append(f"- **Net Liquidity Impact:** {c} {sim['net_cash_impact']:,.2f}")
                 if sim['is_reserve_breach']:
-                    lines.append(f"- 🚨 **Reserve Breach Alert:** YES. Maximum liquidity shortfall of **R$ {sim['shortfall_amount']:,.2f}**.")
+                    lines.append(f"- 🚨 **Reserve Breach Alert:** YES. Maximum liquidity shortfall of **{c} {sim['shortfall_amount']:,.2f}**.")
                     lines.append(f"- **Cash Runway:** Reduced from `{sim['baseline_runway_days']}` days to `{sim['shocked_runway_days']}` days (Loss of `{abs(sim['runway_change_days'])}` days of runway).")
                     lines.append("\n**Recommended Action Plan for SME Owner:**")
                     lines.append("1. **Supplier Negotiation:** Defer non-critical AP payments by 7 business days to match cash inflows.")
-                    lines.append(f"2. **Short-term Line of Credit:** Secure a working capital buffer of at least R$ {sim['shortfall_amount']:,.2f} before payroll.")
+                    lines.append(f"2. **Short-term Line of Credit:** Secure a working capital buffer of at least {c} {sim['shortfall_amount']:,.2f} before payroll.")
                 else:
                     lines.append("- ✅ **Solvency Check:** No reserve breach detected under this shock scenario.")
                     lines.append(f"- **Remaining Runway:** Stable at `{sim['shocked_runway_days']}` days.")
+
+        elif "target_plan" in context:
+            tp = context["target_plan"]
+            tot = tp['total_projected_sales']
+            if lang == "bn":
+                lines.append("### 🎯 ব্যবসায়িক টার্গেট ও অ্যাকশনেবল কৌশল পরিকল্পনা")
+                lines.append(f"- **বর্তমান প্রজেক্টেড মাসিক রাজস্ব:** {c} {tot:,.2f}")
+                lines.append("\n**সুপারিশকৃত ৪টি কার্যকরী পদক্ষেপ:**")
+                lines.append("1. **হাই-মার্জিন প্রডাক্ট ফোকাস:** শীর্ষ ২০% মার্জিনযুক্ত পণ্যে জোর দিন এবং ক্রস-সেল বান্ডেল বাড়িয়ে গড় অর্ডার ভ্যালু বৃদ্ধি করুন।")
+                lines.append("2. **ক্যাশ ইনফ্লো ত্বরান্বিতকরণ:** পেমেন্ট সেটেলমেন্ট ল্যাগ ১০ দিন থেকে কমিয়ে ৪ দিনে আনতে কাস্টমারদের ২% আর্লি সেটেলমেন্ট ডিসকাউন্ট অফার করুন।")
+                lines.append("3. **পরিচালন ব্যয় নিয়ন্ত্রণ:** অপারেটিং কস্ট রেশিও কঠোরভাবে ৬২% এর নিচে বজায় রাখুন।")
+                lines.append(f"4. **সাপ্তাহিক মাইলস্টোন লক্ষ্যমাত্রা:** প্রতি সপ্তাহে গড়ে {c} {tot / 4:,.2f} বিক্রয় নিশ্চিত করুন।")
+            else:
+                lines.append("### 🎯 Business Target & Actionable Strategy Roadmap")
+                lines.append(f"- **Current Baseline Projection:** {c} {tot:,.2f}")
+                lines.append("\n**Recommended Execution Roadmap:**")
+                lines.append("1. **High-Margin SKU Prioritization:** Focus on top 20% margin items and bundle fast-moving products.")
+                lines.append("2. **Cash Inflow Acceleration:** Offer a 2% early-settlement incentive to compress payment delay.")
+                lines.append("3. **Cost Containment:** Keep operating cost ratio strictly below 62%.")
+                lines.append(f"4. **Weekly Execution Milestones:** Target average weekly sales of {c} {tot / 4:,.2f}.")
 
         elif "forecast" in context:
             fc = context["forecast"]
             if lang == "bn":
                 lines.append(f"### 📈 পূর্বাভাসকৃত বিক্রয় ({fc['quantile_label']})")
                 lines.append(f"- **পূর্বাভাস দিগন্ত:** `{fc['horizon_days']}` দিন।")
-                lines.append(f"- **প্রত্যাশিত মোট আয়:** R$ {fc['total_projected_sales']:,.2f}")
-                lines.append(f"- **দৈনিক গড় বিক্রয়:** R$ {fc['mean_daily_sales']:,.2f} (সীমা: R$ {fc['min_daily_sales']:,.2f} – R$ {fc['max_daily_sales']:,.2f})।")
+                lines.append(f"- **প্রত্যাশিত মোট আয়:** {c} {fc['total_projected_sales']:,.2f}")
+                lines.append(f"- **দৈনিক গড় বিক্রয়:** {c} {fc['mean_daily_sales']:,.2f} (সীমা: {c} {fc['min_daily_sales']:,.2f} – {c} {fc['max_daily_sales']:,.2f})।")
             else:
                 lines.append(f"### 📈 Temporal Sales Forecast ({fc['quantile_label']})")
                 lines.append(f"- **Forecast Horizon:** `{fc['horizon_days']}` days ahead.")
-                lines.append(f"- **Expected Total Revenue:** R$ {fc['total_projected_sales']:,.2f}")
-                lines.append(f"- **Mean Daily Run-Rate:** R$ {fc['mean_daily_sales']:,.2f} (Daily bounds: R$ {fc['min_daily_sales']:,.2f} – R$ {fc['max_daily_sales']:,.2f}).")
+                lines.append(f"- **Expected Total Revenue:** {c} {fc['total_projected_sales']:,.2f}")
+                lines.append(f"- **Mean Daily Run-Rate:** {c} {fc['mean_daily_sales']:,.2f} (Daily bounds: {c} {fc['min_daily_sales']:,.2f} – {c} {fc['max_daily_sales']:,.2f}).")
 
         elif "projection" in context:
             proj = context["projection"]
             if lang == "bn":
                 lines.append(f"### 🏦 ৩০-দিনের ক্যাশফ্লো প্রজেকশন ({proj['scenario_type']})")
-                lines.append(f"- **প্রারম্ভিক নগদ:** R$ {proj['starting_cash']:,.2f}")
-                lines.append(f"- **সমাপনী নগদ:** R$ {proj['ending_cash']:,.2f}")
-                lines.append(f"- **সর্বনিম্ন নগদ ব্যালেন্স:** R$ {proj['min_cash_balance']:,.2f} (রিজার্ভ সীমা: R$ {proj['min_reserve_limit']:,.2f})।")
+                lines.append(f"- **প্রারম্ভিক নগদ:** {c} {proj['starting_cash']:,.2f}")
+                lines.append(f"- **সমাপনী নগদ:** {c} {proj['ending_cash']:,.2f}")
+                lines.append(f"- **সর্বনিম্ন নগদ ব্যালেন্স:** {c} {proj['min_cash_balance']:,.2f} (রিজার্ভ সীমা: {c} {proj['min_reserve_limit']:,.2f})।")
             else:
                 lines.append(f"### 🏦 30-Day Cashflow Projection ({proj['scenario_type']})")
-                lines.append(f"- **Starting Cash:** R$ {proj['starting_cash']:,.2f}")
-                lines.append(f"- **Ending Cash:** R$ {proj['ending_cash']:,.2f}")
-                lines.append(f"- **Minimum Cash Low-Point:** R$ {proj['min_cash_balance']:,.2f} (Threshold Limit: R$ {proj['min_reserve_limit']:,.2f}).")
+                lines.append(f"- **Starting Cash:** {c} {proj['starting_cash']:,.2f}")
+                lines.append(f"- **Ending Cash:** {c} {proj['ending_cash']:,.2f}")
+                lines.append(f"- **Minimum Cash Low-Point:** {c} {proj['min_cash_balance']:,.2f} (Threshold Limit: {c} {proj['min_reserve_limit']:,.2f}).")
 
         if "reserve_status" in context and "simulation" not in context:
             r = context["reserve_status"]
-            lines.append(f"\n*Current Liquidity Status: Cash = R$ {r['current_cash']:,.2f} | Buffer = R$ {r['buffer_amount']:,.2f} | Fixed OPEX Coverage = {r['reserve_coverage_months']} months.*")
+            lines.append(f"\n*Current Liquidity Status: Cash = {c} {r['current_cash']:,.2f} | Buffer = {c} {r['buffer_amount']:,.2f} | Fixed OPEX Coverage = {r['reserve_coverage_months']} months.*")
 
         return "\n".join(lines)
 
