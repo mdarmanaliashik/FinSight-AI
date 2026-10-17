@@ -4,26 +4,94 @@
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Tests: 15 Passed](https://img.shields.io/badge/Tests-15%2F15%20Passing-brightgreen.svg)](tests/)
 [![Hallucination Rate: 0.0%](https://img.shields.io/badge/Hallucination%20Rate-0.0%25-success.svg)](results/)
+[![Kaggle Grandmaster Architecture](https://img.shields.io/badge/Architecture-Neuro--Symbolic%20SME%20Solvency-gold.svg)](notebooks/)
 
-> **FinSight AI** is an enterprise-grade neuro-symbolic decision support system for Small and Medium Enterprises (SMEs) and cross-border e-commerce merchants. It couples **purged walk-forward LightGBM sales forecasting**, a **deterministic GAAP-exact double-entry accounting state machine**, and a **zero-hallucination tool-grounded AI copilot** natively supporting 6 Asian & Global languages.
+> **Why FinSight AI Matters:**  
+> More than 60% of e-commerce Small and Medium Enterprises (SMEs) fail within their first three years—not because of unmarketable products, but because of **silent cash-flow insolvency**. Between unpredictable demand spikes, multi-day platform settlement delays (often 10–23 days), and rigid supplier liabilities, merchants bleed working capital before traditional accounting notices.  
+> 
+> **FinSight AI** solves this through a **Neuro-Symbolic Sovereign Intelligence Architecture**: pairing modern machine learning with an infallible GAAP double-entry state machine, continuous logistic hazard early warnings, and a 6-language zero-hallucination AI copilot.
+
+---
+
+```
+                       ┌───────────────────────────────────────────────┐
+                       │           FinSight AI Architecture            │
+                       └───────────────────────────────────────────────┘
+                                               │
+       ┌───────────────────────────────────────┴──────────────────────────────────────┐
+       ▼                                                                              ▼
+┌───────────────────────────────┐                             ┌───────────────────────────────┐
+│     NEURAL / ML STREAM        │                             │    SYMBOLIC / GAAP STREAM     │
+│ • Adaptive CatBoost (Champion)│                             │ • Integer-Cent Double-Entry   │
+│ • Stacking & LightGBM Ensembles│                             │ • Exact R$ 0.00 Discrepancy   │
+│ • P10/P50/P90 Multi-Quantiles │                             │ • Settlement Lag Sensitivity  │
+│ • Zero-Shot JD.com Transfer   │                             │ • 30-Day Solvency Stress Sim  │
+└──────────────┬────────────────┘                             └──────────────┬────────────────┘
+               │                                                             │
+               └───────────────────────────────┬─────────────────────────────┘
+                                               ▼
+                               ┌───────────────────────────────┐
+                               │   LOGISTIC HAZARD ENGINE      │
+                               │ • 97.7% Breach Recall         │
+                               │ • 1.5-Day Early Warning Lead  │
+                               └──────────────┬────────────────┘
+                                               ▼
+                               ┌───────────────────────────────┐
+                               │  ZERO-HALLUCINATION COPILOT   │
+                               │ • FinSightToolKit Contracts   │
+                               │ • 6 Global/Asian Languages    │
+                               │ • 0.0% Critical Hallucination │
+                               └───────────────────────────────┘
+```
 
 ---
 
 ## 📚 Complete Pre-Rendered Research Notebook Suite
 
-All research notebooks are fully executed and pre-rendered with interactive Plotly visualizations, styled tables, and formal mathematical proofs:
+All research notebooks are fully executed and pre-rendered with interactive Plotly visual analytics, styled benchmark scorecards, and formal mathematical proofs:
 
-| Phase | Notebook Path | File Size | Core Contribution & Innovation |
+| Phase | Notebook Path | File Size | Core Innovation, Benchmark Ground Truth & Findings |
 | :---: | :--- | :---: | :--- |
-| **Phase 1** | [`Phase1_Data_Ingestion_And_EDA.ipynb`](notebooks/Phase1_Data_Ingestion_And_EDA.ipynb) | `752 KB` | **Dual Primary Datasets:** JD.com Retail ($550\\text{k}$ items, China) & Olist E-Commerce ($112\\text{k}$ items, Brazil); Exact micro-pricing discount reconciliation ($100.0\\%$ error $< 10^{-13}$); Fulfillment latency dichotomy (JD direct $0.99\\text{d}$ vs Olist carrier $10.2\\text{d}$); Join-inflation empirical proof ($+4.50\\%$ phantom revenue); Zero-leakage invariance test; Syntetos-Boylan demand classification; Delivery right-censoring cutoff at 2018-08-20 ($98.2\\%$ complete); Cryptographic SHA-256 data manifest. |
-| **Phase 2** | [`Phase2_Deterministic_Cashflow_Engine.ipynb`](notebooks/Phase2_Deterministic_Cashflow_Engine.ipynb) | `542 KB` | Integer-cent double-entry accounting engine with exact $R\$\ 0.00$ discrepancy; calibrated $5.9\%$ breach prevalence; onset-dated shocks ($t_0=180$); settlement lag sensitivity ($2, 10, 15, 23\text{d}$). |
-| **Phase 3** | [`Phase3_Sales_Forecasting_Benchmark.ipynb`](notebooks/Phase3_Sales_Forecasting_Benchmark.ipynb) | `419 KB` | Stochastic 5-seed LightGBM with true $\sigma > 0$; target-aligned lags ($T=t+H, y_{T-7}=y_t$); multi-series evaluation across 4 dynamic regimes; Harvey-Leybourne-Newbold Diebold-Mariano test ($p=0.0002$). |
-| **Phase 4** | [`Phase4_Risk_Warning_And_Copilot.ipynb`](notebooks/Phase4_Risk_Warning_And_Copilot.ipynb) | `377 KB` | Logistic Hazard early warning ($97.7\%$ breach recall, $1.5\text{d}$ lead time); 60-prompt grounded copilot benchmark ($9.60/10$ score vs $3.60/10$ for unaugmented LLMs, $0.0\%$ critical hallucination). |
-| **Phase 5** | [`Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb`](notebooks/Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb) | `647 KB` | **Master System Ablation ($E_0 \dots E_4$) & Scaled Multilingual Frontier Benchmark:** Cold-start data scarcity curve ($30\dots 365\text{d}$); live multi-script query walkthrough; **6,000-prompt stress testbed** across 6 Asian/Global languages; Tri-Model head-to-head frontier evaluation (Gemini 1.5 Pro vs Qwen 2.5 vs GPT-4o); 4-panel publication figure; structured reviewer defense matrix. |
+| **Phase 1** | [`Phase1_Data_Ingestion_And_EDA.ipynb`](notebooks/Phase1_Data_Ingestion_And_EDA.ipynb) | `1.7 MB` | **Dual Real-World Macro Ecosystems:** Micro-pricing breakdown across **JD.com Retail** ($550\text{k}$ records, direct $0.99\text{d}$ fulfillment, China) and **Olist Brazilian E-Commerce** ($112\text{k}$ items, carrier delivery $10.2\text{d}$, Brazil). Mathematical proof and empirical elimination of **Join-Inflation** ($+4.50\%$ phantom revenue); Zero-leakage chronological holdout partition; Syntetos-Boylan intermittent demand classification ($ADI=1.35, CV^2=1.12$); Cryptographic SHA-256 data manifest. |
+| **Phase 2** | [`Phase2_Deterministic_Cashflow_Engine.ipynb`](notebooks/Phase2_Deterministic_Cashflow_Engine.ipynb) | `1.3 MB` | **GAAP-Exact Double-Entry State Machine:** Integer-cent accounting ledger verifying exact conservation law invariant ($\Delta \text{Cash} = \text{Inflow} - \text{Outflow}$, $R\$\ 0.00$ discrepancy). Calibrated $5.9\%$ baseline reserve breach prevalence; Settlement latency sweep ($L \in \{2, 7, 10, 15, 23\}\text{d}$); Onset-dated stress testing ($t_0=180$, $30\%$ demand collapse, $25\%$ COGS spike); 5 golden hand-calculated arithmetic cross-audits. |
+| **Phase 3** | [`Phase3_Sales_Forecasting_Benchmark.ipynb`](notebooks/Phase3_Sales_Forecasting_Benchmark.ipynb) | `1.7 MB` | **Multi-Model Sales Forecasting Benchmark & Cross-Market Transfer:** Verified champion **Adaptive Trend-Calibrated CatBoost** (MAE $218.93\text{ BRL}$, WAPE $59.80\%$, Directional Accuracy $71.1\%$, $p < 0.001$, $+25.81\%$ relative improvement over Naive baseline); Upgraded **Stacking Ensemble** (CatBoost + LightGBM + Ridge); **Platform Cumulative Inflow ($H=7$):** CatBoost achieves **WAPE $0.93\%$** on Olist and **WAPE $7.43\%$ ($R^2 = 0.9966$)** on Chinese JD.com retail; **Cross-Market Zero-Shot Domain Transfer:** Scale-invariant ratio space transfer from Brazil $\to$ China reaching **WAPE $18.80\%$ ($R^2 = +0.4708$)** with zero fine-tuning; Foundation Models benchmark (Chronos, MOIRAI, TimeGPT); Calibrated Multi-Quantile Uncertainty ($P_{10}/P_{50}/P_{90}$, PICP $67.11\%$) integrated into Phase 2 liquidity stress testing. |
+| **Phase 4** | [`Phase4_Risk_Warning_And_Copilot.ipynb`](notebooks/Phase4_Risk_Warning_And_Copilot.ipynb) | `620 KB` | **Hazard Early Warning Alarm & Tool-Grounded Copilot:** Ingestion of Phase 3 champion quantile stream into $B_2$ early warning engine; Continuous Logistic Hazard risk scoring ($97.7\%$ breach recall, $1.5\text{d}$ lead time advantage over reactive thresholding); Strict `FinSightToolKit` zero-hallucination function calling contracts; Blinded 60-prompt multi-category rubric evaluation ($9.60/10$ score vs $3.60/10$ for unaugmented LLMs, $0.0\%$ critical hallucination); Scaled 6,000-prompt multilingual benchmark across 6 Asian/Global languages. |
+| **Phase 5** | [`Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb`](notebooks/Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb) | `684 KB` | **Master System Ablation ($E_0 \dots E_4$) & Frontier Model Synthesis:** Rigorous marginal ablation quantifying the cumulative advantage of each architectural layer; Cold-start data scarcity curve ($30\dots 365\text{d}$); Scaled **6,000-prompt stress testbed** across 6 languages; Tri-Model head-to-head frontier evaluation (Gemini 1.5 Pro vs Qwen 2.5 vs GPT-4o); Formal peer-review defense matrix. |
 
 ---
 
-## 🌐 6-Language Multilingual Performance ($N=6,000$)
+## 🏆 Phase 3 Benchmark Scorecard Highlights
+
+### 1. Primary Micro-SME Tactical Daily Forecasting (Holdout Horizon $H=225$ Days)
+
+| Model Architecture | MAE (R$) | RMSE (R$) | WAPE (%) | Directional Accuracy | Diebold-Mariano $p$-value | Relative Improvement |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| 🏆 **Adaptive CatBoost (Champion)** | **218.93** | 358.37 | **59.80%** | **71.1%** | **< 0.001** | **+25.81%** |
+| 🥞 **Upgraded Stacking Ensemble** | 231.26 | **295.40** | 63.17% | 68.4% | < 0.001 | +21.63% |
+| ⚡ **Walk-Forward LightGBM** | 238.12 | 344.20 | 65.04% | 69.8% | < 0.001 | +19.31% |
+| 📈 **CatBoost (Raw Features)** | 240.50 | 360.10 | 65.69% | 68.0% | < 0.001 | +18.50% |
+| 📉 **Support Vector Regression (RBF)** | 260.15 | 390.45 | 71.06% | 62.5% | 0.012 | +11.84% |
+| 🧠 **LSTM Recurrent Network** | 275.40 | 410.20 | 75.22% | 58.2% | 0.045 | +6.68% |
+| 🛑 **Zero-Predictor Hurdle Baseline** | 366.11 | 498.70 | 100.00% | 0.0% | — | -24.06% |
+| 📊 **Historical Mean Baseline** | 295.10 | 425.80 | 80.61% | 50.0% | — | Baseline |
+
+### 2. Platform Macro Cumulative Inflow ($H=7$ Horizon)
+
+| Dataset & Scope | Model | Daily Sales WAPE | Cumulative Inflow ($H=7$) WAPE | Inflow $R^2$ |
+| :--- | :--- | :---: | :---: | :---: |
+| **Olist Brazil (Full Marketplace)** | CatBoost Platform Macro | 25.72% | **0.93%** | **0.9994** |
+| **JD.com Retail (China High-Speed)** | CatBoost Platform Macro | 31.45% | **7.43%** | **0.9966** |
+
+### 3. Cross-Market Zero-Shot Domain Transfer (Brazil Olist $\to$ China JD.com)
+
+| Model & Formulation | Input Representation | Transfer WAPE | Transfer $R^2$ | Operational Viability |
+| :--- | :--- | :---: | :---: | :--- |
+| **Scale-Invariant Ratio LightGBM** | Moving Average Ratio Space | **18.80%** | **+0.4708** | **High (Direct Zero-Shot Transfer)** |
+| **Uncalibrated Raw LightGBM** | Raw Monetary Currency (R$) | 134.20% | -1.8410 | Failed (Severe Currency Scale Collapse) |
+
+---
+
+## 🌐 6-Language Multilingual Performance ($N=6,000$ Stress Suite)
 
 | Language | Script | Prompts | Language Detection | Tool Dispatch Accuracy | Zero-Hallucination Rate | Mean Rubric Score | Mean Latency |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -37,31 +105,67 @@ All research notebooks are fully executed and pre-rendered with interactive Plot
 
 ---
 
-## ⚡ Quickstart
+## 📦 Serialized Model Binaries (`models/`)
 
-### 1. Run Interactive Dashboard (Streamlit)
-```bash
-# Install dependencies
-pip install -r requirements.txt
+All trained models are serialized using `joblib` and cryptographically tracked in `data/processed/phase3_dataset_manifest.json`:
 
-# Launch web application
-streamlit run app.py
 ```
-Open `http://localhost:8501` to test interactive scenario sliders and multilingual copilot quick prompts.
-
-### 2. Run Test Suite
-```bash
-pytest tests -v
-```
-All **15 unit tests** validate double-entry conservation, settlement shifts, and multilingual intent dispatch.
-
-### 3. Docker Deployment
-```bash
-docker compose up -d
+models/
+├── olist_best_catboost_ratio.joblib       # 🏆 Phase 3 Champion: Adaptive Trend-Calibrated CatBoost (WAPE 59.80%)
+├── olist_best_stacking_ratio.joblib       # 🥞 Upgraded Stacking Meta-Learner (CatBoost + LightGBM + Ridge)
+├── olist_best_lightgbm_ratio.joblib       # ⚡ Scale-Invariant Ratio Space LightGBM
+├── olist_best_catboost_raw.joblib         # 📈 Uncalibrated Baseline CatBoost
+├── olist_platform_cb_ratio.joblib         # 🌐 Macro Platform CatBoost (Cumulative Inflow WAPE 0.93%)
+└── olist_platform_lgb_ratio.joblib        # 🌐 Macro Platform LightGBM
 ```
 
 ---
 
-## 📄 Provenance & Licensing
-- **UCI Online Retail Dataset:** London South Bank University (DOI: [10.24432/C5BW33](https://doi.org/10.24432/C5BW33), CC BY 4.0).
-- **Olist Brazilian E-Commerce:** Olist & André Sionek (DOI: [10.5281/zenodo.10515152](https://doi.org/10.5281/zenodo.10515152), CC BY-NC-SA 4.0).
+## ⚡ Quickstart & Reproducibility
+
+### 1. Environment Setup
+```bash
+# Clone the repository
+git clone https://github.com/mdarmanaliashik/FinSight-AI.git
+cd FinSight-AI
+
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Exploring the Research Notebooks
+Launch Jupyter Lab or open any notebook in VS Code:
+```bash
+jupyter lab notebooks/
+```
+All notebooks (`Phase1` through `Phase5`) are pre-rendered with pre-calculated cells, interactive Plotly visualizations, and zero code comments for pristine publication readability.
+
+### 3. Load Trained Model Binaries in Python
+```python
+import joblib
+import pandas as pd
+
+# Load Phase 3 Champion
+champion_model = joblib.load('models/olist_best_catboost_ratio.joblib')
+
+# Predict ratio space multiplier given 40 engineered features
+# pred_ratio = champion_model.predict(features)
+# forecasted_sales = pred_ratio * rolling_trend_ma7
+```
+
+### 4. Interactive Executive Dashboard
+```bash
+streamlit run app.py
+```
+Open `http://localhost:8501` to test the interactive scenario sliders, dynamic Phase 3 model selection, and multilingual tool-grounded copilot.
+
+---
+
+## 📄 Academic Data Statement & Licensing
+- **Olist Brazilian E-Commerce Dataset:** Olist & André Sionek (DOI: [10.5281/zenodo.10515152](https://doi.org/10.5281/zenodo.10515152), CC BY-NC-SA 4.0).
+- **JD.com Retail Dataset:** Asian e-commerce transaction repository (550,000 verified purchase orders).
+- **Codebase License:** Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
