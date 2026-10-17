@@ -1,11 +1,11 @@
 """
-FinSight AI — Commercial Enterprise Treasury & Cashflow OS
-==========================================================
-Interactive Streamlit Web Application featuring:
-- Real-time Macro/Micro Scenario Stress Testing Sliders
-- Multi-Horizon Predictive Cashflow Trajectories (Daily, Weekly, Monthly)
-- Zero-Hallucination Tool-Grounded AI Financial Copilot Chat
-- Commercial enterprise business interface (No technical model names)
+FinSight AI — Explainable Cash-Flow & Business Decision Intelligence System
+===========================================================================
+A comprehensive SME decision intelligence platform:
+1. Monitor: Sales, profit, cash balance, expenses & business KPIs
+2. Predict: 7 / 14 / 30-day sales forecast, cash-flow prediction & uncertainty intervals
+3. Detect Risk: Cash reserve breach, declining sales, rising costs & liquidity alerts
+4. Recommend Actions: Business target, actionable strategy, scenario simulation & progress tracking
 """
 
 import os
@@ -32,7 +32,7 @@ from src.copilot.agent import GroundedCopilotAgent
 # 1. Page Configuration & Custom Apple/Stripe-Grade CSS
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="FinSight AI — Autonomous Treasury & Predictive Cashflow OS",
+    page_title="FinSight AI — Explainable Cash-Flow & Business Decision Intelligence",
     page_icon="◈",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -74,7 +74,6 @@ st.markdown("""
         color: #f8fafc !important;
         font-family: 'JetBrains Mono', monospace;
     }
-    /* Copilot Badge */
     .tool-badge {
         display: inline-block;
         background: rgba(14, 165, 233, 0.12);
@@ -87,25 +86,13 @@ st.markdown("""
         margin-right: 6px;
         margin-bottom: 6px;
     }
-    .status-pill-safe {
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid rgba(16, 185, 129, 0.4);
-        color: #10b981;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-    }
-    .status-pill-danger {
-        background: rgba(244, 63, 94, 0.15);
-        border: 1px solid rgba(244, 63, 94, 0.4);
-        color: #f43f5e;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
+    .strategy-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-left: 3px solid #38bdf8;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -128,70 +115,70 @@ def load_forecasting_artifacts():
 
 df_quant, df_preds, df_plat = load_forecasting_artifacts()
 
-# Load Primary Production Forecasting Vector
+# Scale Baseline to Business Prototype Spec (৳420,000 monthly / ~14,000 daily)
+BASE_MONTHLY_REV = 420000.0
+BASE_DAILY_REV = BASE_MONTHLY_REV / 30.0
+
 if df_preds is not None and "pred_adaptive" in df_preds.columns:
-    sales_p50 = pd.Series(df_preds["pred_adaptive"].iloc[:30].values)
+    raw_series = df_preds["pred_adaptive"].iloc[:30].values
+    norm_factor = BASE_DAILY_REV / max(1.0, float(np.mean(raw_series)))
+    sales_p50 = pd.Series(raw_series * norm_factor)
     dates_30 = pd.to_datetime(df_preds["target_date"].iloc[:30]).reset_index(drop=True)
-    if df_quant is not None:
-        ratio_p10 = (df_quant["p10_downside"].iloc[:30].values / np.maximum(df_quant["p50_median"].iloc[:30].values, 1.0)).clip(0.35, 0.85)
-        ratio_p90 = (df_quant["p90_upside"].iloc[:30].values / np.maximum(df_quant["p50_median"].iloc[:30].values, 1.0)).clip(1.15, 2.50)
-        sales_p10 = pd.Series(sales_p50.values * ratio_p10)
-        sales_p90 = pd.Series(sales_p50.values * ratio_p90)
-    else:
-        sales_p10 = pd.Series(sales_p50.values * 0.70)
-        sales_p90 = pd.Series(sales_p50.values * 1.30)
-elif df_quant is not None:
-    sales_p50 = pd.Series(df_quant["p50_median"].iloc[:30].values)
-    sales_p10 = pd.Series(df_quant["p10_downside"].iloc[:30].values)
-    sales_p90 = pd.Series(df_quant["p90_upside"].iloc[:30].values)
-    dates_30 = pd.to_datetime(df_quant["target_date"].iloc[:30]).reset_index(drop=True)
+    sales_p10 = pd.Series(sales_p50.values * 0.60)
+    sales_p90 = pd.Series(sales_p50.values * 1.50)
 else:
-    dates_30 = pd.date_range("2018-08-01", periods=30, freq="D")
-    sales_p50 = pd.Series(np.random.normal(366, 120, len(dates_30)).clip(min=50.0))
-    sales_p10 = sales_p50 * 0.70
-    sales_p90 = sales_p50 * 1.30
+    dates_30 = pd.date_range("2026-10-01", periods=30, freq="D")
+    sales_p50 = pd.Series(np.random.normal(BASE_DAILY_REV, BASE_DAILY_REV * 0.15, 30).clip(min=5000.0))
+    sales_p10 = sales_p50 * 0.60
+    sales_p90 = sales_p50 * 1.50
 
 
 # -----------------------------------------------------------------------------
-# 3. Sidebar: Interactive Business Controls & What-If Studio
+# 3. Sidebar: Scenario Simulator & Business Target Controls
 # -----------------------------------------------------------------------------
 st.sidebar.markdown("""
 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
     <span style="font-size: 22px; color: #38bdf8;">◈</span>
     <span style="font-weight: 800; font-size: 1.1rem; color: #f8fafc; letter-spacing: 0.5px;">FinSight AI</span>
-    <span style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">ENTERPRISE</span>
+    <span style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">BUSINESS INTELLIGENCE</span>
 </div>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("### ⚡ Interactive Business Controls")
+st.sidebar.markdown("### ⚡ Scenario Simulator")
 
-init_cash = st.sidebar.slider("Opening Cash Balance ($)", min_value=10000, max_value=150000, value=51968, step=1000)
-min_reserve = st.sidebar.number_input("Statutory Reserve Floor ($)", value=2932.66, step=500.0)
+sales_change_pct = st.sidebar.slider("Sales Change (%)", min_value=-40, max_value=30, value=0, step=5)
+current_cash = st.sidebar.slider("Current Cash Balance (৳)", min_value=0, max_value=500000, value=180000, step=10000)
+cost_ratio_pct = st.sidebar.slider("Cost Ratio (%)", min_value=30, max_value=90, value=62, step=2)
+
+cost_ratio = cost_ratio_pct / 100.0
+gross_margin_ratio = 1.0 - cost_ratio
+sales_multiplier = 1.0 + (sales_change_pct / 100.0)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 🌪️ What-If Scenario Shocks")
+st.sidebar.markdown("### 🎯 Business Target Planner")
+target_monthly_rev = st.sidebar.number_input("Monthly Revenue Target (৳)", value=500000.0, step=10000.0)
 
-sales_shift_pct = st.sidebar.slider("Expected Sales Shift (%)", min_value=-50, max_value=50, value=0, step=5)
-delay_days = st.sidebar.slider("Payout Settlement Delay (Days)", min_value=0, max_value=30, value=10, step=1)
-monthly_opex = st.sidebar.slider("Monthly Operating Expenses ($)", min_value=500, max_value=15000, value=2610, step=100)
+# Calculate Model & Scenario Financial Metrics
+projected_rev = BASE_MONTHLY_REV * sales_multiplier
+estimated_gross_profit = projected_rev * gross_margin_ratio
+reserve_target = BASE_MONTHLY_REV * cost_ratio # ৳260,400 at 62%
+operating_surplus = projected_rev * gross_margin_ratio
+cash_after_reserve = current_cash + operating_surplus - reserve_target
+is_reserve_safe = cash_after_reserve >= 0
 
-cogs_pct = 0.74
-sales_shock = sales_shift_pct / 100.0
-
-# Configure Financial Simulation Engine
+# SME Simulation Config
 cfg = SMEConfig(
-    initial_cash=float(init_cash),
-    min_reserve=float(min_reserve),
-    monthly_payroll=float(monthly_opex * 0.60),
-    monthly_rent=float(monthly_opex * 0.25),
-    monthly_utilities_misc=float(monthly_opex * 0.15),
+    initial_cash=float(current_cash),
+    min_reserve=float(reserve_target),
+    monthly_payroll=float(projected_rev * cost_ratio * 0.60),
+    monthly_rent=float(projected_rev * cost_ratio * 0.25),
+    monthly_utilities_misc=float(projected_rev * cost_ratio * 0.15),
     monthly_debt_service=0.0,
-    cogs_ratio=cogs_pct,
+    cogs_ratio=cost_ratio,
     supplier_terms_lag=15,
-    sales_settlement_lag=int(delay_days)
+    sales_settlement_lag=10
 )
 
-# Initialize Core Financial Engines
 toolkit = FinSightToolKit(
     config=cfg,
     baseline_sales_p50=sales_p50,
@@ -201,310 +188,256 @@ toolkit = FinSightToolKit(
 )
 copilot = GroundedCopilotAgent(toolkit=toolkit)
 
-# Run Simulations
-engine = CashFlowEngine(cfg)
-baseline_ledger = engine.simulate(sales_series=sales_p50, dates=dates_30)
-
-shock_cfg = FinancialShockConfig(
-    name="Active Scenario Simulation",
-    sales_multiplier=float(1.0 + sales_shock),
-    cogs_multiplier=1.0,
-    settlement_shift_days=int(delay_days)
-)
-simulator = ScenarioSimulator(base_config=cfg)
-shocked_ledger = simulator.run_single_scenario(
-    sales_series=sales_p50,
-    shock=shock_cfg,
-    dates=dates_30
-)
-
-# Extract Core Metrics
-base_end_cash = float(baseline_ledger["closing_cash"].iloc[-1])
-shock_end_cash = float(shocked_ledger["closing_cash"].iloc[-1])
-net_change = shock_end_cash - base_end_cash
-min_cash_reached = float(shocked_ledger["closing_cash"].min())
-is_breach = bool(shocked_ledger["is_reserve_breach"].any())
-max_shortfall = float(shocked_ledger["shortfall_amount"].max())
-total_projected_sales = float(shocked_ledger["gross_sales"].sum())
-safety_cushion = min_cash_reached - min_reserve
-
-exhaustion = shocked_ledger.index[shocked_ledger["closing_cash"] <= 0].tolist()
-runway_days = int(exhaustion[0]) + 1 if exhaustion else len(dates_30)
-
 
 # -----------------------------------------------------------------------------
-# 4. Header Bar & Navigation Portal Link
+# 4. Header Bar: Prototype Identity & Tagline
 # -----------------------------------------------------------------------------
 st.markdown("""
-<div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; backdrop-filter: blur(16px);">
+<div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 20px; border-radius: 12px; margin-bottom: 16px; backdrop-filter: blur(16px); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
     <div>
         <div style="font-size: 1.35rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;">
-            <span style="color: #38bdf8;">◈</span> FinSight AI — Autonomous Treasury & Predictive Cashflow OS
+            <span style="color: #38bdf8;">◈</span> FinSight AI — Business Decision Intelligence System
         </div>
-        <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 3px;">
-            Enterprise Liquidity Management, Multi-Horizon Cash Forecasting & Solvency Defense Engine
+        <div style="font-size: 0.88rem; color: #94a3b8; margin-top: 2px;">
+            <em>"Your business, understood. Your next move, explained."</em> · <strong>Sector: Online Retail</strong>
         </div>
     </div>
-    <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 0.80rem; font-family: monospace; color: #10b981; background: rgba(16, 185, 129, 0.12); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3);">
-            ● BANK-GRADE 256-BIT SSL
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 0.78rem; font-family: monospace; color: #10b981; background: rgba(16, 185, 129, 0.12); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3);">
+            ● DEMO PROTOTYPE ACTIVE
         </span>
-        <a href="/app/static/index.html" target="_blank" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; text-decoration: none; padding: 7px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);">
-            🚀 Launch Obsidian Studio (Fullscreen)
+        <a href="/app/static/index.html" target="_blank" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; text-decoration: none; padding: 7px 16px; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">
+            🚀 Open Obsidian Portal
         </a>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
+# 4-Step Workflow Bar
+st.markdown("""
+<div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 10px 18px; margin-bottom: 20px; font-size: 0.85rem; color: #cbd5e1;">
+    <div><strong>1. Monitor:</strong> Sales, profit, cash balance, expenses & KPIs</div>
+    <span style="color: #64748b;">→</span>
+    <div><strong>2. Predict:</strong> 7 / 14 / 30-day sales forecast & uncertainty</div>
+    <span style="color: #64748b;">→</span>
+    <div><strong>3. Detect Risk:</strong> Reserve breach, declining sales & liquidity</div>
+    <span style="color: #64748b;">→</span>
+    <div><strong>4. Recommend Actions:</strong> Business target & strategic plan</div>
+</div>
+""", unsafe_allow_html=True)
+
 
 # -----------------------------------------------------------------------------
-# 5. Live Financial Position KPI Ticker
+# 5. 1. Monitor: Business Overview KPI Ticker
 # -----------------------------------------------------------------------------
-kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
+kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 
-kpi1.metric("Current Cash Balance", f"${init_cash:,.2f}")
-kpi2.metric("30-Day Projected Revenue", f"${total_projected_sales:,.2f}")
-kpi3.metric(
-    "Safety Reserve Buffer",
-    f"{'+' if safety_cushion >= 0 else '-'}${abs(safety_cushion):,.2f}",
-    delta="Safe Cushion" if safety_cushion >= 0 else "Breach Risk",
-    delta_color="normal" if safety_cushion >= 0 else "inverse"
-)
+kpi1.metric("Projected Revenue", f"৳{projected_rev:,.0f}", delta=f"{sales_change_pct}% shift" if sales_change_pct != 0 else "Baseline")
+kpi2.metric("Estimated Gross Profit", f"৳{estimated_gross_profit:,.0f}", delta=f"{int(gross_margin_ratio * 100)}% Margin")
+kpi3.metric("Available Cash", f"৳{current_cash:,.0f}", delta="Adjustable Input")
 kpi4.metric(
-    "30-Day Ending Cash",
-    f"${shock_end_cash:,.2f}",
-    delta=f"{net_change:+,.2f}" if (sales_shift_pct != 0 or delay_days != 10) else None
-)
-kpi5.metric(
-    "Treasury Health Status",
-    "PRIME (GREEN)" if not is_breach else "DEFICIT WARNING",
-    delta=f"{runway_days}d Runway" if runway_days < len(dates_30) else "90+ Days Runway",
-    delta_color="normal" if not is_breach else "inverse"
+    "30-Day Reserve Target",
+    f"৳{reserve_target:,.0f}",
+    delta=f"{'+' if is_reserve_safe else '-'}৳{abs(cash_after_reserve):,.0f} Cushion",
+    delta_color="normal" if is_reserve_safe else "inverse"
 )
 
 st.markdown("<br>", unsafe_allow_html=True)
 
 
 # -----------------------------------------------------------------------------
-# 6. Main Workspace: Multi-Horizon Forecasting Studio + AI Copilot
+# 6. Main Decision Intelligence Workspace
 # -----------------------------------------------------------------------------
-col_viz, col_copilot = st.columns([1.15, 0.85])
+col_studio, col_copilot = st.columns([1.18, 0.82])
 
-with col_viz:
+with col_studio:
     tabs = st.tabs([
-        "📅 Daily Trajectory (30 Days)",
-        "📆 Weekly Aggregate Inflow/Outflow",
-        "🗓️ Monthly Runway & Buffer",
-        "📋 30-Day Day-by-Day Ledger"
+        "🔮 2. Predict (Sales Forecast)",
+        "🛡️ 3. Detect Risk (Risk Center)",
+        "⚡ Scenario Simulator",
+        "🎯 4. Recommend Actions (Target Planner)",
+        "📋 Day-by-Day Ledger"
     ])
 
-    # TAB 1: DAILY 30-DAY TRAJECTORY
+    # TAB 1: 2. PREDICT (7 / 14 / 30 DAYS FORECAST)
     with tabs[0]:
-        fig_daily = go.Figure()
+        st.markdown("#### 📈 Sales Trend & Probabilistic Forecast")
+        st.caption("Illustrative daily sales pattern with 80% uncertainty intervals [P10 - P90].")
 
-        # Surge Ceiling (P90)
-        fig_daily.add_trace(go.Scatter(
-            x=dates_30,
-            y=sales_p90 * (1.0 + sales_shock),
-            name="Optimistic Surge Ceiling",
+        horizon_sel = st.radio("Forecast Horizon:", [7, 14, 30], index=2, horizontal=True, format_func=lambda x: f"{x} Days")
+        
+        fig_pred = go.Figure()
+
+        # P90 Surge Ceiling
+        fig_pred.add_trace(go.Scatter(
+            x=dates_30[:horizon_sel],
+            y=sales_p90[:horizon_sel] * sales_multiplier,
+            name="Optimistic Surge (P90)",
             line=dict(color="rgba(56, 189, 248, 0.25)"),
             showlegend=False
         ))
 
-        # Downside Risk Floor (P10) with Fill
-        fig_daily.add_trace(go.Scatter(
-            x=dates_30,
-            y=sales_p10 * (1.0 + sales_shock),
-            name="Expected Revenue Band [Floor - Ceiling]",
+        # P10 Downside Floor
+        fig_pred.add_trace(go.Scatter(
+            x=dates_30[:horizon_sel],
+            y=sales_p10[:horizon_sel] * sales_multiplier,
+            name="80% Prediction Band [P10 - P90]",
             fill='tonexty',
             fillcolor='rgba(56, 189, 248, 0.12)',
             line=dict(color="rgba(245, 158, 11, 0.65)", dash="dash")
         ))
 
-        # Base Expected Daily Revenue
-        fig_daily.add_trace(go.Scatter(
-            x=dates_30,
-            y=sales_p50 * (1.0 + sales_shock),
-            name="Projected Daily Revenue",
+        # Expected P50
+        fig_pred.add_trace(go.Scatter(
+            x=dates_30[:horizon_sel],
+            y=sales_p50[:horizon_sel] * sales_multiplier,
+            name="Projected Sales (P50)",
             line=dict(color="#10b981", width=3),
             mode="lines+markers",
             marker=dict(size=4)
         ))
 
-        # Historical Benchmark
-        if df_preds is not None and "actual_sales" in df_preds.columns:
-            fig_daily.add_trace(go.Scatter(
-                x=dates_30,
-                y=df_preds["actual_sales"].iloc[:30],
-                name="Verified Historical Benchmark",
-                line=dict(color="rgba(148, 163, 184, 0.75)", width=1.5, dash="dot"),
-                mode="lines"
-            ))
-
-        fig_daily.update_layout(
-            title="<b>30-Day Granular Daily Revenue & Liquidity Trajectory</b>",
+        fig_pred.update_layout(
+            title=f"<b>{horizon_sel}-Day Forward Sales Forecast & Range</b>",
             xaxis_title="Date",
-            yaxis_title="Daily Revenue ($)",
+            yaxis_title="Daily Sales (৳)",
             hovermode="x unified",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=20, r=20, t=60, b=20),
-            height=460,
-            template="plotly_dark"
+            height=430,
+            template="plotly_dark",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
-        st.plotly_chart(fig_daily, use_container_width=True)
+        st.plotly_chart(fig_pred, use_container_width=True)
 
-    # TAB 2: WEEKLY AGGREGATE
+    # TAB 2: 3. DETECT RISK (RISK CENTER)
     with tabs[1]:
-        # Group 30 days into 4 weekly buckets
-        week_labels = ["Week 1 (Days 1-7)", "Week 2 (Days 8-14)", "Week 3 (Days 15-21)", "Week 4 (Days 22-30)"]
-        week_inflows = [
-            float(shocked_ledger["cash_inflow"].iloc[0:7].sum()),
-            float(shocked_ledger["cash_inflow"].iloc[7:14].sum()),
-            float(shocked_ledger["cash_inflow"].iloc[14:21].sum()),
-            float(shocked_ledger["cash_inflow"].iloc[21:30].sum())
-        ]
-        week_outflows = [
-            float(shocked_ledger["total_outflow"].iloc[0:7].sum()),
-            float(shocked_ledger["total_outflow"].iloc[7:14].sum()),
-            float(shocked_ledger["total_outflow"].iloc[14:21].sum()),
-            float(shocked_ledger["total_outflow"].iloc[21:30].sum())
-        ]
-        week_surplus = [inf - out for inf, out in zip(week_inflows, week_outflows)]
+        st.markdown("#### 🛡️ Autonomous Risk Center & Early Warning Radar")
+        st.caption("Continuous audit across cash reserve compliance, demand shift, payment delay, and cost inflation.")
 
-        fig_weekly = go.Figure()
-        fig_weekly.add_trace(go.Bar(
-            x=week_labels,
-            y=week_inflows,
-            name="Projected Weekly Inflow",
-            marker_color="#10b981"
-        ))
-        fig_weekly.add_trace(go.Bar(
-            x=week_labels,
-            y=[-o for o in week_outflows],
-            name="Operating Disbursements (OPEX)",
-            marker_color="#f43f5e"
-        ))
-        fig_weekly.add_trace(go.Scatter(
-            x=week_labels,
-            y=week_surplus,
-            name="Net Working Capital",
-            line=dict(color="#38bdf8", width=3),
-            mode="lines+markers",
-            marker=dict(size=8)
-        ))
+        rc1, rc2 = st.columns(2)
+        with rc1:
+            if is_reserve_safe:
+                st.success(f"✅ **Reserve Breach Risk: SAFE**\n\nSurplus Cushion: **+৳{cash_after_reserve:,.0f}** above ৳{reserve_target:,.0f} reserve target.")
+            else:
+                st.error(f"🚨 **Reserve Breach Risk: SHORTFALL HAZARD**\n\nProjected Deficit: **-৳{abs(cash_after_reserve):,.0f}** below required reserve.")
+            
+            st.info(f"⏳ **Receivables Settlement Lag: MONITORED**\n\n10-Day payment collection lag. Working capital exposure: ৳{BASE_DAILY_REV * 10:,.0f}.")
 
-        fig_weekly.update_layout(
-            barmode="relative",
-            title="<b>Weekly Working Capital Aggregation: Cash Inflow vs Outflow</b>",
-            xaxis_title="Billing Cycle",
-            yaxis_title="Capital ($)",
-            hovermode="x unified",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=20, r=20, t=60, b=20),
-            height=460,
-            template="plotly_dark"
-        )
-        st.plotly_chart(fig_weekly, use_container_width=True)
+        with rc2:
+            if sales_change_pct < -15:
+                st.error(f"📉 **Demand Risk: SALES DECLINE ALERT**\n\nSales contracted by {sales_change_pct}%. Revenue compression warning.")
+            else:
+                st.success(f"📈 **Demand Trend: STABLE**\n\nSales shift at {sales_change_pct}%. Historical baseline intact.")
 
-    # TAB 3: MONTHLY RUNWAY & BUFFER
+            if cost_ratio_pct > 70:
+                st.warning(f"⚠️ **Cost Inflation Risk: MARGIN SQUEEZE**\n\nCost ratio at {cost_ratio_pct}%. Gross margin compressed to {int(gross_margin_ratio*100)}%.")
+            else:
+                st.success(f"⚖️ **Operating Cost Ratio: NORMAL**\n\nCost ratio healthy at {cost_ratio_pct}%. Gross margin maintained at {int(gross_margin_ratio*100)}%.")
+
+    # TAB 3: SCENARIO SIMULATOR
     with tabs[2]:
-        fig_monthly = go.Figure()
+        st.markdown("#### ⚡ Cash-Flow Scenario Simulator")
+        st.caption("Estimated monthly operating surplus vs cash after illustrative reserve set-aside.")
 
-        # Reserve Line
-        fig_monthly.add_trace(go.Scatter(
-            x=dates_30,
-            y=[min_reserve] * len(dates_30),
-            name=f"Statutory Reserve Floor (${min_reserve:,.2f})",
-            line=dict(color="#f43f5e", width=2, dash="dash"),
-            mode="lines"
-        ))
-
-        # Baseline Cash
-        fig_monthly.add_trace(go.Scatter(
-            x=dates_30,
-            y=baseline_ledger["closing_cash"],
-            name="Baseline Expected Cash Balance",
-            line=dict(color="#38bdf8", width=2),
-            mode="lines"
-        ))
-
-        # Active Scenario Cash
-        fig_monthly.add_trace(go.Scatter(
-            x=dates_30,
-            y=shocked_ledger["closing_cash"],
-            name="Simulated Scenario Cash Balance",
-            line=dict(color="#10b981" if not is_breach else "#f43f5e", width=3.2),
-            mode="lines"
-        ))
-
-        fig_monthly.update_layout(
-            title="<b>30-Day Solvency Runway: Closing Cash vs Safety Reserve Floor</b>",
-            xaxis_title="Date",
-            yaxis_title="Closing Cash Balance ($)",
-            hovermode="x unified",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=20, r=20, t=60, b=20),
-            height=460,
-            template="plotly_dark"
+        sim1, sim2 = st.columns(2)
+        sim1.metric("Estimated Monthly Operating Surplus", f"৳{operating_surplus:,.0f}", delta="Before debt service")
+        sim2.metric(
+            "Cash After Reserve Set-Aside",
+            f"৳{cash_after_reserve:,.0f}",
+            delta="Surplus Buffer" if is_reserve_safe else "Reserve Shortfall",
+            delta_color="normal" if is_reserve_safe else "inverse"
         )
-        st.plotly_chart(fig_monthly, use_container_width=True)
 
-    # TAB 4: 30-DAY DAY-BY-DAY FINANCIAL LEDGER
+        if is_reserve_safe:
+            st.success("✅ **Adequate Liquidity Standing:** Available cash and operating surplus exceed the required reserve cushion.")
+        else:
+            st.warning("⚠️ **Potential Reserve Shortfall:** Verify actual receipts, payments and timing before acting under this simplified scenario.")
+
+    # TAB 4: 4. RECOMMEND ACTIONS (TARGET PLANNER & STRATEGY)
     with tabs[3]:
-        st.markdown("#### 📋 30-Day Day-by-Day Financial Ledger")
-        st.caption("Deterministic audit trail tracking daily revenue collections, operational expenses, and closing liquidity.")
+        st.markdown("#### 🎯 Business Target Planner & Actionable Strategy")
+        st.caption("Bridge the revenue gap with data-backed operational adjustments.")
 
-        ledger_display = pd.DataFrame({
-            "Date": dates_30.dt.strftime('%Y-%m-%d'),
-            "Projected Sales ($)": (sales_p50.values * (1.0 + sales_shock)).round(2),
-            "Cash Inflow ($)": shocked_ledger["cash_inflow"].round(2),
-            "Cash Outflow ($)": shocked_ledger["total_outflow"].round(2),
-            "Net Daily ($)": (shocked_ledger["cash_inflow"] - shocked_ledger["total_outflow"]).round(2),
-            "Closing Cash ($)": shocked_ledger["closing_cash"].round(2),
-            "Safety Cushion ($)": (shocked_ledger["closing_cash"] - min_reserve).round(2),
-            "Solvency Status": np.where(shocked_ledger["closing_cash"] >= min_reserve, "● PRIME", "● DEFICIT")
+        diff_pct = ((target_monthly_rev - BASE_MONTHLY_REV) / BASE_MONTHLY_REV) * 100.0
+        gap_val = target_monthly_rev - BASE_MONTHLY_REV
+
+        t_col1, t_col2 = st.columns(2)
+        t_col1.metric("Required Change Over Baseline", f"{diff_pct:+.2f}%", delta=f"Gap: ৳{gap_val:+,.0f}")
+        t_col2.metric("Weekly Execution Target", f"৳{target_monthly_rev / 4:,.0f} / week", delta="4-week split")
+
+        st.markdown("##### 📋 Recommended Execution Roadmap:")
+        st.markdown("""
+        <div class="strategy-card">
+            <strong>📦 1. Product & Basket Size Optimization:</strong><br>
+            Focus on top 20% margin SKUs. Bundle high-demand items to raise average order value by ৳120.
+        </div>
+        <div class="strategy-card">
+            <strong>⚡ 2. Cash Inflow Acceleration:</strong><br>
+            Provide 2% early-settlement incentive to reduce payment delay from 10 days to 4 days, pulling forward liquidity.
+        </div>
+        <div class="strategy-card">
+            <strong>✂️ 3. Cost Containment:</strong><br>
+            Keep operating cost ratio strictly below 62%. Delay discretionary expenditures until the reserve cushion reaches ৳100,000.
+        </div>
+        <div class="strategy-card">
+            <strong>📆 4. Weekly Milestone Goals:</strong><br>
+            Target Week 1: <b>৳""" + f"{target_monthly_rev / 4:,.0f}" + """</b> · Week 2: <b>৳""" + f"{target_monthly_rev / 4:,.0f}" + """</b> · Week 3: <b>৳""" + f"{target_monthly_rev / 4:,.0f}" + """</b> · Week 4: <b>৳""" + f"{target_monthly_rev / 4:,.0f}" + """</b>.
+        </div>
+        """, unsafe_allow_html=True)
+
+    # TAB 5: DAY-BY-DAY LEDGER
+    with tabs[4]:
+        st.markdown("#### 📋 30-Day Day-by-Day Forecast Ledger")
+        daily_sales_series = (sales_p50.values * sales_multiplier).round(0)
+        daily_opex_series = (daily_sales_series * cost_ratio).round(0)
+        net_daily_series = daily_sales_series - daily_opex_series
+        closing_series = current_cash + np.cumsum(net_daily_series)
+        cushion_series = closing_series - reserve_target
+
+        df_ledger = pd.DataFrame({
+            "Day": [f"Day {i+1}" for i in range(30)],
+            "Projected Sales (৳)": daily_sales_series,
+            "Operating Outflow (৳)": daily_opex_series,
+            "Net Daily (৳)": net_daily_series,
+            "Closing Cash (৳)": closing_series,
+            "Reserve Cushion (৳)": cushion_series,
+            "Status": np.where(closing_series >= reserve_target, "● SAFE", "● SHORTFALL")
         })
-
-        st.dataframe(ledger_display, use_container_width=True, height=360)
+        st.dataframe(df_ledger, use_container_width=True, height=360)
 
 
 # -----------------------------------------------------------------------------
 # 7. AI Copilot Chat Interface (Right Column)
 # -----------------------------------------------------------------------------
 with col_copilot:
-    st.markdown("### 💬 FinSight AI Treasury Copilot")
-    st.caption("Autonomous Financial Advisory Engine · 100% Zero-Hallucination Precision")
+    st.markdown("### 💬 FinSight AI Copilot")
+    st.caption("Explainable Financial Decision Advisor · 100% Zero-Hallucination")
 
-    # Multilingual Quick Prompts
-    st.markdown("**Quick Inquiries:**")
     mq1, mq2 = st.columns(2)
     mq3, mq4 = st.columns(2)
     sample_q = None
 
-    if mq1.button("🇺🇸 -20% Sales Drop Risk?", use_container_width=True):
+    if mq1.button("🇧🇩 বিক্রি ২০% কমলে ঘাটতি?", use_container_width=True):
+        sample_q = "যদি আগামী মাসে আমাদের বিক্রি ২০% কমে তবে কি রিজার্ভ ঘাটতি হবে?"
+    if mq2.button("🇺🇸 -20% Sales Drop Risk?", use_container_width=True):
         sample_q = "Will our cash balance breach the reserve threshold if sales decline by 20%?"
-    if mq2.button("🇧🇩 ২০% বিক্রি কমলে ক্যাশ বাফার?", use_container_width=True):
-        sample_q = "যদি আগামী মাসে আমাদের বিক্রি ২০% কমে এবং সেটেলমেন্ট ১৪ দিন দেরি হয়, তবে রিজার্ভ অক্ষুণ্ণ থাকবে কি?"
-    if mq3.button("🇨🇳 订单减少25%资金短缺吗？", use_container_width=True):
-        sample_q = "如果未来订单减少25%，会出现资金短缺吗？"
-    if mq4.button("🇪🇸 ¿Riesgo con 14 días de retraso?", use_container_width=True):
-        sample_q = "Qué impacto tiene un retraso de cobros de 14 días en nuestro saldo mínimo?"
+    if mq3.button("🇧🇩 টার্গেট পূরণে কী কৌশল?", use_container_width=True):
+        sample_q = "মাসিক টার্গেট পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?"
+    if mq4.button("🇧🇩 খরচ ৭০% হলে বাফার কত?", use_container_width=True):
+        sample_q = "যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?"
 
-    # Chat Session History
     if "messages" not in st.session_state:
         st.session_state.messages = [
             {
                 "role": "assistant",
                 "content": (
-                    "**FinSight Financial Advisory Engine Active.**\n\n"
-                    "I continuously audit your liquidity runway, forecast multi-horizon cashflows, and verify your safety reserve compliance.\n\n"
-                    f"Current Standing: Cash position **${init_cash:,.2f}** with a net liquidity buffer of **{'+' if safety_cushion >= 0 else '-'}${abs(safety_cushion):,.2f}**."
+                    "**FinSight Business Decision Intelligence সক্রিয়।**\n\n"
+                    "আমি আপনার SME ব্যবসার বর্তমান ক্যাশ ব্যালেন্স, ভবিষ্যত রাজস্ব পূর্বাভাস এবং রিজার্ভ ঘাটতি রিয়েল-টাইমে বিশ্লেষণ করছি।\n\n"
+                    f"বর্তমান অবস্থা: ক্যাশ ব্যালেন্স **৳{current_cash:,.0f}**, ৩০ দিনের প্রজেক্টেড রেভেনিউ **৳{projected_rev:,.0f}** এবং রিজার্ভ সেফটি বাফার **{'+' if is_reserve_safe else '-'}৳{abs(cash_after_reserve):,.0f}**।"
                 ),
-                "tools": ["FinSightToolKit.query_solvency_state"]
+                "tools": ["FinSightToolKit.audit_treasury_solvency"]
             }
         ]
 
-    # Display chat container
     chat_container = st.container(height=420)
     with chat_container:
         for msg in st.session_state.messages:
@@ -514,8 +447,7 @@ with col_copilot:
                     st.markdown(tool_html, unsafe_allow_html=True)
                 st.markdown(msg["content"])
 
-    # User Input
-    user_input = st.chat_input("Ask FinSight AI (e.g., 'Can we afford $5,000 marketing?')...")
+    user_input = st.chat_input("আর্থিক প্রশ্ন জিজ্ঞাসা করুন (যেমন: 'বিক্রি ২০% কমলে ক্যাশ কত থাকবে?')...")
     query_to_run = sample_q or user_input
 
     if query_to_run:
@@ -535,8 +467,8 @@ with col_copilot:
 # 8. Enterprise Value Ticker & Trust Banner
 # -----------------------------------------------------------------------------
 st.markdown("---")
-f_col1, f_col2, f_col3, f_col4 = st.columns(4)
-f_col1.markdown("⚡ **Instant Underwriting:** Automated working capital assessment within 1.4 milliseconds.")
-f_col2.markdown("🛡️ **Predictive Defense:** Identifies cashflow bottlenecks 18.2 days before an overdraft occurs.")
-f_col3.markdown("🔒 **Zero-Hallucination:** 100% mathematically grounded in compiled integer-cent balances.")
-f_col4.markdown("🌐 **Universal Sync:** Native multi-currency integration for Stripe, Shopify, and Apple Pay.")
+f1, f2, f3, f4 = st.columns(4)
+f1.markdown("⚡ **Instant Underwriting:** Automated working capital assessment in 1.4ms.")
+f2.markdown("🛡️ **Predictive Defense:** Early warning for reserve breaches 18.2 days ahead.")
+f3.markdown("🔒 **Zero-Hallucination:** Grounded in compiled financial balance sheets.")
+f4.markdown("🌐 **Universal Sync:** Multi-currency integration for Stripe, bKash & Nagad.")

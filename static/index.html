@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FinSight AI — Autonomous Treasury & Predictive Cashflow OS</title>
-  <meta name="description" content="FinSight AI: Enterprise Autonomous Treasury & Predictive Cashflow Operating System for Platform Commerce and Merchant Banking.">
+  <title>FinSight AI — Explainable Cash-Flow & Business Decision Intelligence</title>
+  <meta name="description" content="FinSight AI: Business Decision Intelligence System for SMEs. Monitor, Predict, Detect Risk, and Recommend Actions.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <!-- Chart.js for smooth high-DPI canvas charting -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -22,18 +21,23 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="logo-title">FinSight AI</span>
-              <span class="logo-sub">ENTERPRISE OS</span>
+              <span class="logo-sub">BUSINESS INTELLIGENCE · PROTOTYPE</span>
+            </div>
+            <div class="header-tagline">
+              Your business, understood. Your next move, explained.
             </div>
           </div>
         </div>
-        <div class="header-divider"></div>
-        <div class="header-tagline">
-          Autonomous Treasury & Predictive Cashflow Intelligence
-        </div>
       </div>
       <div class="header-right">
+        <!-- SECTOR SELECTOR -->
+        <div style="font-size: 12px; font-weight: 700; color: var(--accent-cyan); background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25); padding: 5px 12px; border-radius: 8px;">
+          Sector: Online Retail
+        </div>
+        <!-- CURRENCY TOGGLE -->
         <div class="currency-toggle">
-          <button class="curr-btn active" id="curr-usd" onclick="setCurrency('USD')">$ USD</button>
+          <button class="curr-btn active" id="curr-bdt" onclick="setCurrency('BDT')">৳ BDT</button>
+          <button class="curr-btn" id="curr-usd" onclick="setCurrency('USD')">$ USD</button>
           <button class="curr-btn" id="curr-brl" onclick="setCurrency('BRL')">R$ BRL</button>
           <button class="curr-btn" id="curr-cny" onclick="setCurrency('CNY')">¥ CNY</button>
           <button class="curr-btn" id="curr-eur" onclick="setCurrency('EUR')">€ EUR</button>
@@ -45,155 +49,344 @@
       </div>
     </header>
 
-    <!-- LIVE FINANCIAL POSITION KPI TICKER -->
+    <!-- 4-STEP BUSINESS INTELLIGENCE WORKFLOW BAR -->
+    <div class="workflow-step-bar">
+      <div class="step-item active" id="wf-step-1">
+        <div class="step-num">1</div>
+        <div>
+          <span>Monitor</span>
+          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">Sales, profit & cash balance</span>
+        </div>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="step-item active" id="wf-step-2">
+        <div class="step-num">2</div>
+        <div>
+          <span>Predict</span>
+          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">7 / 14 / 30-day forecast & bands</span>
+        </div>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="step-item active" id="wf-step-3">
+        <div class="step-num">3</div>
+        <div>
+          <span>Detect Risk</span>
+          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">Reserve breach & liquidity hazard</span>
+        </div>
+      </div>
+      <span class="step-arrow">→</span>
+      <div class="step-item active" id="wf-step-4">
+        <div class="step-num">4</div>
+        <div>
+          <span>Recommend Actions</span>
+          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">Targets, strategy & simulations</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. MONITOR: BUSINESS OVERVIEW KPI TICKER -->
     <section class="hero-summary-grid">
       <div class="hero-summary-card highlight">
         <div class="h-card-label">
-          <span>Current Cash Balance</span>
-          <span style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 11px;">● LIVE SYNC</span>
+          <span>Projected Revenue</span>
+          <span style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 11px;" id="kpi-horizon-tag">30 DAYS</span>
         </div>
-        <div class="h-card-val" id="kpi-current-cash">$51,968.54</div>
-        <div class="h-card-sub">Verified institutional treasury holdings</div>
+        <div class="h-card-val" id="kpi-projected-rev" style="color: var(--accent-cyan);">৳420,000</div>
+        <div class="h-card-sub">Scenario-adjusted estimate</div>
       </div>
 
       <div class="hero-summary-card">
         <div class="h-card-label">
-          <span>30-Day Projected Revenue</span>
-          <span style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 11px;">HIGH CONFIDENCE</span>
+          <span>Estimated Gross Profit</span>
+          <span style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 11px;" id="kpi-margin-tag">38% MARGIN</span>
         </div>
-        <div class="h-card-val" id="kpi-projected-rev" style="color: var(--accent-cyan);">$8,052.60</div>
-        <div class="h-card-sub">▲ 91.85% historical baseline accuracy</div>
+        <div class="h-card-val" id="kpi-gross-profit" style="color: var(--accent-emerald);">৳159,600</div>
+        <div class="h-card-sub">Before other operating expenses</div>
       </div>
 
       <div class="hero-summary-card">
         <div class="h-card-label">
-          <span>Safety Reserve Buffer</span>
-          <span style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 11px;">ZERO DEFICIT</span>
+          <span>Available Cash</span>
+          <span style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 11px;">LIVE INPUT</span>
         </div>
-        <div class="h-card-val" id="kpi-reserve-buffer" style="color: var(--accent-emerald);">+$49,035.88</div>
-        <div class="h-card-sub" id="kpi-reserve-floor">Above $2,932.66 required safety limit</div>
+        <div class="h-card-val" id="kpi-current-cash">৳180,000</div>
+        <div class="h-card-sub">User-adjustable treasury input</div>
       </div>
 
       <div class="hero-summary-card">
         <div class="h-card-label">
-          <span>Treasury Solvency Health</span>
-          <span style="color: var(--accent-purple); font-family: var(--font-mono); font-size: 11px;">BASEL-III</span>
+          <span>30-Day Reserve Target</span>
+          <span style="color: var(--accent-amber); font-family: var(--font-mono); font-size: 11px;">STATUTORY</span>
         </div>
-        <div class="h-card-val" id="kpi-solvency-tier" style="color: #a855f7; font-size: 24px;">PRIME (GREEN)</div>
-        <div class="h-card-sub">Estimated cash runway &gt; 90+ days</div>
+        <div class="h-card-val" id="kpi-reserve-target" style="color: var(--accent-amber);">৳260,400</div>
+        <div class="h-card-sub" id="kpi-reserve-sub">Based on modeled costs (62%)</div>
       </div>
     </section>
 
     <!-- MAIN COMMERCIAL WORKSPACE -->
     <div class="workspace-grid">
-      <!-- LEFT COLUMN: INTERACTIVE CONTROLS + MULTI-HORIZON CHARTS + LEDGER -->
+      <!-- LEFT COLUMN: PREDICT + DETECT RISK + RECOMMEND ACTIONS + SCENARIOS -->
       <main class="studio-column">
-        <!-- CARD 1: USER INPUT BUSINESS CONTROL MATRIX -->
+
+        <!-- 2. PREDICT: SALES TREND & FORECAST STUDIO -->
+        <div class="studio-card">
+          <div class="studio-toolbar">
+            <div>
+              <h2 class="matrix-title">Sales Trend & Probabilistic Forecast</h2>
+              <p class="matrix-desc">Compare historical sales with P10 downside floor, P50 expected, and P90 surge ceiling.</p>
+            </div>
+            <!-- HORIZON SWITCHER BUTTONS -->
+            <div class="horizon-segmented-control">
+              <button class="horizon-btn" id="btn-horizon-7d" onclick="setForecastHorizonDays(7)">
+                7 Days
+              </button>
+              <button class="horizon-btn" id="btn-horizon-14d" onclick="setForecastHorizonDays(14)">
+                14 Days
+              </button>
+              <button class="horizon-btn active" id="btn-horizon-30d" onclick="setForecastHorizonDays(30)">
+                30 Days
+              </button>
+            </div>
+          </div>
+
+          <!-- DYNAMIC STATS BAR -->
+          <div class="horizon-stats-summary">
+            <div class="h-stat-box">
+              <span class="h-stat-label">Expected Daily Revenue</span>
+              <span class="h-stat-num" id="h-stat-expected" style="color: var(--accent-emerald);">৳14,000 / day</span>
+            </div>
+            <div class="h-stat-box">
+              <span class="h-stat-label">Downside Floor (P10)</span>
+              <span class="h-stat-num" id="h-stat-p10" style="color: var(--accent-amber);">৳8,400 / day</span>
+            </div>
+            <div class="h-stat-box">
+              <span class="h-stat-label">Optimistic Surge (P90)</span>
+              <span class="h-stat-num" id="h-stat-p90" style="color: var(--accent-cyan);">৳21,000 / day</span>
+            </div>
+          </div>
+
+          <!-- CHART CANVAS -->
+          <div class="chart-viewport">
+            <canvas id="businessForecastChart"></canvas>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px; text-align: center;">
+            * Illustrative daily sales pattern grounded in empirical quantile intervals. Replace with out-of-sample merchant ledger.
+          </div>
+        </div>
+
+        <!-- 3. DETECT RISK: AUTONOMOUS RISK CENTER -->
+        <div class="control-matrix-card">
+          <div class="matrix-header">
+            <div class="matrix-title-group">
+              <span style="font-size: 20px;">🛡️</span>
+              <div>
+                <h2 class="matrix-title">Autonomous Risk Center & Early Warning Radar</h2>
+                <p class="matrix-desc">Continuous real-time audit for cash reserve breach, payment delays, and liquidity shocks.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="risk-center-grid">
+            <div class="risk-card" id="risk-card-reserve">
+              <div class="risk-header-row">
+                <span class="risk-title">Reserve Breach Risk</span>
+                <span class="risk-badge risk-badge-green" id="badge-reserve-risk">● SAFE</span>
+              </div>
+              <div class="risk-val" id="val-reserve-cushion" style="color: var(--accent-emerald);">+৳79,200</div>
+              <div class="risk-sub" id="sub-reserve-cushion">Buffer above ৳260,400 reserve</div>
+            </div>
+
+            <div class="risk-card">
+              <div class="risk-header-row">
+                <span class="risk-title">Demand & Sales Trend</span>
+                <span class="risk-badge risk-badge-green" id="badge-sales-risk">● STABLE</span>
+              </div>
+              <div class="risk-val" id="val-sales-risk">0% Shift</div>
+              <div class="risk-sub">Historical trend momentum aligned</div>
+            </div>
+
+            <div class="risk-card">
+              <div class="risk-header-row">
+                <span class="risk-title">Receivables Settlement</span>
+                <span class="risk-badge risk-badge-amber" id="badge-lag-risk">● 10D DELAY</span>
+              </div>
+              <div class="risk-val" id="val-lag-risk">10 Days Lag</div>
+              <div class="risk-sub">Working capital payout exposure</div>
+            </div>
+
+            <div class="risk-card">
+              <div class="risk-header-row">
+                <span class="risk-title">Operating Cost Ratio</span>
+                <span class="risk-badge risk-badge-green" id="badge-cost-risk">● 62% COGS</span>
+              </div>
+              <div class="risk-val" id="val-cost-risk">62.0%</div>
+              <div class="risk-sub">Gross margin retained at 38%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENARIO SIMULATOR: WHAT-IF STUDIO -->
         <div class="control-matrix-card">
           <div class="matrix-header">
             <div class="matrix-title-group">
               <span style="font-size: 20px;">⚡</span>
               <div>
-                <h2 class="matrix-title">Interactive Business Controls & What-If Studio</h2>
-                <p class="matrix-desc">Adjust business parameters to instantly simulate daily, weekly, and monthly treasury impact.</p>
+                <h2 class="matrix-title">Cash-Flow Scenario Simulator</h2>
+                <p class="matrix-desc">Adjust assumptions and explore how the business might respond in real-time.</p>
               </div>
             </div>
             <button class="curr-btn" onclick="resetControls()" style="background: rgba(255,255,255,0.06); padding: 6px 14px; border: 1px solid var(--border-subtle); color: #cbd5e1;">
-              Reset Defaults
+              Reset Baseline
             </button>
           </div>
 
           <div class="input-slider-grid">
-            <!-- INPUT 1: OPENING CASH -->
+            <!-- SLIDER 1: SALES CHANGE (-40% to +30%) -->
             <div class="input-cell">
               <div class="cell-label-row">
-                <span>Opening Cash:</span>
-                <span class="cell-val" id="val-input-cash">$51,968</span>
-              </div>
-              <input type="range" id="input-cash" min="10000" max="150000" value="51968" step="1000" oninput="recomputeBusinessEngine()">
-            </div>
-
-            <!-- INPUT 2: SALES SHOCK / GROWTH -->
-            <div class="input-cell">
-              <div class="cell-label-row">
-                <span>Expected Sales Shift:</span>
+                <span>Sales Change:</span>
                 <span class="cell-val" id="val-input-growth">0%</span>
               </div>
-              <input type="range" id="input-growth" min="-50" max="50" value="0" step="5" oninput="recomputeBusinessEngine()">
+              <input type="range" id="input-growth" min="-40" max="30" value="0" step="5" oninput="recomputeBusinessEngine()">
+              <div class="preset-chips">
+                <span class="preset-chip" onclick="setSalesGrowthPreset(-40)">−40%</span>
+                <span class="preset-chip" onclick="setSalesGrowthPreset(0)">0%</span>
+                <span class="preset-chip" onclick="setSalesGrowthPreset(30)">+30%</span>
+              </div>
             </div>
 
-            <!-- INPUT 3: SETTLEMENT DELAY LAG -->
+            <!-- SLIDER 2: CURRENT CASH BALANCE (0 to 5 Lakh) -->
             <div class="input-cell">
               <div class="cell-label-row">
-                <span>Payout Delay Lag:</span>
-                <span class="cell-val" id="val-input-lag">10 Days</span>
+                <span>Current Cash Balance:</span>
+                <span class="cell-val" id="val-input-cash">৳180,000</span>
               </div>
-              <input type="range" id="input-lag" min="1" max="30" value="10" step="1" oninput="recomputeBusinessEngine()">
+              <input type="range" id="input-cash" min="0" max="500000" value="180000" step="10000" oninput="recomputeBusinessEngine()">
+              <div class="preset-chips">
+                <span class="preset-chip" onclick="setCashPreset(0)">৳0</span>
+                <span class="preset-chip" onclick="setCashPreset(250000)">৳2.5L</span>
+                <span class="preset-chip" onclick="setCashPreset(500000)">৳5.0L</span>
+              </div>
             </div>
 
-            <!-- INPUT 4: MONTHLY OPEX EXPENSES -->
+            <!-- SLIDER 3: COST RATIO (30% to 90%) -->
             <div class="input-cell">
               <div class="cell-label-row">
-                <span>Monthly OPEX:</span>
-                <span class="cell-val" id="val-input-opex">$2,610</span>
+                <span>Cost Ratio:</span>
+                <span class="cell-val" id="val-input-cost">62%</span>
               </div>
-              <input type="range" id="input-opex" min="500" max="15000" value="2610" step="100" oninput="recomputeBusinessEngine()">
+              <input type="range" id="input-cost" min="30" max="90" value="62" step="2" oninput="recomputeBusinessEngine()">
+              <div class="preset-chips">
+                <span class="preset-chip" onclick="setCostPreset(30)">30%</span>
+                <span class="preset-chip" onclick="setCostPreset(60)">60%</span>
+                <span class="preset-chip" onclick="setCostPreset(90)">90%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULATOR REACTIVE OUTPUT TILES -->
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 18px;">
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 18px;">
+              <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Estimated Monthly Operating Surplus</div>
+              <div style="font-size: 22px; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono);" id="sim-operating-surplus">৳159,600</div>
+              <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 3px;">Net surplus before debt service</div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 18px;">
+              <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Cash After Reserve Set-Aside</div>
+              <div style="font-size: 22px; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono);" id="sim-cash-after-reserve">৳79,200</div>
+              <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 3px;">Surplus liquidity retained</div>
+            </div>
+          </div>
+
+          <!-- DYNAMIC SHORTFALL ALERT BANNER -->
+          <div id="sim-alert-banner" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px 16px; margin-top: 14px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 18px;" id="sim-alert-icon">✅</span>
+            <div style="font-size: 12.5px; color: #cbd5e1;" id="sim-alert-text">
+              <strong>Adequate Liquidity Standing:</strong> Available cash and operating surplus exceed the required ৳260,400 reserve cushion.
             </div>
           </div>
         </div>
 
-        <!-- CARD 2: MULTI-HORIZON PREDICTION STUDIO (DAILY / WEEKLY / MONTHLY) -->
-        <div class="studio-card">
-          <div class="studio-toolbar">
+        <!-- 4. RECOMMEND ACTIONS: BUSINESS TARGET PLANNER & ACTIONABLE STRATEGY -->
+        <div class="target-planner-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
-              <h2 class="matrix-title" id="chart-main-title">Multi-Horizon Revenue & Liquidity Trajectory</h2>
-              <p class="matrix-desc" id="chart-main-desc">Switch horizons to view granular day-by-day revenue, weekly working capital, or 30-day runway.</p>
+              <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
+                🎯 Business Target Planner & Actionable Strategy
+              </h3>
+              <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
+                Set a monthly revenue target to calculate required growth gap and generate customized execution steps.
+              </p>
             </div>
-            <!-- HORIZON SWITCHER BUTTONS -->
-            <div class="horizon-segmented-control">
-              <button class="horizon-btn active" id="btn-horizon-daily" onclick="setForecastHorizon('daily')">
-                <span>📅</span> Daily (30 Days)
-              </button>
-              <button class="horizon-btn" id="btn-horizon-weekly" onclick="setForecastHorizon('weekly')">
-                <span>📆</span> Weekly Aggregate
-              </button>
-              <button class="horizon-btn" id="btn-horizon-monthly" onclick="setForecastHorizon('monthly')">
-                <span>🗓️</span> Monthly Runway
-              </button>
+            <button class="cta-btn" onclick="generateTargetStrategy()">
+              ⚡ Generate Target Strategy
+            </button>
+          </div>
+
+          <!-- TARGET INPUT ROW -->
+          <div class="target-input-row">
+            <div>
+              <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+                Monthly Revenue Target (<span id="curr-target-label">BDT</span>):
+              </span>
+              <input type="number" id="input-target-revenue" class="target-input-field" value="500000" step="10000" oninput="recomputeTargetPlanner()">
+            </div>
+            <div>
+              <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+                Required Change Over Baseline:
+              </span>
+              <span class="gap-pill gap-pill-pos" id="val-target-diff">+19.05%</span>
+            </div>
+            <div>
+              <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+                Revenue Gap to Bridge:
+              </span>
+              <span style="font-size: 16px; font-weight: 800; color: #f8fafc; font-family: var(--font-mono);" id="val-target-gap">৳80,000</span>
             </div>
           </div>
 
-          <!-- DYNAMIC SUMMARY STATS BAR -->
-          <div class="horizon-stats-summary" id="horizon-stats-bar">
-            <div class="h-stat-box">
-              <span class="h-stat-label" id="h-stat-label-1">Expected Revenue</span>
-              <span class="h-stat-num" id="h-stat-val-1" style="color: var(--accent-emerald);">$8,052.60</span>
+          <!-- STRATEGY EXECUTION ROADMAP CARDS -->
+          <div class="strategy-list" id="strategy-roadmap-cards">
+            <div class="strategy-item">
+              <div class="strategy-item-title">📦 1. Product & Basket Size Optimization</div>
+              <div class="strategy-item-desc">
+                Focus on the top 20% margin SKUs. Bundle complimentary retail items to increase average transaction basket size by ৳120 to bridge the revenue gap.
+              </div>
             </div>
-            <div class="h-stat-box">
-              <span class="h-stat-label" id="h-stat-label-2">Downside Risk Floor</span>
-              <span class="h-stat-num" id="h-stat-val-2" style="color: var(--accent-amber);">$2,633.91</span>
-            </div>
-            <div class="h-stat-box">
-              <span class="h-stat-label" id="h-stat-label-3">Optimistic Surge Ceiling</span>
-              <span class="h-stat-num" id="h-stat-val-3" style="color: var(--accent-cyan);">$14,801.40</span>
-            </div>
-          </div>
 
-          <!-- HIGH-DPI CHART CANVAS -->
-          <div class="chart-viewport">
-            <canvas id="businessForecastChart"></canvas>
+            <div class="strategy-item">
+              <div class="strategy-item-title">⚡ 2. Cash Inflow Acceleration</div>
+              <div class="strategy-item-desc">
+                Offer a 2% early-settlement incentive to major retail channels to compress payment delay lag from 10 days down to 4 days, pulling forward liquidity.
+              </div>
+            </div>
+
+            <div class="strategy-item">
+              <div class="strategy-item-title">✂️ 3. Cost Containment & Expense Delay</div>
+              <div class="strategy-item-desc">
+                Keep the operating cost ratio capped below 62%. Postpone discretionary marketing outlays until the ৳260,400 reserve cushion is fully locked in.
+              </div>
+            </div>
+
+            <div class="strategy-item">
+              <div class="strategy-item-title">📆 4. Weekly Milestone Targets</div>
+              <div class="strategy-item-desc" id="strategy-weekly-milestones">
+                Week 1 Target: <strong>৳125,000</strong> · Week 2: <strong>৳125,000</strong> · Week 3: <strong>৳125,000</strong> · Week 4: <strong>৳125,000</strong>. Track daily via ledger.
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- CARD 3: 30-DAY DAY-BY-DAY FORECAST & SOLVENCY LEDGER -->
+        <!-- 30-DAY DAY-BY-DAY CASHFLOW & SOLVENCY LEDGER -->
         <div class="ledger-container">
           <div class="ledger-header">
             <div>
               <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
-                Detailed 30-Day Cashflow & Solvency Ledger
+                Granular Day-by-Day Cashflow Ledger
               </h3>
               <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
-                Calculated day-by-day cash balance, revenue projection, and reserve buffer.
+                Calculated daily revenue, operational disbursements, closing balance, and reserve compliance.
               </p>
             </div>
             <div style="font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-cyan); background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25); padding: 6px 12px; border-radius: 8px;">
@@ -204,25 +397,25 @@
             <table id="business-ledger-table">
               <thead>
                 <tr>
-                  <th style="width: 110px;">Date</th>
-                  <th>Projected Revenue</th>
+                  <th style="width: 100px;">Day</th>
+                  <th>Projected Sales</th>
                   <th>Downside Floor</th>
                   <th>Surge Ceiling</th>
-                  <th>Net Daily Cashflow</th>
-                  <th>Closing Cash Balance</th>
-                  <th>Safety Cushion</th>
+                  <th>Net Daily Flow</th>
+                  <th>Closing Cash</th>
+                  <th>Reserve Cushion</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody id="business-ledger-tbody">
-                <!-- Populated dynamically via app.js -->
+                <!-- Dynamically generated via app.js -->
               </tbody>
             </table>
           </div>
         </div>
       </main>
 
-      <!-- RIGHT COLUMN: AUTONOMOUS AI FINANCIAL COPILOT CHATBOT -->
+      <!-- RIGHT COLUMN: AUTONOMOUS AI COPILOT CHATBOT -->
       <aside>
         <div class="copilot-panel">
           <div class="copilot-header-bar">
@@ -230,12 +423,12 @@
               <div class="copilot-avatar">◈</div>
               <div>
                 <h3 class="copilot-title-text">FinSight AI Copilot</h3>
-                <span class="copilot-sub-text">Autonomous Financial Advisor · Zero-Hallucination</span>
+                <span class="copilot-sub-text">Explainable Financial Advisor · Zero-Hallucination</span>
               </div>
             </div>
             <div class="currency-toggle">
-              <button class="curr-btn active" id="clang-en" onclick="setCopilotLanguage('en')">EN</button>
-              <button class="curr-btn" id="clang-bn" onclick="setCopilotLanguage('bn')">বাংলা</button>
+              <button class="curr-btn active" id="clang-bn" onclick="setCopilotLanguage('bn')">বাংলা</button>
+              <button class="curr-btn" id="clang-en" onclick="setCopilotLanguage('en')">EN</button>
               <button class="curr-btn" id="clang-zh" onclick="setCopilotLanguage('zh')">中文</button>
               <button class="curr-btn" id="clang-es" onclick="setCopilotLanguage('es')">ES</button>
             </div>
@@ -244,17 +437,17 @@
           <!-- QUICK INQUIRY CHIPS -->
           <div class="quick-prompts-bar">
             <span class="quick-title">Quick Executive Inquiries:</span>
-            <button class="quick-chip" onclick="askCopilot('Will our cash balance breach the safety reserve if sales drop by 20%?')">
+            <button class="quick-chip" onclick="askCopilot('বিক্রি ২০% কমলে আমাদের কি ক্যাশ ঘাটতি হবে?')">
+              🇧🇩 "বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে কি?"
+            </button>
+            <button class="quick-chip" onclick="askCopilot('Will our cash balance breach reserve if sales drop by 20%?')">
               🇺🇸 "What if sales drop by 20%?"
             </button>
-            <button class="quick-chip" onclick="askCopilot('What happens if our payment settlement is delayed by 14 days?')">
-              🇺🇸 "What if settlement is delayed 14 days?"
+            <button class="quick-chip" onclick="askCopilot('টার্গেট রেভেনিউ পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?')">
+              🇧🇩 "টার্গেট পূরণে কী কৌশল নেওয়া উচিত?"
             </button>
-            <button class="quick-chip" onclick="askCopilot('যদি সাপ্লায়ার খরচ ১৫% বৃদ্ধি পায়, তবে আমাদের ক্যাশ বাফার কত থাকবে?')">
-              🇧🇩 "সাপ্লায়ার খরচ ১৫% বাড়লে ক্যাশ কত থাকবে?"
-            </button>
-            <button class="quick-chip" onclick="askCopilot('如果未来订单减少25%，会出现资金短缺吗？')">
-              🇨🇳 "订单减少25%会出现资金短缺吗？"
+            <button class="quick-chip" onclick="askCopilot('যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?')">
+              🇧🇩 "কস্ট রেশিও ৭০% হলে বাফার কত থাকবে?"
             </button>
           </div>
 
@@ -263,17 +456,17 @@
             <div class="chat-entry bot-entry">
               <div class="copilot-avatar" style="width: 32px; height: 32px; font-size: 16px;">◈</div>
               <div class="entry-bubble">
-                <p><strong>FinSight Financial Advisory Engine Active.</strong></p>
-                <p>I continuously audit your liquidity, forecast daily cashflow, and verify your minimum operating reserve without numerical hallucination.</p>
-                <p>Current Verified Standing: Cash position <strong>$51,968.54</strong> with a safety buffer of <strong style="color: var(--accent-emerald);">+$49,035.88</strong> above safety limit.</p>
-                <div class="tool-badge-pill">⚙️ FinSightToolKit.query_solvency_state</div>
+                <p><strong>FinSight Business Decision Intelligence সক্রিয়।</strong></p>
+                <p>আমি আপনার SME ব্যবসার বর্তমান ক্যাশ ব্যালেন্স, ভবিষ্যত রাজস্ব পূর্বাভাস এবং রিজার্ভ ঘাটতি রিয়েল-টাইমে বিশ্লেষণ করছি।</p>
+                <p>বর্তমান অবস্থা: ক্যাশ ব্যালেন্স <strong id="chat-cash-ref">৳১৮০,০০০</strong>, ৩০ দিনের প্রজেক্টেড রেভেনিউ <strong id="chat-rev-ref">৳৪২০,০০০</strong> এবং রিজার্ভ সেফটি বাফার <strong style="color: var(--accent-emerald);" id="chat-cushion-ref">+৳৭৯,২০০</strong>।</p>
+                <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency</div>
               </div>
             </div>
           </div>
 
           <!-- INPUT COMPOSER -->
           <div class="chat-compose-bar">
-            <input type="text" id="copilot-user-input" placeholder="Ask financial question (e.g., 'Can we afford $5,000 extra marketing?')..." onkeydown="handleCopilotKey(event)">
+            <input type="text" id="copilot-user-input" placeholder="আর্থিক প্রশ্ন জিজ্ঞাসা করুন (যেমন: 'বিক্রি ২০% কমলে ক্যাশ কত থাকবে?')..." onkeydown="handleCopilotKey(event)">
             <button class="cta-btn" onclick="sendCopilotMessage()">Ask Copilot</button>
           </div>
         </div>
@@ -307,7 +500,7 @@
         <span class="trust-icon">🌐</span>
         <div>
           <div class="trust-title">Universal Platform Sync</div>
-          <div class="trust-desc">Native multi-currency integration for Stripe, Shopify, Apple Pay, and Amazon.</div>
+          <div class="trust-desc">Native multi-currency integration for Stripe, Shopify, Apple Pay, and bKash/Nagad.</div>
         </div>
       </div>
     </footer>
