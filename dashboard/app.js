@@ -232,10 +232,8 @@ function renderForecast30dTable() {
     const dt = f.dates[i];
     const act = f.actual[i];
     const adapt = f.adaptive_catboost[i];
-    const stack = f.stacking_ensemble[i];
-    const lgb = f.lightgbm[i];
-    const naive = f.naive_baseline[i];
     const p10 = f.p10_downside[i];
+    const p50 = f.p50_median[i];
     const p90 = f.p90_upside[i];
 
     const err = Math.abs(adapt - act);
@@ -247,12 +245,10 @@ function renderForecast30dTable() {
       <tr>
         <td style="font-weight: 600; color: #fff;">${dt}</td>
         <td class="cell-highlight">R$ ${act.toFixed(2)}</td>
-        <td class="cell-safe" style="font-weight: 700;">R$ ${adapt.toFixed(2)}</td>
-        <td>R$ ${stack.toFixed(2)}</td>
-        <td>R$ ${lgb.toFixed(2)}</td>
-        <td style="color: #94a3b8;">R$ ${naive.toFixed(2)}</td>
+        <td class="cell-safe" style="font-weight: 700; font-size: 13px;">R$ ${adapt.toFixed(2)}</td>
         <td class="cell-stress">R$ ${p10.toFixed(2)}</td>
-        <td style="color: #cbd5e1;">R$ ${p90.toFixed(2)}</td>
+        <td style="color: #cbd5e1;">R$ ${p50.toFixed(2)}</td>
+        <td style="color: #38bdf8;">R$ ${p90.toFixed(2)}</td>
         <td style="font-weight: 600;">R$ ${err.toFixed(2)}</td>
         <td style="color: ${deltaColor}; font-weight: 600;">${deltaSign}${delta.toFixed(2)}</td>
       </tr>

@@ -73,19 +73,14 @@
             Champion Architecture: <strong>Adaptive Trend-Calibrated CatBoost</strong> ($H=30$ Days) with Asymmetric Multi-Quantile Uncertainty Envelope ($P_{10} \cdot P_{50} \cdot P_{90}$).
           </p>
         </div>
-        <div class="forecast-model-selector">
-          <button class="model-toggle-btn active" id="mbtn-adaptive" onclick="selectForecastModel('adaptive')">
-            🏆 Adaptive CatBoost (Champion)
-          </button>
-          <button class="model-toggle-btn" id="mbtn-stacking" onclick="selectForecastModel('stacking')">
-            ⚡ Stacking Ensemble
-          </button>
-          <button class="model-toggle-btn" id="mbtn-lightgbm" onclick="selectForecastModel('lightgbm')">
-            🌲 LightGBM Regressor
-          </button>
-          <button class="model-toggle-btn" id="mbtn-naive" onclick="selectForecastModel('naive')">
-            ⏱️ Naive Baseline (Lag-7)
-          </button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.25)); border: 1.5px solid #10b981; border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);">
+            <span style="font-size: 24px;">🏆</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: #10b981; letter-spacing: 0.5px;">EXCLUSIVE PRODUCTION ENGINE: ADAPTIVE CATBOOST</div>
+              <div style="font-size: 11px; color: #cbd5e1; font-family: var(--font-mono);">Rank #1 ML Model (Table 2A) · WAPE 59.80% · Directional Acc. 71.1% ($p < 0.001$)</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -152,15 +147,13 @@
             <thead>
               <tr>
                 <th style="width: 110px;">Date</th>
-                <th>Actual (R$)</th>
-                <th>Adaptive CatBoost</th>
-                <th>Stacking Ens.</th>
-                <th>LightGBM</th>
-                <th>Naive (Lag-7)</th>
-                <th>P10 Downside</th>
-                <th>P90 Upside</th>
+                <th>Actual Sales (R$)</th>
+                <th style="color: #10b981;">🏆 Adaptive CatBoost (Champion)</th>
+                <th style="color: #f59e0b;">P10 Downside Floor</th>
+                <th>P50 Expected Median</th>
+                <th style="color: #38bdf8;">P90 Surge Ceiling</th>
                 <th>Abs Error (R$)</th>
-                <th>Model Delta</th>
+                <th>Accuracy Delta</th>
               </tr>
             </thead>
             <tbody id="forecast-ledger-tbody">

@@ -189,13 +189,18 @@ model_catalog = {
     }
 }
 
-selected_model_name = st.sidebar.selectbox(
-    "Active Forecasting Algorithm",
-    options=list(model_catalog.keys()),
-    index=0,
-    help="Select the Phase 3 machine learning model to generate forward 30-day cashflow and solvency projections."
-)
+selected_model_name = "🏆 Adaptive CatBoost (Phase 3 Champion)"
 model_info = model_catalog[selected_model_name]
+
+st.sidebar.markdown("""
+<div style="background: rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981; border-radius: 10px; padding: 12px; margin-bottom: 15px;">
+    <div style="color: #10b981; font-weight: 800; font-size: 0.82rem; letter-spacing: 0.5px;">🏆 EXCLUSIVE PRODUCTION MODEL</div>
+    <div style="color: #f8fafc; font-weight: 700; font-size: 0.92rem; margin-top: 2px;">Adaptive CatBoost (Champion)</div>
+    <div style="color: #94a3b8; font-size: 0.78rem; margin-top: 5px;">• Holdout WAPE: <b>59.80%</b> (+25.81% vs Naive)</div>
+    <div style="color: #94a3b8; font-size: 0.78rem;">• Directional Acc: <b>71.1%</b> (p &lt; 0.001)</div>
+    <div style="color: #94a3b8; font-size: 0.78rem;">• Warning Lead Time: <b>+18.2 Days</b></div>
+</div>
+""", unsafe_allow_html=True)
 
 # Extract Forecast Streams based on Selection
 if model_info["source_key"] == "quantiles" and df_quant is not None:
@@ -226,14 +231,6 @@ else:
     sales_p10 = sales_p50 * 0.70
     sales_p90 = sales_p50 * 1.30
 
-st.sidebar.markdown(f"""
-<div style="background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
-    <div style="color: #38BDF8; font-weight: 700; font-size: 0.85rem;">{model_info['tag']}</div>
-    <div style="color: #94A3B8; font-size: 0.78rem; margin-top: 4px;">• WAPE: <b>{model_info['wape']}</b></div>
-    <div style="color: #94A3B8; font-size: 0.78rem;">• Directional Acc: <b>{model_info['dir_acc']}</b></div>
-    <div style="color: #94A3B8; font-size: 0.78rem;">• Warning Lead Time: <b>{model_info['lead_time']}</b></div>
-</div>
-""", unsafe_allow_html=True)
 
 st.sidebar.markdown("## ⚙️ SME Financial Setup")
 
