@@ -108,6 +108,272 @@
       color: #ffffff !important;
       box-shadow: 0 0 16px rgba(56, 189, 248, 0.25) !important;
     }
+
+    /* Risk Center Early Warning Radar Styles */
+    .risk-live-indicator {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      background: rgba(16, 185, 129, 0.12) !important;
+      border: 1px solid rgba(16, 185, 129, 0.35) !important;
+      padding: 6px 14px !important;
+      border-radius: 9999px !important;
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      color: #10b981 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      letter-spacing: 0.04em !important;
+    }
+    .live-dot {
+      width: 7px !important;
+      height: 7px !important;
+      border-radius: 50% !important;
+      background: #10b981 !important;
+      box-shadow: 0 0 8px #10b981 !important;
+      display: inline-block !important;
+    }
+    .risk-center-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 16px !important;
+      margin-top: 18px !important;
+    }
+    @media (max-width: 1024px) {
+      .risk-center-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 640px) {
+      .risk-center-grid { grid-template-columns: 1fr !important; }
+    }
+    .risk-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(8, 12, 24, 0.95)) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 16px !important;
+      padding: 20px 22px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    .risk-card:hover {
+      transform: translateY(-3px) !important;
+      border-color: rgba(56, 189, 248, 0.4) !important;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.16) !important;
+    }
+    .risk-header-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      margin-bottom: 12px !important;
+    }
+    .risk-title {
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      color: #94a3b8 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.06em !important;
+    }
+    .risk-badge {
+      font-size: 10.5px !important;
+      font-weight: 800 !important;
+      padding: 4px 10px !important;
+      border-radius: 6px !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      letter-spacing: 0.04em !important;
+    }
+    .risk-badge-green {
+      background: rgba(16, 185, 129, 0.15) !important;
+      color: #10b981 !important;
+      border: 1px solid rgba(16, 185, 129, 0.4) !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.15) !important;
+    }
+    .risk-badge-amber {
+      background: rgba(245, 158, 11, 0.15) !important;
+      color: #f59e0b !important;
+      border: 1px solid rgba(245, 158, 11, 0.4) !important;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.15) !important;
+    }
+    .risk-badge-red {
+      background: rgba(244, 63, 94, 0.15) !important;
+      color: #f43f5e !important;
+      border: 1px solid rgba(244, 63, 94, 0.4) !important;
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.15) !important;
+    }
+    .risk-val {
+      font-size: 24px !important;
+      font-weight: 800 !important;
+      color: #ffffff !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      margin-bottom: 6px !important;
+      letter-spacing: -0.02em !important;
+    }
+    .risk-sub {
+      font-size: 12px !important;
+      color: #94a3b8 !important;
+      line-height: 1.4 !important;
+      margin-bottom: 12px !important;
+    }
+    .risk-progress-track {
+      width: 100% !important;
+      height: 4px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-radius: 9999px !important;
+      overflow: hidden !important;
+      margin-top: auto !important;
+    }
+    .risk-progress-bar {
+      height: 100% !important;
+      border-radius: 9999px !important;
+      transition: width 0.4s ease !important;
+    }
+    .bar-emerald { background: linear-gradient(90deg, #10b981, #34d399) !important; box-shadow: 0 0 8px #10b981 !important; }
+    .bar-cyan { background: linear-gradient(90deg, #0ea5e9, #38bdf8) !important; box-shadow: 0 0 8px #0ea5e9 !important; }
+    .bar-amber { background: linear-gradient(90deg, #d97706, #f59e0b) !important; box-shadow: 0 0 8px #f59e0b !important; }
+    .bar-purple { background: linear-gradient(90deg, #7c3aed, #a855f7) !important; box-shadow: 0 0 8px #a855f7 !important; }
+
+    /* Target Planner & Actionable Strategy Styles */
+    .target-planner-box {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(8, 12, 24, 0.95)) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.09) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
+      border-radius: 20px !important;
+      padding: 24px 28px !important;
+      margin-top: 22px !important;
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45) !important;
+    }
+    .target-input-row {
+      display: grid !important;
+      grid-template-columns: 1.4fr 1fr 1fr !important;
+      align-items: center !important;
+      gap: 20px !important;
+      margin-top: 18px !important;
+      margin-bottom: 22px !important;
+      background: rgba(0, 0, 0, 0.35) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 16px !important;
+      padding: 18px 24px !important;
+    }
+    @media (max-width: 860px) {
+      .target-input-row { grid-template-columns: 1fr !important; gap: 16px !important; }
+    }
+    .target-input-col {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .target-input-label {
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      color: #94a3b8 !important;
+      display: block !important;
+      margin-bottom: 6px !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.04em !important;
+    }
+    .target-input-field {
+      background: rgba(15, 23, 42, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      border-radius: 11px !important;
+      padding: 10px 16px !important;
+      color: #ffffff !important;
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      width: 100% !important;
+      max-width: 260px !important;
+      outline: none !important;
+      transition: all 0.2s ease !important;
+    }
+    .target-input-field:focus {
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3) !important;
+    }
+    .target-gap-value {
+      font-size: 22px !important;
+      font-weight: 800 !important;
+      color: #10b981 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      letter-spacing: -0.02em !important;
+    }
+    .gap-pill {
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      padding: 7px 18px !important;
+      border-radius: 10px !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      letter-spacing: 0.02em !important;
+      display: inline-block !important;
+      width: fit-content !important;
+    }
+    .gap-pill-pos {
+      background: rgba(16, 185, 129, 0.15) !important;
+      color: #10b981 !important;
+      border: 1px solid rgba(16, 185, 129, 0.4) !important;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.2) !important;
+    }
+    .gap-pill-neg {
+      background: rgba(244, 63, 94, 0.15) !important;
+      color: #f43f5e !important;
+      border: 1px solid rgba(244, 63, 94, 0.4) !important;
+      box-shadow: 0 0 14px rgba(244, 63, 94, 0.2) !important;
+    }
+    .strategy-list {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 16px !important;
+      margin-top: 18px !important;
+    }
+    @media (max-width: 768px) {
+      .strategy-list { grid-template-columns: 1fr !important; }
+    }
+    .strategy-item {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(11, 17, 32, 0.9)) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 16px !important;
+      padding: 18px 20px !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      position: relative !important;
+    }
+    .strategy-item:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(56, 189, 248, 0.15) !important;
+      border-color: rgba(56, 189, 248, 0.35) !important;
+    }
+    .strategy-item-cyan { border-left: 4px solid #38bdf8 !important; }
+    .strategy-item-amber { border-left: 4px solid #f59e0b !important; }
+    .strategy-item-emerald { border-left: 4px solid #10b981 !important; }
+    .strategy-item-purple { border-left: 4px solid #a855f7 !important; }
+    .strategy-badge-tag {
+      font-size: 9.5px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.08em !important;
+      padding: 3px 8px !important;
+      border-radius: 5px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      color: #94a3b8 !important;
+      display: inline-block !important;
+      margin-bottom: 8px !important;
+    }
+    .strategy-item-title {
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      color: #ffffff !important;
+      margin-bottom: 8px !important;
+      letter-spacing: -0.01em !important;
+    }
+    .strategy-item-desc {
+      font-size: 12.5px !important;
+      color: #cbd5e1 !important;
+      line-height: 1.6 !important;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
@@ -364,6 +630,10 @@
                 <p class="matrix-desc">Continuous real-time audit for cash reserve breach, payment delays, and liquidity shocks.</p>
               </div>
             </div>
+            <div class="risk-live-indicator">
+              <span class="live-dot"></span>
+              REAL-TIME AUDIT ACTIVE
+            </div>
           </div>
 
           <div class="risk-center-grid">
@@ -374,6 +644,9 @@
               </div>
               <div class="risk-val" id="val-reserve-cushion" style="color: var(--accent-emerald);">+৳79,200</div>
               <div class="risk-sub" id="sub-reserve-cushion">Buffer above ৳260,400 reserve</div>
+              <div class="risk-progress-track">
+                <div class="risk-progress-bar bar-emerald" style="width: 85%;"></div>
+              </div>
             </div>
 
             <div class="risk-card">
@@ -383,6 +656,9 @@
               </div>
               <div class="risk-val" id="val-sales-risk">0% Shift</div>
               <div class="risk-sub">Historical trend momentum aligned</div>
+              <div class="risk-progress-track">
+                <div class="risk-progress-bar bar-cyan" style="width: 75%;"></div>
+              </div>
             </div>
 
             <div class="risk-card">
@@ -392,6 +668,9 @@
               </div>
               <div class="risk-val" id="val-lag-risk">10 Days Lag</div>
               <div class="risk-sub">Working capital payout exposure</div>
+              <div class="risk-progress-track">
+                <div class="risk-progress-bar bar-amber" style="width: 50%;"></div>
+              </div>
             </div>
 
             <div class="risk-card">
@@ -401,6 +680,9 @@
               </div>
               <div class="risk-val" id="val-cost-risk">62.0%</div>
               <div class="risk-sub">Gross margin retained at 38%</div>
+              <div class="risk-progress-track">
+                <div class="risk-progress-bar bar-purple" style="width: 62%;"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -529,20 +811,23 @@
         </div>
           <!-- 4. RECOMMEND ACTIONS: BUSINESS TARGET PLANNER & ACTIONABLE STRATEGY -->
         <div class="target-planner-box" id="sec-target-planner">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
-                🎯 Business Target Planner & Actionable Strategy
-              </h3>
-              <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px;">🎯</span>
+                <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin: 0; letter-spacing: -0.01em;">
+                  Business Target Planner & Actionable Strategy
+                </h3>
+              </div>
+              <p style="font-size: 12px; color: var(--text-secondary); margin: 4px 0 0 28px;">
                 Set a monthly revenue target to calculate required growth gap and generate customized execution steps.
               </p>
             </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="curr-btn" id="btn-toggle-planner" onclick="toggleTargetPlanner()" style="background: rgba(255,255,255,0.06); padding: 6px 14px; border: 1px solid var(--border-subtle); color: #cbd5e1;">
+            <div style="display: flex; gap: 10px;">
+              <button class="curr-btn" id="btn-toggle-planner" onclick="toggleTargetPlanner()" style="background: rgba(255,255,255,0.06); padding: 8px 16px; border: 1px solid var(--border-subtle); color: #cbd5e1; border-radius: 9px; cursor: pointer;">
                 Hide target planner
               </button>
-              <button class="cta-btn" onclick="generateTargetStrategy()">
+              <button class="cta-btn" onclick="generateTargetStrategy()" style="background: linear-gradient(135deg, #0284c7, #0ea5e9); color: #fff; border: 1px solid rgba(56,189,248,0.5); padding: 8px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 16px rgba(14,165,233,0.35);">
                 ⚡ Generate Target Strategy
               </button>
             </div>
@@ -551,50 +836,54 @@
           <div id="target-planner-body">
             <!-- TARGET INPUT ROW -->
             <div class="target-input-row">
-              <div>
-                <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+              <div class="target-input-col">
+                <span class="target-input-label">
                   Monthly Revenue Target (<span id="curr-target-label">BDT</span>):
                 </span>
                 <input type="number" id="input-target-revenue" class="target-input-field" value="500000" step="10000" oninput="recomputeTargetPlanner()">
               </div>
-              <div>
-                <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+              <div class="target-input-col">
+                <span class="target-input-label">
                   Required Change Over Baseline:
                 </span>
                 <span class="gap-pill gap-pill-pos" id="val-target-diff">+19.05%</span>
               </div>
-              <div>
-                <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+              <div class="target-input-col">
+                <span class="target-input-label">
                   Revenue Gap to Bridge:
                 </span>
-                <span style="font-size: 16px; font-weight: 800; color: #f8fafc; font-family: var(--font-mono);" id="val-target-gap">৳80,000</span>
+                <span class="target-gap-value" id="val-target-gap">৳80,000</span>
               </div>
             </div>
 
             <!-- STRATEGY EXECUTION ROADMAP CARDS -->
             <div class="strategy-list" id="strategy-roadmap-cards">
-              <div class="strategy-item">
+              <div class="strategy-item strategy-item-cyan">
+                <div class="strategy-badge-tag">GROWTH</div>
                 <div class="strategy-item-title">📦 1. Product & Basket Size Optimization</div>
                 <div class="strategy-item-desc">
                   Focus on the top 20% margin SKUs. Bundle complimentary retail items to increase average transaction basket size by ৳120 to bridge the revenue gap.
                 </div>
               </div>
 
-              <div class="strategy-item">
+              <div class="strategy-item strategy-item-amber">
+                <div class="strategy-badge-tag">LIQUIDITY</div>
                 <div class="strategy-item-title">⚡ 2. Cash Inflow Acceleration</div>
                 <div class="strategy-item-desc">
                   Offer a 2% early-settlement incentive to major retail channels to compress payment delay lag from 10 days down to 4 days, pulling forward liquidity.
                 </div>
               </div>
 
-              <div class="strategy-item">
+              <div class="strategy-item strategy-item-emerald">
+                <div class="strategy-badge-tag">COST CONTROL</div>
                 <div class="strategy-item-title">✂️ 3. Cost Containment & Expense Delay</div>
                 <div class="strategy-item-desc">
                   Keep the operating cost ratio capped below 62%. Postpone discretionary marketing outlays until the ৳260,400 reserve cushion is fully locked in.
                 </div>
               </div>
 
-              <div class="strategy-item">
+              <div class="strategy-item strategy-item-purple">
+                <div class="strategy-badge-tag">MILESTONES</div>
                 <div class="strategy-item-title">📆 4. Weekly Milestone Targets</div>
                 <div class="strategy-item-desc" id="strategy-weekly-milestones">
                   Week 1 Target: <strong>৳125,000</strong> · Week 2: <strong>৳125,000</strong> · Week 3: <strong>৳125,000</strong> · Week 4: <strong>৳125,000</strong>. Track daily via ledger.
