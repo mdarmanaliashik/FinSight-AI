@@ -41,11 +41,17 @@
     "records": 9,
     "sha256": "58d0c11b3415fe2276364e29f149d2de265f5f99505430ae9e61565997638013"
   },
-  "Cross-Market Synthesis Scorecard (Table 2D-2)": {
+  "Cross-Market Zero-Shot Domain Transfer Benchmark (Table 2D-2)": {
+    "file_path": "d:\\Others\\data\\processed\\phase3_cross_market_transfer_benchmark.parquet",
+    "downstream_phase": "Phase 5 (Cross-Border Transferability)",
+    "records": 10,
+    "sha256": "d9797b6a3c93bbde302498eb58211cfcdc3a8ca8d8c0ec78c1c5b9be7ae8cc30"
+  },
+  "Cross-Market Synthesis Scorecard (Table 2D-3)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_cross_market_scorecard.parquet",
     "downstream_phase": "Phase 5 (Cross-Border Ablation)",
     "records": 7,
-    "sha256": "b5c2e860e99da0b28c94d45ec70f1f5ecbdcd4d5706dd2849c1674b86820eef1"
+    "sha256": "7858921f5b90c64ef381b4c0b81f724a8533efb50ad0c9892d830cb1366f01b3"
   },
   "Olist Platform Macro Scorecard (Table 2E-1)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_platform_forecasting_benchmark.parquet",
