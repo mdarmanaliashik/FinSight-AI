@@ -1,0 +1,26 @@
+{
+  "Early-Warning Risk Detection Evaluation (Table 1)": {
+    "file_path": "d:\\Others\\data\\processed\\phase4_early_warning_eval.parquet",
+    "downstream_phase": "Phase 5 (System Ablation)",
+    "records": 4,
+    "sha256": "5d4cd54a07395d6dc533d35a0bb7292f27bd8e732d9696b43edb1eff230a6faf"
+  },
+  "Tool-Grounded Copilot Benchmark (Table 2)": {
+    "file_path": "d:\\Others\\data\\processed\\phase4_copilot_benchmark.parquet",
+    "downstream_phase": "Phase 5 (System Ablation)",
+    "records": 3,
+    "sha256": "88f882aaee3206692cac20a22be06d2305edf4f1a13d0a19a60d76b602417e85"
+  },
+  "Detailed 60-Prompt Rubric Evaluation": {
+    "file_path": "d:\\Others\\data\\processed\\phase4_prompt_eval_detailed.parquet",
+    "downstream_phase": "Phase 5 (Decision Utility)",
+    "records": 180,
+    "sha256": "7b3aae59f7aa7fa562b34b8e62b3320b5d602e5f116a5f0bfad7492188cb5e74"
+  },
+  "6,000-Prompt Multilingual Omni-Model Benchmark (Table 3)": {
+    "file_path": "d:\\Others\\data\\processed\\phase4_multilingual_benchmark.parquet",
+    "downstream_phase": "Phase 5 (Cross-Market AI Copilot)",
+    "records": 6,
+    "sha256": "827eb17c20874460601384f72fec739acee49afd6e84f848ebe3d98a6b8650d9"
+  }
+}
