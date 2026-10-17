@@ -86,16 +86,17 @@ class GroundedCopilotAgent:
         # Multilingual Intent Matching Keywords
         shock_keywords = [
             "shock", "drop", "delay", "what-if", "inflation", "cogs", "fall", "loss",
+            "decline", "breach", "decrease", "down", "less", "cut", "recession", "downturn", "slump", "deficit", "shortfall",
             # Bengali
-            "কমে", "হ্রাস", "পতন", "ড্রপ", "ক্ষতি", "দেরি", "বিলম্ব", "কাঁচামাল",
+            "কমে", "হ্রাস", "পতন", "ড্রপ", "ক্ষতি", "দেরি", "বিলম্ব", "কাঁচামাল", "কমলে", "সংকট", "ঘাটতি", "ঝুঁকি",
             # Hindi
-            "गिरावट", "कमी", "नुकसान", "देरी", "विलंब", "महंगाई",
+            "गिरावट", "कमी", "नुकसान", "देरी", "विलंब", "महंगाई", "घट", "गिरे",
             # Urdu
             "کمی", "گراوٹ", "نقصان", "تاخیر", "مہنگائی",
             # Chinese
-            "下降", "下滑", "跌", "减少", "延迟", "延期", "成本", "通胀",
+            "下降", "下滑", "跌", "减少", "延迟", "延期", "成本", "通胀", "跌破", "击穿",
             # Japanese
-            "減少", "下落", "低下", "遅延", "遅れ", "コスト", "原価"
+            "減少", "下落", "低下", "遅延", "遅れ", "コスト", "原価", "割れ"
         ]
 
         forecast_keywords = [
@@ -126,23 +127,27 @@ class GroundedCopilotAgent:
             "準備金", "バッファ", "最低現金"
         ]
 
-        is_shock = any(k in p_lower for k in shock_keywords)
+        pct_matches = re.findall(r'(\d+(?:\.\d+)?)\s*%', p_lower)
+        has_percentage = len(pct_matches) > 0
+
+        is_shock = any(k in p_lower for k in shock_keywords) or (has_percentage and any(k in p_lower for k in ["sales", "revenue", "cost", "supplier", "cash", "balance", "reserve", "breach", "বিক্রি", "খরচ", "ক্যাশ", "রিজার্ভ", "बिक्री", "فروخت", "销售", "成本", "売上"]))
         is_forecast = any(k in p_lower for k in forecast_keywords)
         is_reserve = any(k in p_lower for k in reserve_keywords)
 
         # 1. Intent Detection & Tool Execution
         if is_shock:
-            # Extract percentages dynamically via regex
-            pct_matches = re.findall(r'(\d+)\s*%', p_lower)
             sales_shock = 0.0
             cost_shock = 0.0
 
             if pct_matches:
-                p1 = float(pct_matches[0]) / 100.0
-                sales_shock = -p1 # Primary drop
-                if len(pct_matches) > 1:
-                    p2 = float(pct_matches[1]) / 100.0
-                    cost_shock = p2
+                is_cost_only = any(c in p_lower for c in ["cost", "cogs", "supplier", "expense", "খরচ", "কাঁচামাল", "लागत", "成本", "原価"]) and not any(s in p_lower for s in ["sales", "revenue", "demand", "বিক্রি", "बिक्री", "فروخت", "销售", "売上"])
+                if is_cost_only:
+                    sales_shock = 0.0
+                    cost_shock = float(pct_matches[0]) / 100.0
+                else:
+                    sales_shock = -float(pct_matches[0]) / 100.0
+                    if len(pct_matches) > 1:
+                        cost_shock = float(pct_matches[1]) / 100.0
             else:
                 # Pure delay query without percentage shocks
                 if any(k in p_lower for k in ["delay", "দেরি", "देरी", "تاخیر", "延迟", "遅延"]):
