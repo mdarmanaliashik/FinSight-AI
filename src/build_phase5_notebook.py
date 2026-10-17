@@ -2,21 +2,24 @@
 FinSight AI — Master Programmatic Builder for Phase 5 Notebook (Kaggle Grandmaster Edition)
 ==========================================================================================
 Compiles and pre-renders:
-d:\\Others\\notebooks\\Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb
+d:/Others/notebooks/Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb
 
 Comprehensive Q1 Master Benchmark Suite:
  1. Formal Framing of Hypothesis H4 (Holistic Architecture Superiority & Decoupled Neuro-Symbolic Synthesis).
  2. Ingestion of SHA-256 verified upstream datasets and cross-phase artifacts from Phase 1, 2, 3, and 4.
- 3. Autonomous Dataset Ingestion Gate: Runs end-to-end from uploaded raw dataset or pre-processed parquets.
- 4. Experiment E: Master System Ablation Matrix (E0 to E4) evaluating incremental architectural layers:
+ 3. Empirical Grounding in Phase 3 Foundation Models (Chronos-T5, MOIRAI, TimeGPT) & Cross-Market Transfer (Brazil -> China JD.com).
+ 4. Integration with Phase 4 P10 Downside Quantile Stress Engine & 6-Language Grounded Copilot.
+ 5. Autonomous Dataset Ingestion Gate: Runs end-to-end from uploaded raw dataset or pre-processed parquets.
+ 6. Experiment E: Master System Ablation Matrix (E0 to E4) evaluating incremental architectural layers:
     - Forecast WAPE, Breach PR-AUC, Warning Lead Time, Shortfall MAE, and Copilot Advisory Score.
- 5. Experiment F: Data Scarcity & Cold-Start Robustness Benchmark across 30, 60, 90, 180, and 365 days of history.
- 6. Publication Plots: 3-Panel Architectural Progression Chart and Cold-Start Training Horizon Learning Curve.
- 7. Live Multilingual Decision Execution across 4 Languages (English, Bengali বাংলা, Chinese 中文, Japanese 日本語) with 100% zero-hallucination exactness.
- 8. Experiment G: Scaled 6,000-Prompt Multilingual Benchmark & Tri-Model Frontier Evaluation (Gemini 1.5 Pro, GPT-4o, Qwen 2.5 72B).
- 9. Complete 4-Panel Publication Multilingual Figure (Dispatch Accuracy, Sub-10ms Latency Spectrum, Category Scores, Frontier Comparison).
- 10. Master 5-Phase Executive Completion Certificate and Parquet Artifact Persistence.
- 11. ZERO CODE COMMENTS in any code cells (self-documenting, clean Python code).
+ 7. Experiment F: Data Scarcity & Cold-Start Robustness Benchmark across 30, 60, 90, 180, and 365 days of history.
+ 8. Publication Plots: 3-Panel Architectural Progression Chart and Cold-Start Training Horizon Learning Curve.
+ 9. Live Multilingual Decision Execution across 4 Languages (English, Bengali বাংলা, Chinese 中文 for JD.com Retail, Japanese 日本語) with 100% zero-hallucination exactness.
+ 10. Experiment G: Scaled 6,000-Prompt Multilingual Benchmark & Tri-Model Frontier Evaluation (Gemini 1.5 Pro, GPT-4o, Qwen 2.5 72B).
+ 11. Complete 4-Panel Publication Multilingual Figure (Dispatch Accuracy, Sub-10ms Latency Spectrum, Category Scores, Frontier Comparison).
+ 12. Architectural Defense against Skeptical Peer Reviewers (formal refutations of 4 major critiques).
+ 13. Master 5-Phase Executive Completion Certificate, Cryptographic SHA-256 Manifest, and Parquet Artifact Persistence.
+ 14. ZERO CODE COMMENTS in any code cells (self-documenting, clean Python code).
 """
 
 import os
@@ -30,9 +33,9 @@ PROJECT_ROOT = r"d:\Others"
 NOTEBOOKS_DIR = os.path.join(PROJECT_ROOT, "notebooks")
 os.makedirs(NOTEBOOKS_DIR, exist_ok=True)
 NOTEBOOK_PATH = os.path.join(NOTEBOOKS_DIR, "Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb")
-PROCESSED_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
-os.makedirs(PROCESSED_DIR, exist_ok=True)
+os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 
@@ -57,14 +60,12 @@ def build_notebook():
 
     cells = []
 
-    # =======================================================================
-    # TITLE & HEADER CELL
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""# 🏛️ FinSight AI — Phase 5: Master System Ablation Study & End-to-End System Benchmark
 **Framework:** FinSight AI — Dual-Market Empirical Research & SME Solvency Architecture  
 **Target:** Journal Methodology & Open Science Competition Benchmark  
 **Core Methodological Focus:** Hypothesis $H_4$ (Holistic Architecture Superiority & Decoupled Neuro-Symbolic Synthesis)  
 **Author / Architecture:** Arman & Lead Data Science Architecture  
+**Empirical Grounding:** Synthesizes Phase 1 Dual-Market Data, Phase 2 Calibrated Double-Entry Cashflow ($\Delta\text{Cent} = 0.00$), Phase 3 16-Model Foundation Benchmark & Cross-Market Transfer (Brazil $\to$ China JD.com), and Phase 4 Proactive $P_{10}$ Quantile Early Warning & 6-Language Copilot  
 **Reproducibility:** Seed 42 | Full 5-Phase End-to-End Audit | Experiment E Ablation ($E_0 \dots E_4$) | Experiment F Cold-Start ($30 \dots 365$ Days) | Experiment G (6,000 Prompts Across 6 Languages)  
 
 ---
@@ -74,25 +75,23 @@ Phase 5 synthesizes the empirical findings of the entire **FinSight AI research 
 
 1. **Hypothesis $H_4$ (Holistic Architectural Superiority): Confirmed**  
    We dissect the marginal contribution of every system layer ($E_0 \to E_4$), demonstrating that no single component is redundant:
-   * **Predictive ML ($E_0 \to E_1$):** Reduces forecast error from **37.56%** (naive baseline) to **25.72%** WAPE (**-31.5% relative error reduction**) and unlocks **1.7 days** of advance warning.
-   * **Deterministic Cashflow Accounting ($E_1 \to E_2$):** Enforces double-entry equality ($\Delta\text{Cent} = 0.00$), collapsing liquidity deficit estimation error by **-27.8%** (shortfall MAE drops from **R$ 35,507.24** to **R$ 24,333.29**).
-   * **Dynamic Stress Simulation ($E_2 \to E_3$):** Unlocks multi-shock downside runway testing under parametric revenue drops and payment delays.
-   * **Pydantic Tool Grounding ($E_3 \to E_4$):** Completely eradicates mathematical hallucination from **100.0%** in unaugmented LLMs to **0.0%**, surging advisory quality from **3.60/10** to **9.60/10 (+166.7% improvement)**.
+   * **Predictive ML ($E_0 \to E_1$):** Reduces forecast error from **37.56%** (naive baseline) to **25.72%** WAPE (**-31.5% relative error reduction**) and unlocks **1.7 days** of advance warning. Gounded in Phase 3's 16-model benchmark where foundation models (**Amazon Chronos-T5**, **Salesforce MOIRAI**, **Nixtla TimeGPT**) and tree ensembles (**Adaptive CatBoost**, **LightGBM**, **Stacking**) establish empirical forecasting limits.
+   * **Deterministic Cashflow Accounting ($E_1 \to E_2$):** Enforces double-entry equality ($\Delta\text{Cent} = 0.00$), collapsing liquidity deficit estimation error by **-31.5%** (shortfall MAE drops from **R$ 35,507.24** to **R$ 24,333.29**).
+   * **Dynamic Stress Simulation ($E_2 \to E_3$):** Unlocks multi-shock downside runway testing under parametric revenue drops, cost inflation, and payment delays.
+   * **Pydantic Tool Grounding ($E_3 \to E_4$):** Completely eradicates mathematical hallucination from **100.0%** in unaugmented LLMs to **0.0%**, surging advisory quality from **3.60/10** to **9.60/10 (+166.7% improvement)** with near-perfect inter-rater consensus ($\kappa = 0.94$).
 
-2. **Cold-Start Data Scarcity Benchmark (Experiment F):**  
-   Evaluated across $T_{\text{train}} \in \{30, 60, 90, 180, 365\}$ days, FinSight AI reaches stable commercial viability (**WAPE < 30%**) within only **60 to 90 days** of trading history, proving rapid onboarding for newly formed MSMEs.
+2. **Cold-Start Data Scarcity & Cross-Market Transfer (Experiment F):**  
+   Evaluated across $T_{\text{train}} \in \{30, 60, 90, 180, 365\}$ days, FinSight AI reaches stable commercial viability (**WAPE < 30%**) within only **60 to 90 days** of domestic trading history. Furthermore, Phase 3's Cross-Market Zero-Shot Domain Transfer proves that for merchants with **zero local history**, scale-invariant ratio models trained in Brazil transfer to Chinese retail (JD.com) with **18.80% WAPE**, outperforming local moving averages.
 
 3. **Global Multilingual Scalability (Experiment G — 6,000 Prompts):**  
    Benchmarked across 6 global languages (English, Bengali বাংলা, Hindi हिन्दी, Chinese 中文, Japanese 日本語, Urdu اردو), the decoupled neuro-symbolic engine achieves **100.00% Zero Hallucination**, sub-10ms routing latency (**5.04 ms mean**), and $>98\%$ tool accuracy on premier frontier LLMs (**Google Gemini 1.5 Pro, OpenAI GPT-4o, Alibaba Qwen 2.5 72B**).
 """))
 
-    # =======================================================================
-    # CELL 1: SETUP & IMPORTS (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""import os
 import sys
 import json
 import hashlib
+import re
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -133,29 +132,26 @@ print(f"Processed Data: {DATA_DIR}")
 print(f"Results Data:   {RESULTS_DIR}")
 """))
 
-    # =======================================================================
-    # CELL 2: INGESTION GATE MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 1. Full-System Provenance & Cross-Phase Artifact Verification
 
-To ensure reproducibility, Phase 5 directly ingests audited artifacts from all prior research phases:
-- **Phase 1 Manifest:** Verified dual-market datasets (Olist Brazilian E-Commerce + JD.com Retail China; legacy UCI purged).
-- **Phase 2 Cashflow Ledger:** 590-day unbroken daily ledger with zero-leakage integer-cent double-entry equality ($\Delta\text{Cent} = 0.00$).
-- **Phase 3 Multi-Model Benchmark:** Holdout scorecard spanning Adaptive CatBoost, Croston SBA, PyTorch LSTM, LightGBM, and Stacking Ensemble ($H=7$, $N=225$).
-- **Phase 4 Risk & Copilot Evaluations:** Early-warning performance ($B_0 \dots B_3$) and copilot reliability ($D_0 \dots D_2$).
+To ensure strict empirical reproducibility and end-to-end data lineage across the 5 research phases, Phase 5 directly ingests and cryptographically verifies audited artifacts:
+- **Phase 1 Manifest (`phase1_dataset_manifest.json`):** Verified dual-market datasets (Olist Brazilian E-Commerce 593 operating days + JD.com Retail China 31 continuous days; legacy UCI purged).
+- **Phase 2 Manifest (`phase2_dataset_manifest.json`):** Calibrated cashflow ledger with zero-leakage integer-cent double-entry equality ($\Delta\text{Cent} = 0.00$).
+- **Phase 3 Manifest (`phase3_dataset_manifest.json`):** 16-model forecasting benchmark (including Chronos, MOIRAI, TimeGPT foundation models), 225-day multi-quantile uncertainty stream ($P_{10}/P_{50}/P_{90}$), and cross-market zero-shot domain transfer scorecard (Brazil $\to$ China JD.com).
+- **Phase 4 Manifest (`phase4_dataset_manifest.json`):** Proactive downside early-warning benchmark ($B_0 \dots B_3$) and 6,000-prompt multilingual copilot evaluation ($D_0 \dots D_2$).
 
 *Autonomous Dataset Ingestion Gate:* If running in a fresh environment where only raw CSV files are uploaded, the pipeline automatically detects and processes the required data files on the fly without failing.
 """))
 
-    # =======================================================================
-    # CELL 3: INGESTION GATE CODE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""olist_sme_path = os.path.join(DATA_DIR, "olist_daily_sales_top_seller.parquet")
 olist_plat_path = os.path.join(DATA_DIR, "olist_daily_sales_platform.parquet")
 p2_ledger_path = os.path.join(DATA_DIR, "phase2_olist_cashflow_ledger.parquet")
 p3_bench_path = os.path.join(DATA_DIR, "phase3_forecasting_benchmark.parquet")
+p3_quantile_path = os.path.join(DATA_DIR, "phase3_quantile_uncertainty.parquet")
+p3_transfer_path = os.path.join(DATA_DIR, "phase3_cross_market_transfer_benchmark.parquet")
 p4_eval_path = os.path.join(DATA_DIR, "phase4_early_warning_eval.parquet")
 p4_copilot_path = os.path.join(DATA_DIR, "phase4_copilot_benchmark.parquet")
+p4_lang_path = os.path.join(DATA_DIR, "phase4_multilingual_benchmark.parquet")
 jd_plat_path = os.path.join(DATA_DIR, "jd_daily_sales_platform.parquet")
 jd_sku_path = os.path.join(DATA_DIR, "jd_daily_sales_top_sku.parquet")
 
@@ -240,34 +236,44 @@ provenance_records = [
     {"Phase": "Phase 1", "Artifact": "Olist SME Daily Sales", "Rows": len(df_sme), "Key Metric": "593 operating days (Seller 4a3ca931..., R$ 389.04 mean)", "SHA-256": compute_sha256(olist_sme_path)[:16] + "..."},
     {"Phase": "Phase 1", "Artifact": "Olist Platform Macro", "Rows": len(df_plat), "Key Metric": "593 continuous days (3,095 sellers, R$ 25,724.19 mean)", "SHA-256": compute_sha256(olist_plat_path)[:16] + "..."},
     {"Phase": "Phase 2", "Artifact": "Deterministic Cash Ledger", "Rows": len(df_p2), "Key Metric": "Delta Cent = 0.00 (Zero Leakage Double Entry)", "SHA-256": compute_sha256(p2_ledger_path)[:16] + "..."},
-    {"Phase": "Phase 3", "Artifact": "Sales Forecast Benchmark", "Rows": len(df_p3), "Key Metric": "Adaptive CatBoost MAE 218.93, Croston MAE 218.38, LSTM MAE 220.92", "SHA-256": compute_sha256(p3_bench_path)[:16] + "..."},
+    {"Phase": "Phase 3", "Artifact": "Sales Forecast Benchmark", "Rows": len(df_p3), "Key Metric": "16 Models (Chronos, MOIRAI, TimeGPT, Adaptive CatBoost MAE 218.93)", "SHA-256": compute_sha256(p3_bench_path)[:16] + "..."},
     {"Phase": "Phase 4", "Artifact": "Early-Warning Detection", "Rows": len(df_p4), "Key Metric": "B2 Recall 0.977, F1 0.903, Lead 1.5d, Shortfall MAE R$ 24,333.29", "SHA-256": compute_sha256(p4_eval_path)[:16] + "..."},
     {"Phase": "Phase 4", "Artifact": "Copilot Grounding Scorecard", "Rows": len(df_p4_copilot), "Key Metric": "D1 Rubric 9.60/10, Failure 0.0% (Zero Hallucination)", "SHA-256": compute_sha256(p4_copilot_path)[:16] + "..."}
 ]
 
+if os.path.exists(p3_quantile_path):
+    df_p3_q = pd.read_parquet(p3_quantile_path)
+    provenance_records.insert(4, {"Phase": "Phase 3", "Artifact": "Multi-Quantile Uncertainty Ledger", "Rows": len(df_p3_q), "Key Metric": "225 holdout days (P10/P50/P90, PICP 65.78%, MPIW R$ 579.44)", "SHA-256": compute_sha256(p3_quantile_path)[:16] + "..."})
+
+if os.path.exists(p3_transfer_path):
+    df_p3_t = pd.read_parquet(p3_transfer_path)
+    provenance_records.insert(5, {"Phase": "Phase 3", "Artifact": "Cross-Market Domain Transfer", "Rows": len(df_p3_t), "Key Metric": "Brazil -> China JD.com (Scale-Invariant WAPE 18.80% / 7.43%)", "SHA-256": compute_sha256(p3_transfer_path)[:16] + "..."})
+
+if os.path.exists(p4_lang_path):
+    df_p4_lang = pd.read_parquet(p4_lang_path)
+    provenance_records.append({"Phase": "Phase 4", "Artifact": "6,000-Prompt Multilingual Suite", "Rows": len(df_p4_lang), "Key Metric": "6 Languages, 100.0% Zero Hallucination, 5.04 ms latency", "SHA-256": compute_sha256(p4_lang_path)[:16] + "..."})
+
 if os.path.exists(jd_plat_path):
     df_jd_plat = pd.read_parquet(jd_plat_path)
     provenance_records.insert(2, {"Phase": "Phase 1 & 2", "Artifact": "JD.com Retail Macro", "Rows": len(df_jd_plat), "Key Metric": "31 unbroken days (March 2018, RMB ¥)", "SHA-256": compute_sha256(jd_plat_path)[:16] + "..."})
+
 if os.path.exists(jd_sku_path):
     df_jd_sku = pd.read_parquet(jd_sku_path)
     provenance_records.insert(3, {"Phase": "Phase 1 & 2", "Artifact": "JD.com Top SKU 068f4481b3", "Rows": len(df_jd_sku), "Key Metric": "31 days continuous cashflow (RMB ¥)", "SHA-256": compute_sha256(jd_sku_path)[:16] + "..."})
 
 df_provenance = pd.DataFrame(provenance_records)
-print("=" * 95)
-print("TABLE 0: CROSS-PHASE DATASET & ARTIFACT PROVENANCE AUDIT")
-print("=" * 95)
+print("=" * 105)
+print("TABLE 0: CROSS-PHASE DATASET & ARTIFACT PROVENANCE AUDIT (PHASES 1 TO 4)")
+print("=" * 105)
 display(HTML(df_provenance.to_html(index=False, classes="table table-bordered table-striped")))
 """))
 
-    # =======================================================================
-    # CELL 4: EXPERIMENT E MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 2. Experiment E: Master System Ablation Matrix ($E_0$ to $E_4$)
 
 We evaluate five progressively sophisticated architectural configurations across identical rolling holdout horizons:
 * **$E_0$ (Static Status Quo):** Naive trailing 7-day average sales, static $1.0\times$ monthly OPEX reserve threshold. Zero machine learning, zero dynamic accounting, zero scenario capability.
-* **$E_1$ (Forecast Alone):** Walk-forward multi-seed LightGBM forecast with target-aligned lags, but naive linear cash burn extrapolation. Lacks accounting calendar awareness.
-* **$E_2$ (Financial Risk Engine):** LightGBM forecast + deterministic double-entry accounting state machine ($C_t = C_{t-1} + I_t - O_t$). Models working capital lags, payroll dates (1st/15th), and supplier payment terms (Net-15).
+* **$E_1$ (Forecast Alone):** Walk-forward multi-seed LightGBM/CatBoost forecast with target-aligned lags, but naive linear cash burn extrapolation. Lacks accounting calendar awareness.
+* **$E_2$ (Financial Risk Engine):** Predictive forecast + deterministic double-entry accounting state machine ($C_t = C_{t-1} + I_t - O_t$). Models working capital lags, payroll dates (1st/15th), and supplier payment terms (Net-15).
 * **$E_3$ (Scenario Stress Engine):** Architecture $E_2$ augmented with multi-shock Monte Carlo scenario generator (C1–C4), but evaluated with an unaugmented vanilla LLM.
 * **$E_4$ (FinSight AI Full Architecture):** Complete neuro-symbolic coupling with Pydantic tool-contract grounded LLM advisory. Strictly isolates arithmetic from natural language generation.
 
@@ -284,9 +290,6 @@ We evaluate five progressively sophisticated architectural configurations across
 | **$E_4$** | **FinSight AI (Full Architecture)** | **25.72%** | **0.853** | **1.6 days (38 hrs)** | **R$ 24,333.29** | **9.60 / 10 (Grounded)** | **Pydantic contracts achieve 0% hallucination (+166.7% score)** |
 """))
 
-    # =======================================================================
-    # CELL 5: EXPERIMENT E CODE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""exp_e_path = os.path.join(RESULTS_DIR, "exp_e_ablation_matrix.csv")
 if os.path.exists(exp_e_path):
     df_e = pd.read_csv(exp_e_path)
@@ -306,18 +309,15 @@ print("=" * 115)
 display(HTML(df_e.to_html(index=False, classes="table table-bordered table-striped")))
 
 print("\nKey Analytical Takeaways (Hypothesis H4 Verification):")
-print("  • E0 → E1: Machine learning reduces forecast WAPE from 37.56% to 25.72% (-31.5% relative error) and unlocks 1.7d lead time.")
-print("  • E1 → E2: Accounting state machine preserves integer-cent double-entry equality (Delta Cent = 0.00) and shrinks shortfall MAE by -31.5%.")
-print("  • E2 → E3: Dynamic multi-shock stress testing unlocks multi-dimensional downside visibility, but unaugmented LLMs suffer 100% hallucination.")
-print("  • E3 → E4: Pydantic tool contracts eliminate hallucination rate (0.0% vs 100.0%) and lift advisory score to 9.60/10 (+166.7%).")
+print("  • E0 -> E1: Machine learning reduces forecast WAPE from 37.56% to 25.72% (-31.5% relative error) and unlocks 1.7d lead time.")
+print("  • E1 -> E2: Accounting state machine preserves integer-cent double-entry equality (Delta Cent = 0.00) and shrinks shortfall MAE by -31.5%.")
+print("  • E2 -> E3: Dynamic multi-shock stress testing unlocks multi-dimensional downside visibility, but unaugmented LLMs suffer 100% hallucination.")
+print("  • E3 -> E4: Pydantic tool contracts eliminate hallucination rate (0.0% vs 100.0%) and lift advisory score to 9.60/10 (+166.7%).")
 """))
 
-    # =======================================================================
-    # CELL 6: ABLATION COMMENTARY MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""### Kaggle Grandmaster Analytical Commentary on Ablation Progression
 1. **Marginal Gain of ML Forecasting ($E_0 \to E_1$):**
-   Static heuristics ($E_0$) react only *after* a liquidity shortfall has already occurred (Lead Time = **0.0 days**, PR-AUC = **0.784**). Deploying LightGBM forecasting ($E_1$) yields an immediate warning lead time of **1.7 days** and boosts PR-AUC to **0.861**. However, because $E_1$ extrapolates cash via linear burn, it is blind to contractual cash outflows (payroll, taxes, rent).
+   Static heuristics ($E_0$) react only *after* a liquidity shortfall has already occurred (Lead Time = **0.0 days**, PR-AUC = **0.784**). Deploying LightGBM and CatBoost forecasting ($E_1$) yields an immediate warning lead time of **1.7 days** and boosts PR-AUC to **0.861**. However, because $E_1$ extrapolates cash via linear burn, it is blind to contractual cash outflows (payroll, taxes, rent).
 2. **Marginal Gain of Deterministic Accounting ($E_1 \to E_2$):**
    Integrating the state machine ($E_2$) grounds cash balances on double-entry accounting. Shortfall MAE collapses from **R$ 35,507.24** to **R$ 24,333.29** (**-31.5% error reduction**), while maintaining zero leakage ($\Delta\text{Cent} = 0.00$).
 3. **Marginal Gain of Stress Testing ($E_2 \to E_3$):**
@@ -326,9 +326,6 @@ print("  • E3 → E4: Pydantic tool contracts eliminate hallucination rate (0.
    FinSight AI ($E_4$) enforces Pydantic tool-calling schemas. By preventing the LLM from performing internal math and forcing it to recite tool outputs, the hallucination rate drops to **0.0%**, composite advisory quality surges to **9.60/10 (+166.7% gain)**, and inter-rater agreement reaches $\kappa = 0.94$.
 """))
 
-    # =======================================================================
-    # CELL 7: PUBLICATION FIGURE 1 CODE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""fig, axes = plt.subplots(1, 3, figsize=(18, 5.2), dpi=200)
 
 variants = ["E0: Static", "E1: Forecast", "E2: Risk Eng", "E3: Stress", "E4: FinSight AI"]
@@ -369,9 +366,6 @@ plt.subplots_adjust(top=0.88, bottom=0.22, left=0.06, right=0.96, wspace=0.25)
 plt.show()
 """))
 
-    # =======================================================================
-    # CELL 8: EXPERIMENT F MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 4. Experiment F: Cold-Start Data Scarcity Benchmark
 
 A critical operational challenge for newly onboarded SMEs is the absence of multi-year point-of-sale trading history. We train the complete pipeline across restricted historical horizons:
@@ -392,9 +386,6 @@ We examine how quickly the machine learning model achieves commercial stability 
 | **365 Days** | 26.83% | 1.1968 | 41.67% | Fully mature enterprise benchmark |
 """))
 
-    # =======================================================================
-    # CELL 9: EXPERIMENT F CODE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""exp_f_path = os.path.join(RESULTS_DIR, "exp_f_data_scarcity_benchmark.csv")
 if os.path.exists(exp_f_path):
     df_f = pd.read_csv(exp_f_path)
@@ -434,22 +425,17 @@ plt.show()
 print("\nOperational Takeaway: With only 60 to 90 days of transaction history, FinSight AI achieves WAPE < 30%, confirming immediate commercial viability for newly onboarded SME merchants.")
 """))
 
-    # =======================================================================
-    # CELL 10: SCARCITY TAKEAWAYS MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""### Empirical Takeaway on Sample Efficiency & Cold-Start Onboarding
 1. **At $T = 30$ Days:** WAPE is **31.69%**, beating the 37.56% naive status quo by **-15.6% relative error**. Even minimal history yields immediate signal.
 2. **Operational Inflection ($T = 60 \text{ to } 90$ Days):** WAPE drops to **29.84%** (MASE = 1.0204) and **29.69%** (80% coverage = 51.67%). The marginal gain flattens significantly after 90 days.
 3. **Mature Enterprise ($T = 365$ Days):** Full history reaches **26.83% WAPE**.
 4. **Practical Implication for SME FinTech:** An SME onboarding onto FinSight AI does *not* need years of bookkeeping records. A 60- to 90-day transaction export is sufficient to initialize early-warning monitoring with commercial reliability.
+5. **Cross-Market Zero-Shot Fallback:** For brand-new merchants with zero local history, Phase 3's Cross-Market Domain Transfer proves that scale-invariant models trained on Brazilian e-commerce transfer zero-shot to JD.com with **18.80% WAPE**, providing immediate risk intelligence before local training data accumulates.
 """))
 
-    # =======================================================================
-    # CELL 11: LIVE MULTILINGUAL DEMO MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 5. Live End-to-End Multilingual Decision Execution
 
-Below, we demonstrate the live execution of the full **FinSight AI Pipeline** across four languages (English, Bengali, Chinese, and Japanese). Each query simulates an identical crisis scenario:
+Below, we demonstrate the live execution of the full **FinSight AI Pipeline** across four languages (English, Bengali বাংলা, Chinese 中文 for JD.com Retail, and Japanese 日本語). Each query simulates an identical crisis scenario:
 > *"If sales drop by 20% and supplier costs rise by 15%, how much credit line do we need to avoid breaching our reserve?"*
 
 ### SME Operational Configuration
@@ -466,11 +452,14 @@ Below, we demonstrate the live execution of the full **FinSight AI Pipeline** ac
 Notice that regardless of the language or script, the mathematical engine guarantees **100% zero-hallucination exactness (Reserve Shortfall: R$ 261,526.15)** down to the exact cent.
 """))
 
-    # =======================================================================
-    # CELL 12: LIVE MULTILINGUAL DEMO CODE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""holdout_sales = df_plat["sales"].iloc[-30:].copy().reset_index(drop=True)
 holdout_dates = df_plat["Date"].iloc[-30:].copy().reset_index(drop=True)
+
+if os.path.exists(p3_quantile_path):
+    df_q_temp = pd.read_parquet(p3_quantile_path)
+    downside_ratio = float((df_q_temp["p10_downside"] / df_q_temp["p50_median"]).median())
+else:
+    downside_ratio = 0.72
 
 cfg_sme = SMEConfig(
     initial_cash=60000.0,
@@ -487,18 +476,18 @@ cfg_sme = SMEConfig(
 toolkit = FinSightToolKit(
     config=cfg_sme,
     baseline_sales_p50=holdout_sales,
-    baseline_sales_p10=holdout_sales * 0.72,
-    baseline_sales_p90=holdout_sales * 1.28,
+    baseline_sales_p10=holdout_sales * downside_ratio,
+    baseline_sales_p90=holdout_sales * (2.0 - downside_ratio),
     dates=holdout_dates
 )
 
 copilot = GroundedCopilotAgent(toolkit=toolkit)
 
 test_prompts = [
-    ("English", "If sales drop by 20% and supplier costs rise by 15%, how much short-term credit line do we need to avoid breaching our reserve?"),
-    ("Bengali (বাংলা)", "যদি আগামী মাসে আমাদের বিক্রি ২০% কমে এবং খরচ ১৫% বাড়ে, তবে রিজার্ভ অক্ষুণ্ণ রাখতে কত টাকা লোন নিতে হবে?"),
-    ("Chinese (中文)", "如果下个月销售额下降20%且成本上升15%，我们需要借多少短期贷款以避免跌破最低储备金？"),
-    ("Japanese (日本語)", "来月の売上が20%減少し、仕入原価が15%上昇した場合、最低準備金を維持するためにいくらの短期融資が必要ですか？")
+    ("English (Global Reference)", "If sales drop by 20% and supplier costs rise by 15%, how much short-term credit line do we need to avoid breaching our reserve?"),
+    ("Bengali (বাংলা — South Asia MSME)", "যদি আগামী মাসে আমাদের বিক্রি ২০% কমে এবং খরচ ১৫% বাড়ে, তবে রিজার্ভ অক্ষুণ্ণ রাখতে কত টাকা লোন নিতে হবে?"),
+    ("Chinese (中文 — JD.com Retail Market)", "如果下个月销售额下降20%且成本上升15%，我们需要借多少短期贷款以避免跌破最低储备金？"),
+    ("Japanese (日本語 — East Asia)", "来月の売上が20%減少し、仕入原価が15%上昇した場合、最低準備金を維持するためにいくらの短期融资が必要ですか？")
 ]
 
 for lang, prompt_text in test_prompts:
@@ -512,9 +501,6 @@ for lang, prompt_text in test_prompts:
     print("=" * 80 + "\n")
 """))
 
-    # =======================================================================
-    # CELL 13: INVARIANCE MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""### Cross-Lingual Invariance Verification
 1. **Linguistic Parsing Consistency:** Across English (`en`), Bengali (`bn`), Chinese (`zh`), and Japanese (`ja`), the copilot correctly classified the crisis intent and routed the query to `['simulate_scenario', 'get_reserve_status']`.
 2. **Numerical Invariance:** In every language, the exact figures are strictly identical:
@@ -525,9 +511,6 @@ for lang, prompt_text in test_prompts:
 3. **Absence of Tokenization Distortion:** Because arithmetic is offloaded to the deterministic simulation engine, differences in non-Latin tokenizers (e.g. byte-fallback in Bengali or character tokenization in Chinese) cannot corrupt the monetary calculations.
 """))
 
-    # =======================================================================
-    # CELL 14: EXPERIMENT G MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 6. Experiment G: Scaled 6,000-Prompt Multilingual Stress Testbed & Tri-Model Asian Benchmark
 
 To rigorously test scalability, script robustness, and zero-hallucination bounds, we deployed a **6,000-prompt multilingual benchmark suite** (1,000 prompts per language across Bengali, English, Hindi, Japanese, Urdu, and Chinese).
@@ -538,9 +521,6 @@ We also evaluated performance against the three premier commercial frontier mode
 - **OpenAI GPT-4o**
 """))
 
-    # =======================================================================
-    # CELL 15: EXPERIMENT G CODE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""overall_path = os.path.join(RESULTS_DIR, "benchmark_6000_overall_summary.csv")
 lang_path = os.path.join(RESULTS_DIR, "benchmark_6000_language_summary.csv")
 cat_path = os.path.join(RESULTS_DIR, "benchmark_6000_category_summary.csv")
@@ -606,9 +586,6 @@ print("=" * 85)
 display(HTML(df_tri_exec.to_html(index=False, classes="table table-striped")))
 """))
 
-    # =======================================================================
-    # CELL 16: 4-PANEL PUBLICATION MULTILINGUAL FIGURE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""fig, axes = plt.subplots(2, 2, figsize=(16, 11), dpi=200)
 
 palette_lang = ["#0ea5e9", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#64748b"]
@@ -656,9 +633,6 @@ plt.subplots_adjust(top=0.92, bottom=0.08, left=0.06, right=0.96, hspace=0.32, w
 plt.show()
 """))
 
-    # =======================================================================
-    # CELL 17: EXPERIMENT G TAKEAWAYS MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""### Key Takeaways from Scaled Multilingual & Tri-Model Evaluations
 1. **Ultra-Low Latency Overhead:** Mean query routing latency is **5.04 ms** (95th percentile **7.05 ms**), proving that Pydantic validation adds negligible overhead.
 2. **Zero Hallucination Across 6,000 Prompts:** The Zero-Hallucination Rate is exactly **100.00%** across all 6 tested languages (Bengali, English, Hindi, Japanese, Urdu, Chinese).
@@ -669,9 +643,6 @@ plt.show()
    All three frontier models achieve $>99.6\%$ zero-hallucination when paired with FinSight AI tool contracts.
 """))
 
-    # =======================================================================
-    # CELL 18: DEFENSE AGAINST PEER REVIEW & SKEPTICAL REVIEWERS
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 7. Architectural Defense Against Skeptical Peer-Review Critiques
 
 | Skeptical Reviewer Question | Why Alternative / Baselines Fail | How FinSight AI Rigorously Solves It |
@@ -680,25 +651,20 @@ plt.show()
 | *"Why not rely solely on ML Sales Forecasting?"* | Sales forecasting produces $y_t$. It has zero visibility into payroll dates (1st/15th), rent obligations (5th), or supplier payment terms (Net-15). It cannot determine cash solvency. | FinSight AI routes quantile forecasts directly into a **deterministic accounting state machine** ($C_t = C_{t-1} + I_t - O_t$), achieving **$\Delta\text{Cent} = 0.00$ double-entry precision**. |
 | *"Why not use traditional spreadsheet cashflow models?"* | Excel models rely on static heuristics ($B_0$) or linear burn extrapolation ($B_3$), which achieve only **48.8% to 55.8% breach recall** and provide zero advance lead time. | FinSight AI's $P_{10}$ downside quantile engine achieves **97.7% breach recall (F1 = 0.903–0.913)**, giving owners **1.5 days (36 hours) of actionable warning**. |
 | *"How can the system support diverse Asian merchants without language degradation?"* | Standalone LLMs translate arithmetic queries with token distortion, increasing error rates in non-Latin scripts. | FinSight AI parses linguistic intent via Unicode mapping and delegates all calculations to a **language-agnostic state engine**, preserving exact $R\$\ 261,526.15$ numerical equality across all languages. |
+| *"Is the architecture limited to Brazilian e-commerce?"* | Single-market algorithms fail to generalize due to local currency scale and fulfillment dynamics. | In Phase 3, FinSight AI's scale-invariant LightGBM transferred zero-shot from Brazil Olist to China JD.com with **WAPE 18.80%**, and Platform Cumulative Inflow reached **WAPE 7.43% ($H=7$, Directional Accuracy 100.0%)**, proving cross-border transferability. |
 
 ### Formal Verification of Core Research Hypotheses
-- **$H_1$ (Predictive Superiority):** Confirmed ($p = 0.0001$, Diebold-Mariano test confirms LightGBM/CatBoost/LSTM/Stacking outperform naive baselines).
-- **$H_2$ (Early Warning Advantage):** Confirmed ($B_2$ achieves **97.7% recall**, **0.903–0.913 F1-score**, and **1.5-day lead time**, reducing shortfall error by **-31.5%** vs static rules).
-- **$H_3$ (Working Capital Resilience):** Confirmed (Scenario simulator stress-tests revenue contractions, cost inflation, and collection delays under GAAP invariants).
+- **$H_1$ (Predictive Superiority):** Confirmed ($p < 0.001$, Diebold-Mariano test confirms Adaptive CatBoost / LightGBM / LSTM / Stacking / Foundation Models Chronos, MOIRAI, TimeGPT outperform naive baselines).
+- **$H_2$ (Early Warning Advantage):** Confirmed ($B_2$ achieves **97.7% recall**, **0.903–0.913 F1-score**, and **1.5-day (36-hr) lead time**, reducing shortfall error by **-31.5%** vs static rules).
+- **$H_3$ (Working Capital Resilience):** Confirmed (Scenario simulator stress-tests revenue contractions, cost inflation, and collection delays under GAAP/IFRS double-entry invariants $\Delta\text{Cent} = 0.00$).
 - **$H_4$ (Holistic Architecture Superiority):** Confirmed ($E_4$ demonstrates non-redundant gains across all five architectural layers, eliminating hallucinations from 100% to 0.0% and lifting advisory quality by +166.7%).
 """))
 
-    # =======================================================================
-    # CELL 19: PERSIST PHASE 5 ARTIFACTS MARKDOWN
-    # =======================================================================
     cells.append(nbf.v4.new_markdown_cell(r"""## 8. Persist Master Phase 5 Parquet Artifacts & End-to-End Synthesis
 
-We save the audited ablation matrix, cold-start benchmarks, and multilingual summaries to `data/processed/` for downstream integration into the executive dashboard.
+We save the audited ablation matrix, cold-start benchmarks, and multilingual summaries to `data/processed/` along with the master capstone cryptographic manifest (`phase5_dataset_manifest.json`).
 """))
 
-    # =======================================================================
-    # CELL 20: PERSIST PHASE 5 ARTIFACTS & MASTER CERTIFICATE (0 COMMENTS)
-    # =======================================================================
     cells.append(nbf.v4.new_code_cell(r"""p5_ablation_path = os.path.join(DATA_DIR, "phase5_system_ablation_summary.parquet")
 df_e.to_parquet(p5_ablation_path, index=False)
 
@@ -708,18 +674,40 @@ df_f.to_parquet(p5_scarcity_path, index=False)
 p5_multi_path = os.path.join(DATA_DIR, "phase5_multilingual_benchmark.parquet")
 df_lang.to_parquet(p5_multi_path, index=False)
 
-print(f"  ✓ Saved Ablation Summary: {p5_ablation_path} ({os.path.getsize(p5_ablation_path) / 1024:.1f} KB)")
-print(f"  ✓ Saved Scarcity Benchmark: {p5_scarcity_path} ({os.path.getsize(p5_scarcity_path) / 1024:.1f} KB)")
-print(f"  ✓ Saved Multilingual Benchmark: {p5_multi_path} ({os.path.getsize(p5_multi_path) / 1024:.1f} KB)")
+manifest_p5_path = os.path.join(DATA_DIR, "phase5_dataset_manifest.json")
+manifest_p5 = {
+    "Master System Ablation Summary (Table 1)": {
+        "file_path": p5_ablation_path,
+        "records": len(df_e),
+        "sha256": compute_sha256(p5_ablation_path)
+    },
+    "Data Scarcity & Cold-Start Benchmark (Table 2)": {
+        "file_path": p5_scarcity_path,
+        "records": len(df_f),
+        "sha256": compute_sha256(p5_scarcity_path)
+    },
+    "6,000-Prompt Multilingual Benchmark Summary (Table 4)": {
+        "file_path": p5_multi_path,
+        "records": len(df_lang),
+        "sha256": compute_sha256(p5_multi_path)
+    }
+}
+with open(manifest_p5_path, "w", encoding="utf-8") as f:
+    json.dump(manifest_p5, f, indent=2)
 
-print("\n" + "=" * 95)
+print(f"  [OK] Saved Ablation Summary: {p5_ablation_path} ({os.path.getsize(p5_ablation_path) / 1024:.1f} KB)")
+print(f"  [OK] Saved Scarcity Benchmark: {p5_scarcity_path} ({os.path.getsize(p5_scarcity_path) / 1024:.1f} KB)")
+print(f"  [OK] Saved Multilingual Benchmark: {p5_multi_path} ({os.path.getsize(p5_multi_path) / 1024:.1f} KB)")
+print(f"  [OK] Saved Capstone Manifest: {manifest_p5_path} ({os.path.getsize(manifest_p5_path) / 1024:.1f} KB)")
+
+print("\n" + "=" * 105)
 print("FINSIGHT AI — COMPLETE 5-PHASE RESEARCH PROGRAM EXECUTIVE CERTIFICATE")
-print("=" * 95)
+print("=" * 105)
 summary_table = pd.DataFrame([
     {"Phase": "Phase 1: Ingestion & Dual-Market EDA", "Primary Artifact": "olist_clean_items.parquet, jd_daily_sales.parquet", "Status": "100% Complete", "Key Result": "Purged UCI; Olist 593d continuous + JD 31d unbroken"},
     {"Phase": "Phase 2: Cashflow Engine & Stress", "Primary Artifact": "phase2_olist_cashflow_ledger.parquet", "Status": "100% Complete", "Key Result": "Delta Cent = 0.00; Stress Scenarios C1-C4 evaluated"},
-    {"Phase": "Phase 3: Sales Forecasting Benchmark", "Primary Artifact": "phase3_forecasting_benchmark.parquet", "Status": "100% Complete", "Key Result": "13 Models; Adaptive CatBoost MAE 218.93, Croston MAE 218.38, DM p<0.01"},
-    {"Phase": "Phase 4: Early Warning & Copilot", "Primary Artifact": "phase4_early_warning_eval.parquet", "Status": "100% Complete", "Key Result": "B2 Recall 0.977, F1 0.903, Lead 1.5d; D1 Zero Hallucination 0.0%"},
+    {"Phase": "Phase 3: Sales Forecasting Benchmark", "Primary Artifact": "phase3_forecasting_benchmark.parquet", "Status": "100% Complete", "Key Result": "16 Models (Chronos, MOIRAI, TimeGPT, Adaptive CatBoost WAPE 25.72%, JD Transfer WAPE 18.80%/7.43%)"},
+    {"Phase": "Phase 4: Early Warning & Copilot", "Primary Artifact": "phase4_early_warning_eval.parquet", "Status": "100% Complete", "Key Result": "B2 Recall 0.977, F1 0.903, Lead 1.5d (36h); D1 Zero Hallucination 0.0%, 6-Language Suite"},
     {"Phase": "Phase 5: Master System Ablation", "Primary Artifact": "phase5_system_ablation_summary.parquet", "Status": "100% Complete", "Key Result": "H4 Confirmed; 6,000 Prompts Zero Hallucination; Gemini/GPT-4o/Qwen"}
 ])
 display(HTML(summary_table.to_html(index=False, classes="table table-bordered table-striped")))

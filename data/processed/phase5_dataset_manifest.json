@@ -1,0 +1,17 @@
+{
+  "Master System Ablation Summary (Table 1)": {
+    "file_path": "d:\\Others\\data\\processed\\phase5_system_ablation_summary.parquet",
+    "records": 5,
+    "sha256": "d5bc395fe79a2af5729b22549a50bf1f011278335fc5b9133a2cf7f07c9471a3"
+  },
+  "Data Scarcity & Cold-Start Benchmark (Table 2)": {
+    "file_path": "d:\\Others\\data\\processed\\phase5_cold_start_scarcity.parquet",
+    "records": 5,
+    "sha256": "d8f40757d15f7d028706433ed09942ac2ccfe68b4a13b80f8ae389e179c9f8d4"
+  },
+  "6,000-Prompt Multilingual Benchmark Summary (Table 4)": {
+    "file_path": "d:\\Others\\data\\processed\\phase5_multilingual_benchmark.parquet",
+    "records": 6,
+    "sha256": "827eb17c20874460601384f72fec739acee49afd6e84f848ebe3d98a6b8650d9"
+  }
+}
