@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier Form — Digital Product & Web Engineering Studio</title>
+  <meta name="description" content="Independent web design and engineering studio. We build production-ready, responsive websites on Framer, Webflow, WordPress, and Shopify for scaling SaaS, fintech, and data platforms.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       SITE NAVIGATION HEADER
+       ======================================================================== -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-wrap" aria-label="Atelier Form Home">
+        <div class="brand-mark">
+          <!-- Geometric Architectural Studio Glyph -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="3" width="8" height="8" rx="1" stroke-width="2"/>
+            <rect x="13" y="3" width="8" height="8" rx="1" stroke-width="2"/>
+            <rect x="3" y="13" width="8" height="8" rx="1" stroke-width="2"/>
+            <path d="M13 17h8m-4-4v8" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">Atelier Form</span>
+        <span class="brand-badge">Studio</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main Navigation">
+        <a href="#scope" class="nav-link">Scope</a>
+        <a href="#deliverables" class="nav-link">Deliverables</a>
+        <a href="#audience" class="nav-link">Who It's For</a>
+        <a href="#process" class="nav-link">Process</a>
+        <a href="#calculator" class="nav-link">Scope Planner</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="availability-pill" title="Current studio capacity">
+          <span class="availability-dot"></span>
+          <span>Q2/Q3 Bookings Open</span>
+        </div>
+        <a href="#contact" class="btn btn-primary btn-sm">
+          <span>Start a Project</span>
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </a>
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation menu">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================================================================
+         HERO SECTION
+         ====================================================================== -->
+    <section class="hero-section" id="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-tag">
+            <span class="hero-tag-accent">Independent Web Studio</span>
+            <span>/</span>
+            <span>Design System & Production Engineering</span>
+          </div>
+
+          <h1 class="hero-headline">
+            High-fidelity web design & production engineering <span class="highlight">for ambitious tech companies.</span>
+          </h1>
+
+          <p class="hero-lead">
+            We structure complex user flows in Figma and build fast, responsive websites across Framer, Webflow, WordPress, and Shopify. Predictable sprint delivery, clean design systems, and zero agency bureaucracy.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#calculator" class="btn btn-primary btn-lg">
+              <span>Configure Your Project Scope</span>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+              </svg>
+            </a>
+            <a href="#scope" class="btn btn-secondary btn-lg">
+              <span>Explore Capabilities</span>
+            </a>
+          </div>
+
+          <!-- Value Proof Metrics (Human Engineering Standards) -->
+          <div class="hero-metrics-strip">
+            <div class="hero-metric-cell">
+              <div class="metric-value">100%</div>
+              <div class="metric-sub">Figma-to-code design fidelity with zero layout drift</div>
+            </div>
+            <div class="hero-metric-cell">
+              <div class="metric-value">95+</div>
+              <div class="metric-sub">Google Lighthouse performance on mobile and desktop</div>
+            </div>
+            <div class="hero-metric-cell">
+              <div class="metric-value">4 Platforms</div>
+              <div class="metric-sub">Native builds on Webflow, Framer, WordPress & Shopify</div>
+            </div>
+            <div class="hero-metric-cell">
+              <div class="metric-value">3–6 Wks</div>
+              <div class="metric-sub">Predictable sprint turnaround with weekly milestone reviews</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 1: THE SCOPE TYPICALLY COVERS
+         ====================================================================== -->
+    <section class="section-scope" id="scope">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Engineering & Design Capabilities</span>
+          </div>
+          <h2 class="section-title">The scope typically covers everything required to launch a modern web presence.</h2>
+          <p class="section-subtitle">
+            From architecture diagrams to responsive deployment, we handle the entire pipeline without handing off half-finished files.
+          </p>
+        </div>
+
+        <div class="scope-grid">
+          <!-- Card 1: Website Structure & User Flows -->
+          <div class="scope-card">
+            <div class="scope-number">01 / ARCHITECTURE</div>
+            <div class="scope-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
+              </svg>
+            </div>
+            <h3 class="scope-title">Website Structure & User Flows</h3>
+            <p class="scope-description">
+              We define clear information hierarchies, conversion paths, and page architectures before touching visual styling.
+            </p>
+            <div class="scope-checklist">
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Sitemap and navigation taxonomy</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Key conversion funnel mapping</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Content requirements specification</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: High-Fidelity UI Design -->
+          <div class="scope-card">
+            <div class="scope-number">02 / INTERFACE DESIGN</div>
+            <div class="scope-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+              </svg>
+            </div>
+            <h3 class="scope-title">High-Fidelity UI Design</h3>
+            <p class="scope-description">
+              Bespoke visual design in Figma crafted with scalable autolayout, deliberate typography scales, and tactile components.
+            </p>
+            <div class="scope-checklist">
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Complete component library in Figma</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Color tokens, type hierarchy & spacing grid</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Interactive component states (hover, focus, disabled)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Responsive Layouts -->
+          <div class="scope-card">
+            <div class="scope-number">03 / RESPONSIVE ENGINEERING</div>
+            <div class="scope-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3 class="scope-title">Responsive Layouts for All Devices</h3>
+            <p class="scope-description">
+              Every breakpoint is engineered deliberately. No squished text, horizontal overflow, or awkward mobile navigation bugs.
+            </p>
+            <div class="scope-checklist">
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Dedicated mobile, tablet, and ultra-wide layouts</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Fluid typography using modern CSS clamp()</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Touch-friendly hit targets (min 44x44px)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Platform Development (Span 2) -->
+          <div class="scope-card span-2">
+            <div class="scope-number">04 / PRODUCTION PLATFORMS</div>
+            <div class="scope-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+              </svg>
+            </div>
+            <h3 class="scope-title">Development on Webflow, Framer, WordPress, or Shopify</h3>
+            <p class="scope-description">
+              We build on the exact platform that fits your operational needs. Whether your marketing team wants instant visual edits in Framer or an enterprise content ecosystem on Webflow, we write clean, maintainable code.
+            </p>
+            <div class="scope-checklist">
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Framer: Rapid marketing deployment with built-in animations and localization</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Webflow: Clean semantic markup, Client-First class structures, and CMS logic</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>WordPress: Custom Gutenberg block systems without sluggish page builders</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Shopify: Customized Liquid 2.0 theme sections optimized for conversion rate</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Content-Ready CMS Setup -->
+          <div class="scope-card">
+            <div class="scope-number">05 / CONTENT ARCHITECTURE</div>
+            <div class="scope-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <h3 class="scope-title">Content-Ready CMS Setup</h3>
+            <p class="scope-description">
+              Custom collections with intuitive field validation. Your marketing team can publish blog posts, changelogs, and case studies without touching the layout code.
+            </p>
+            <div class="scope-checklist">
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Relational schemas for posts, authors & tags</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Rich text styling preset for all typography elements</span>
+              </div>
+              <div class="scope-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Client authoring documentation & guardrails</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Platform Matrix Component -->
+        <div class="platform-matrix-wrap">
+          <div class="platform-tabs-header">
+            <div>
+              <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 4px;">Platform Architecture Details</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Compare how each platform is implemented for your business requirements.</p>
+            </div>
+            <div class="platform-nav-buttons">
+              <button class="platform-tab-btn active" data-platform="framer">Framer</button>
+              <button class="platform-tab-btn" data-platform="webflow">Webflow</button>
+              <button class="platform-tab-btn" data-platform="wordpress">WordPress</button>
+              <button class="platform-tab-btn" data-platform="shopify">Shopify</button>
+            </div>
+          </div>
+
+          <!-- Framer Panel -->
+          <div class="platform-content-panel active" id="platform-framer">
+            <div>
+              <h4 class="platform-detail-title">Framer: Visual Production for Fast-Moving Tech Teams</h4>
+              <p class="platform-detail-desc">
+                Ideal for modern SaaS companies and product marketing sites. Features native React components, fluid canvas responsiveness, built-in visual CMS, and instant global edge deployment.
+              </p>
+              <p class="platform-detail-desc">
+                We build Framer websites with structured components, custom CSS variables, and strict autolayout principles so your team can freely edit text without breaking layouts.
+              </p>
+            </div>
+            <div class="platform-specs-table">
+              <div class="spec-row">
+                <span class="spec-label">Ideal For:</span>
+                <span class="spec-val">SaaS Marketing, Seed/Series A Launches</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Content Updates:</span>
+                <span class="spec-val">Visual On-Canvas + Built-in CMS</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Interactions:</span>
+                <span class="spec-val">Native 60fps Spring Physics</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Hosting:</span>
+                <span class="spec-val">AWS Global Edge Network</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Webflow Panel -->
+          <div class="platform-content-panel" id="platform-webflow">
+            <div>
+              <h4 class="platform-detail-title">Webflow: Enterprise Scalability & Semantic Control</h4>
+              <p class="platform-detail-desc">
+                Engineered with Client-First or Finsweet naming systems. Generates clean semantic HTML5 markup, full custom code embed support, and structured CMS logic for enterprise teams.
+              </p>
+              <p class="platform-detail-desc">
+                Includes full localized URL routing, role-based collaborator permissions, and automated webhooks for your CRM or marketing automation tool.
+              </p>
+            </div>
+            <div class="platform-specs-table">
+              <div class="spec-row">
+                <span class="spec-label">Ideal For:</span>
+                <span class="spec-val">Scaling SaaS, Data Platforms, B2B Enterprise</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Content Updates:</span>
+                <span class="spec-val">Collaborator Mode & CMS Collections</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">CSS Architecture:</span>
+                <span class="spec-val">Client-First BEM-Style Tokens</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Hosting:</span>
+                <span class="spec-val">Fastly + AWS CloudFront</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WordPress Panel -->
+          <div class="platform-content-panel" id="platform-wordpress">
+            <div>
+              <h4 class="platform-detail-title">WordPress: Headless or Custom Gutenberg Blocks</h4>
+              <p class="platform-detail-desc">
+                Zero bloated page builders (no Elementor, no Divi). We author native, lightweight Gutenberg block systems or headless setups that load in milliseconds and give editorial teams ultimate flexibility.
+              </p>
+              <p class="platform-detail-desc">
+                Ideal for content publishers, media brands, and companies with legacy database requirements that demand open-source ownership.
+              </p>
+            </div>
+            <div class="platform-specs-table">
+              <div class="spec-row">
+                <span class="spec-label">Ideal For:</span>
+                <span class="spec-val">Content-Heavy Publications, Corporate Rebrands</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Content Updates:</span>
+                <span class="spec-val">Modular Native Block Editor</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Customization:</span>
+                <span class="spec-val">100% PHP / React Block Control</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Hosting:</span>
+                <span class="spec-val">Self-Hosted / WP Engine / Kinsta</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shopify Panel -->
+          <div class="platform-content-panel" id="platform-shopify">
+            <div>
+              <h4 class="platform-detail-title">Shopify: High-Converting Commerce Architecture</h4>
+              <p class="platform-detail-desc">
+                Bespoke Shopify Online Store 2.0 builds using modular Liquid sections, lightweight vanilla JavaScript, and customized checkout experiences engineered to maximize cart completion.
+              </p>
+              <p class="platform-detail-desc">
+                Fully integrated with inventory management, product variants, metafields, and high-speed international currency switching.
+              </p>
+            </div>
+            <div class="platform-specs-table">
+              <div class="spec-row">
+                <span class="spec-label">Ideal For:</span>
+                <span class="spec-val">Direct-to-Consumer Brands & Tech Merch</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Content Updates:</span>
+                <span class="spec-val">Shopify Theme Customizer & Metafields</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Checkout:</span>
+                <span class="spec-val">Shop Pay 1-Click Accelerated Flow</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Hosting:</span>
+                <span class="spec-val">Global Shopify Edge Infrastructure</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 2: WHAT YOU RECEIVE (CONCRETE DELIVERABLES)
+         ====================================================================== -->
+    <section class="section-deliverables" id="deliverables">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Tangible Assets</span>
+          </div>
+          <h2 class="section-title">What you receive upon completion.</h2>
+          <p class="section-subtitle">
+            Every project concludes with clean, organized production assets and full IP ownership transferred directly to your organization.
+          </p>
+        </div>
+
+        <div class="deliverables-grid">
+          <!-- 1. Complete website design in Figma -->
+          <div class="deliverable-card">
+            <div class="deliverable-header">
+              <div class="deliverable-check">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3 class="deliverable-title">Complete Website Design in Figma</h3>
+            </div>
+            <p class="deliverable-body">
+              Production-ready Figma source file with organized frames, autolayout components, pixel-level constraints, and complete responsive breakpoint mockups.
+            </p>
+          </div>
+
+          <!-- 2. Fully developed and responsive website -->
+          <div class="deliverable-card">
+            <div class="deliverable-header">
+              <div class="deliverable-check">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3 class="deliverable-title">Fully Developed & Responsive Website</h3>
+            </div>
+            <p class="deliverable-body">
+              Live website deployed to your custom domain, rigorously tested across modern browsers (Safari, Chrome, Firefox, Edge) and mobile devices.
+            </p>
+          </div>
+
+          <!-- 3. Structured design system for consistency -->
+          <div class="deliverable-card">
+            <div class="deliverable-header">
+              <div class="deliverable-check">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3 class="deliverable-title">Structured Design System</h3>
+            </div>
+            <p class="deliverable-body">
+              Centralized design tokens covering typography, colors, borders, shadows, spacing, and button variants to ensure ongoing brand consistency.
+            </p>
+          </div>
+
+          <!-- 4. CMS setup for easy content updates -->
+          <div class="deliverable-card">
+            <div class="deliverable-header">
+              <div class="deliverable-check">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3 class="deliverable-title">CMS Setup for Content Updates</h3>
+            </div>
+            <p class="deliverable-body">
+              Pre-configured database schemas and custom collections so your marketing team can publish new posts, announcements, and case studies seamlessly.
+            </p>
+          </div>
+
+          <!-- 5. Optimized performance and clean build -->
+          <div class="deliverable-card">
+            <div class="deliverable-header">
+              <div class="deliverable-check">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3 class="deliverable-title">Optimized Performance & Clean Build</h3>
+            </div>
+            <p class="deliverable-body">
+              Lightweight assets, WebP/AVIF image formats, minimal third-party scripts, and high Core Web Vitals scores for fast loading times.
+            </p>
+          </div>
+
+          <!-- 6. Organized project files and handoff -->
+          <div class="deliverable-card">
+            <div class="deliverable-header">
+              <div class="deliverable-check">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3 class="deliverable-title">Organized Files & Handoff Support</h3>
+            </div>
+            <p class="deliverable-body">
+              Clean account ownership transfer, recorded Loom walkthrough videos demonstrating how to manage content, and 14 days of post-launch warranty support.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 3: WHO THIS SERVICE WORKS WELL FOR
+         ====================================================================== -->
+    <section class="section-audience" id="audience">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Target Profiles</span>
+          </div>
+          <h2 class="section-title">This service works well for ambitious product and business teams.</h2>
+          <p class="section-subtitle">
+            We partner with teams that value clarity, speed, and technical precision over committee meetings and generic templates.
+          </p>
+        </div>
+
+        <div class="audience-grid">
+          <!-- 1. SaaS & Tech Products -->
+          <div class="audience-card">
+            <div class="audience-index">01</div>
+            <div class="audience-content">
+              <h3>SaaS & Tech Products Launching or Scaling</h3>
+              <p>
+                Companies that need an authoritative web presence to communicate complex software features, product tiers, and API documentation to technical buyers.
+              </p>
+              <div class="audience-pill-row">
+                <span class="audience-pill">Product Marketing</span>
+                <span class="audience-pill">Feature Breakdown</span>
+                <span class="audience-pill">Self-Serve Onboarding</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Logistics, Fintech & Data Platforms -->
+          <div class="audience-card">
+            <div class="audience-index">02</div>
+            <div class="audience-content">
+              <h3>Logistics, Fintech & Data-Driven Platforms</h3>
+              <p>
+                Platforms operating in regulated or data-dense verticals requiring trust, compliance clarity, clear metric dashboards, and high security credibility.
+              </p>
+              <div class="audience-pill-row">
+                <span class="audience-pill">Trust Architecture</span>
+                <span class="audience-pill">Data Visualizations</span>
+                <span class="audience-pill">Institutional Positioning</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Startups Preparing for Growth or Fundraising -->
+          <div class="audience-card">
+            <div class="audience-index">03</div>
+            <div class="audience-content">
+              <h3>Startups Preparing for Growth or Fundraising</h3>
+              <p>
+                Founders raising Seed or Series A capital who need their public web presence to match their product quality and valuation in front of prospective investors.
+              </p>
+              <div class="audience-pill-row">
+                <span class="audience-pill">Investor Confidence</span>
+                <span class="audience-pill">Pristine Polish</span>
+                <span class="audience-pill">Rapid 3-Week Delivery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Companies Redesigning Outdated Websites -->
+          <div class="audience-card">
+            <div class="audience-index">04</div>
+            <div class="audience-content">
+              <h3>Companies Redesigning Outdated Websites</h3>
+              <p>
+                Businesses held back by slow legacy WordPress themes, brittle plugins, or confusing layouts that fail to convert modern desktop and mobile visitors.
+              </p>
+              <div class="audience-pill-row">
+                <span class="audience-pill">Speed Rebuilding</span>
+                <span class="audience-pill">Conversion Overhaul</span>
+                <span class="audience-pill">SEO Preservation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Teams that need a structured and scalable web presence -->
+          <div class="audience-card" style="grid-column: span 2;">
+            <div class="audience-index">05</div>
+            <div class="audience-content">
+              <h3>Teams That Need a Structured and Scalable Web Presence</h3>
+              <p>
+                Engineering and marketing teams that need modular, reusable page sections and robust design foundations so future landing pages can be assembled in hours, not months.
+              </p>
+              <div class="audience-pill-row">
+                <span class="audience-pill">Modular Section Library</span>
+                <span class="audience-pill">Design Token Consistency</span>
+                <span class="audience-pill">Zero Developer Lock-in</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 4: PREDICTABLE 6-STEP DELIVERY PROCESS
+         ====================================================================== -->
+    <section class="section-process" id="process">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Workflow & Timeline</span>
+          </div>
+          <h2 class="section-title">We keep the process simple and predictable.</h2>
+          <p class="section-subtitle">
+            A milestone-driven 6-stage engineering sprint with transparent review cycles and clear sign-offs.
+          </p>
+        </div>
+
+        <div class="timeline-track">
+          <!-- Step 1: Discovery -->
+          <div class="timeline-step">
+            <div class="step-meta">
+              <span class="step-number">PHASE 01</span>
+              <span class="step-duration">Week 1</span>
+            </div>
+            <h3 class="step-title">Discovery</h3>
+            <p class="step-desc">
+              Understanding your product, business objectives, target audience personas, and positioning challenges through an async intake and kickoff alignment call.
+            </p>
+            <div class="step-deliverable">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              <span>Project brief & technical spec doc</span>
+            </div>
+          </div>
+
+          <!-- Step 2: Structure -->
+          <div class="timeline-step">
+            <div class="step-meta">
+              <span class="step-number">PHASE 02</span>
+              <span class="step-duration">Week 1–2</span>
+            </div>
+            <h3 class="step-title">Structure</h3>
+            <p class="step-desc">
+              Defining page layout architectures, content priority, wireframes, and key user flows before committing to visual styling or asset production.
+            </p>
+            <div class="step-deliverable">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/></svg>
+              <span>Low-fidelity wireframe blueprints</span>
+            </div>
+          </div>
+
+          <!-- Step 3: Design -->
+          <div class="timeline-step">
+            <div class="step-meta">
+              <span class="step-number">PHASE 03</span>
+              <span class="step-duration">Week 2–3</span>
+            </div>
+            <h3 class="step-title">Design</h3>
+            <p class="step-desc">
+              Building a clear and consistent UI system in Figma with tailored typography, custom component states, and complete responsive breakpoint layouts.
+            </p>
+            <div class="step-deliverable">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343"/></svg>
+              <span>Interactive high-fidelity Figma prototype</span>
+            </div>
+          </div>
+
+          <!-- Step 4: Development -->
+          <div class="timeline-step">
+            <div class="step-meta">
+              <span class="step-number">PHASE 04</span>
+              <span class="step-duration">Week 3–5</span>
+            </div>
+            <h3 class="step-title">Development</h3>
+            <p class="step-desc">
+              Implementing the website on your chosen platform (Framer, Webflow, WordPress, or Shopify) with semantic structure and custom CMS schemas.
+            </p>
+            <div class="step-deliverable">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+              <span>Staging environment ready for live preview</span>
+            </div>
+          </div>
+
+          <!-- Step 5: Testing -->
+          <div class="timeline-step">
+            <div class="step-meta">
+              <span class="step-number">PHASE 05</span>
+              <span class="step-duration">Week 5</span>
+            </div>
+            <h3 class="step-title">Testing</h3>
+            <p class="step-desc">
+              Ensuring responsiveness across physical devices, testing form submissions, validating accessibility standards, and tuning Core Web Vitals speeds.
+            </p>
+            <div class="step-deliverable">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>QA audit & Lighthouse speed report</span>
+            </div>
+          </div>
+
+          <!-- Step 6: Launch -->
+          <div class="timeline-step">
+            <div class="step-meta">
+              <span class="step-number">PHASE 06</span>
+              <span class="step-duration">Week 6</span>
+            </div>
+            <h3 class="step-title">Launch</h3>
+            <p class="step-desc">
+              Domain routing, DNS configuration, SSL verification, production deployment, client video walkthrough, and transfer of all source files.
+            </p>
+            <div class="step-deliverable">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Production deployment & 14-day warranty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 5: INTERACTIVE SCOPE & SPRINT CALCULATOR
+         ====================================================================== -->
+    <section class="section-calculator" id="calculator">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Interactive Estimator</span>
+          </div>
+          <h2 class="section-title">Configure your project scope and estimated timeline.</h2>
+          <p class="section-subtitle">
+            Select your project scale, preferred platform, and add-on requirements to see the estimated turnaround time and delivery package.
+          </p>
+        </div>
+
+        <div class="calculator-wrapper">
+          <div class="calculator-controls">
+            <!-- Project Scale Selection -->
+            <div>
+              <div class="calc-group-label">
+                <span>1. Select Project Scale</span>
+              </div>
+              <div class="calc-options-grid">
+                <button type="button" class="calc-option-btn active" data-calc-scale="launch">
+                  <span class="opt-title">Launch Sprint</span>
+                  <span class="opt-desc">1–5 Pages (MVP)</span>
+                </button>
+                <button type="button" class="calc-option-btn" data-calc-scale="growth">
+                  <span class="opt-title">Growth Tier</span>
+                  <span class="opt-desc">6–12 Pages</span>
+                </button>
+                <button type="button" class="calc-option-btn" data-calc-scale="flagship">
+                  <span class="opt-title">Flagship Scale</span>
+                  <span class="opt-desc">12+ Pages & System</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Platform Selection -->
+            <div>
+              <div class="calc-group-label">
+                <span>2. Select Production Platform</span>
+              </div>
+              <div class="calc-options-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <button type="button" class="calc-option-btn active" data-calc-platform="framer">
+                  <span class="opt-title">Framer</span>
+                  <span class="opt-desc">Fast Canvas</span>
+                </button>
+                <button type="button" class="calc-option-btn" data-calc-platform="webflow">
+                  <span class="opt-title">Webflow</span>
+                  <span class="opt-desc">Client-First</span>
+                </button>
+                <button type="button" class="calc-option-btn" data-calc-platform="wordpress">
+                  <span class="opt-title">WordPress</span>
+                  <span class="opt-desc">Custom Blocks</span>
+                </button>
+                <button type="button" class="calc-option-btn" data-calc-platform="shopify">
+                  <span class="opt-title">Shopify</span>
+                  <span class="opt-desc">Liquid 2.0</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Add-ons Selection -->
+            <div>
+              <div class="calc-group-label">
+                <span>3. Optional Infrastructure Add-ons</span>
+              </div>
+              <div class="calc-checkboxes">
+                <label class="calc-checkbox-label">
+                  <input type="checkbox" id="addon-cms" class="calc-addon" checked>
+                  <span>Content-Ready CMS Setup</span>
+                </label>
+                <label class="calc-checkbox-label">
+                  <input type="checkbox" id="addon-interactions" class="calc-addon" checked>
+                  <span>Custom Micro-Interactions</span>
+                </label>
+                <label class="calc-checkbox-label">
+                  <input type="checkbox" id="addon-seo" class="calc-addon">
+                  <span>Technical SEO & 301 Migration</span>
+                </label>
+                <label class="calc-checkbox-label">
+                  <input type="checkbox" id="addon-analytics" class="calc-addon">
+                  <span>Privacy Analytics & Events</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output Summary Card -->
+          <div class="calculator-summary">
+            <div class="calc-output-header">Estimated Project Blueprint</div>
+            
+            <div class="calc-summary-stat">
+              <div class="calc-timeline-badge" id="calc-timeline-output">4 Weeks</div>
+              <div class="calc-timeline-sub">Sprint delivery with weekly milestone demos</div>
+            </div>
+
+            <div class="calc-included-list" id="calc-deliverables-list">
+              <!-- Dynamically populated via JS with clean SVGs -->
+            </div>
+
+            <button type="button" class="btn btn-primary btn-lg" id="calc-apply-btn" style="width: 100%; margin-top: auto;">
+              <span>Apply to Inquiry Form</span>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 6: SELECTED WORK VIGNETTES (HIGH CONTRAST, ZERO EMOJIS)
+         ====================================================================== -->
+    <section class="section-work" id="work">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Case Studies</span>
+          </div>
+          <h2 class="section-title">Selected production work.</h2>
+          <p class="section-subtitle">
+            Every build is engineered for high conversion rates, technical accessibility, and seamless client maintenance.
+          </p>
+        </div>
+
+        <div class="work-grid">
+          <!-- Work Card 1 -->
+          <div class="work-card">
+            <div class="work-mockup">
+              <div class="mockup-header-bar">
+                <div class="mockup-dots"><span></span><span></span><span></span></div>
+                <div class="mockup-url-pill">aura-treasury.io</div>
+              </div>
+              <div class="mockup-wireframe-body">
+                <div class="mock-box">
+                  <div class="mock-bar medium"></div>
+                  <div class="mock-bar short"></div>
+                </div>
+                <div class="mock-box">
+                  <div class="mock-bar short"></div>
+                  <div class="mock-bar medium"></div>
+                </div>
+              </div>
+            </div>
+            <div class="work-info">
+              <div class="work-meta-row">
+                <span class="work-stack-pill">Framer + CMS</span>
+                <span class="work-stat-badge">99 Performance</span>
+              </div>
+              <h3 class="work-title">Aura Financial — Corporate Treasury Platform</h3>
+              <p class="work-description">
+                Redesigned the marketing website and product documentation for a Series A fintech infrastructure platform. Boosted inbound demo conversions by 140%.
+              </p>
+            </div>
+          </div>
+
+          <!-- Work Card 2 -->
+          <div class="work-card">
+            <div class="work-mockup">
+              <div class="mockup-header-bar">
+                <div class="mockup-dots"><span></span><span></span><span></span></div>
+                <div class="mockup-url-pill">vectorlogix.com</div>
+              </div>
+              <div class="mockup-wireframe-body">
+                <div class="mock-box">
+                  <div class="mock-bar short"></div>
+                  <div class="mock-bar medium"></div>
+                </div>
+                <div class="mock-box">
+                  <div class="mock-bar medium"></div>
+                  <div class="mock-bar short"></div>
+                </div>
+              </div>
+            </div>
+            <div class="work-info">
+              <div class="work-meta-row">
+                <span class="work-stack-pill">Webflow Client-First</span>
+                <span class="work-stat-badge">Sub-600ms TTFB</span>
+              </div>
+              <h3 class="work-title">VectorLogix — Fleet Telematics Operating System</h3>
+              <p class="work-description">
+                Constructed a 24-page modular website with custom CMS architecture for enterprise freight dispatchers, supporting 4 localized European regions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 7: INQUIRY & CONTACT FORM
+         ====================================================================== -->
+    <section class="section-contact" id="contact">
+      <div class="container">
+        <div class="contact-layout">
+          <div class="contact-details">
+            <div>
+              <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                <span>Get In Touch</span>
+              </div>
+              <h2 class="section-title" style="font-size: 2.25rem;">Let's build your website.</h2>
+              <p class="section-subtitle" style="margin-top: 10px;">
+                Tell us about your product, timeline, and current challenges. We reply with a detailed scope assessment and timeline within 24 business hours.
+              </p>
+            </div>
+
+            <div class="contact-point">
+              <div class="contact-point-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div class="contact-point-text">
+                <h4>Direct Email</h4>
+                <p>projects@atelierform.studio</p>
+              </div>
+            </div>
+
+            <div class="contact-point">
+              <div class="contact-point-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div class="contact-point-text">
+                <h4>Response Commitment</h4>
+                <p>Within 24 business hours. No automated sales pitches.</p>
+              </div>
+            </div>
+
+            <div class="contact-point">
+              <div class="contact-point-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+              </div>
+              <div class="contact-point-text">
+                <h4>Fixed Pricing & Timeline</h4>
+                <p>Milestone-based agreements with zero surprise hourly billing.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Intake Form -->
+          <div class="contact-form-wrap">
+            <form id="project-inquiry-form">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="form-name" class="form-label">Your Name</label>
+                  <input type="text" id="form-name" class="form-input" placeholder="Sarah Jenkins" required>
+                </div>
+                <div class="form-field">
+                  <label for="form-email" class="form-label">Work Email</label>
+                  <input type="email" id="form-email" class="form-input" placeholder="sarah@company.com" required>
+                </div>
+                <div class="form-field">
+                  <label for="form-company" class="form-label">Company / URL</label>
+                  <input type="text" id="form-company" class="form-input" placeholder="company.com">
+                </div>
+                <div class="form-field">
+                  <label for="form-platform" class="form-label">Target Platform</label>
+                  <select id="form-platform" class="form-select">
+                    <option value="framer">Framer</option>
+                    <option value="webflow">Webflow</option>
+                    <option value="wordpress">WordPress</option>
+                    <option value="shopify">Shopify</option>
+                    <option value="recommendation">Open to studio recommendation</option>
+                  </select>
+                </div>
+                <div class="form-field full">
+                  <label for="form-message" class="form-label">Project Overview & Objectives</label>
+                  <textarea id="form-message" class="form-textarea" placeholder="Tell us about your product, what you need built, and your expected launch target..." required></textarea>
+                </div>
+                <div class="form-field full">
+                  <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                    <span>Submit Project Brief</span>
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="brand-wrap">
+            <div class="brand-mark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="3" y="3" width="8" height="8" rx="1" stroke-width="2"/>
+                <rect x="13" y="3" width="8" height="8" rx="1" stroke-width="2"/>
+                <rect x="3" y="13" width="8" height="8" rx="1" stroke-width="2"/>
+                <path d="M13 17h8m-4-4v8" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="brand-name">Atelier Form</span>
+          </div>
+          <p>
+            Independent digital product & web engineering studio. We build production-ready web experiences that scale with your business.
+          </p>
+        </div>
+
+        <div class="footer-links-group">
+          <div class="footer-col">
+            <h5>Navigation</h5>
+            <ul>
+              <li><a href="#scope">Scope of Work</a></li>
+              <li><a href="#deliverables">Deliverables</a></li>
+              <li><a href="#audience">Who It's For</a></li>
+              <li><a href="#process">6-Step Process</a></li>
+              <li><a href="#calculator">Scope Planner</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Platforms</h5>
+            <ul>
+              <li><a href="#scope">Framer Production</a></li>
+              <li><a href="#scope">Webflow Systems</a></li>
+              <li><a href="#scope">Custom WordPress</a></li>
+              <li><a href="#scope">Shopify Liquid 2.0</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Direct</h5>
+            <ul>
+              <li><a href="mailto:projects@atelierform.studio">projects@atelierform.studio</a></li>
+              <li><a href="#contact">Book Intake Call</a></li>
+              <li><a href="#">Figma Community</a></li>
+              <li><a href="#">GitHub Repository</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 Atelier Form Studio. All rights reserved. Built with semantic HTML & modern CSS.
+        </div>
+        <div>
+          Handcrafted by Senior Web Engineers. Zero automated templates.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
