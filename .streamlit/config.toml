@@ -3,6 +3,7 @@ headless = true
 enableCORS = false
 enableXsrfProtection = false
 address = "0.0.0.0"
+enableStaticServing = true
 
 [theme]
 base = "dark"

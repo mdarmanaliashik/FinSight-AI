@@ -391,9 +391,10 @@ st.markdown("<br>", unsafe_allow_html=True)
 col_viz, col_copilot = st.columns([1.1, 0.9])
 
 with col_viz:
-    tabs = st.tabs(["📈 Cash Runway Trajectory", "🔮 Quantile Sales Forecast", "📊 Daily Inflows & Outflows"])
+    tabs = st.tabs(["📈 Cash Runway Trajectory", "🔮 Quantile Sales Forecast", "📊 Daily Inflows & Outflows", "📑 30-Day Forecasting Ledger & Proposal"])
 
     # Tab 1: Cash Trajectory Plotly Chart
+
     with tabs[0]:
         fig_cash = go.Figure()
 
@@ -522,6 +523,46 @@ with col_viz:
             template="plotly_dark"
         )
         st.plotly_chart(fig_flow, use_container_width=True)
+
+    # Tab 4: 30-Day Empirical Forecasting Ledger & Topic E Technical Dossier
+    with tabs[3]:
+        st.markdown("#### 🏆 Phase 3 Champion Model: Adaptive Trend-Calibrated CatBoost")
+        st.caption("30-Day Forward Holdout Horizon ($H=30$). Holdout WAPE: **59.80%** · Directional Accuracy: **71.1%** ($p < 0.001$).")
+        
+        m_c1, m_c2, m_c3 = st.columns(3)
+        m_c1.metric("Champion WAPE", "59.80%", delta="-25.81% vs Naive")
+        m_c2.metric("30-Day Forecast Sum", "R$ 8,052.60", delta="Actual: R$ 8,767.14")
+        m_c3.metric("Directional Accuracy", "71.1%", delta="+21.1% over random")
+
+        if df_preds is not None:
+            view_cols = [c for c in ['target_date', 'actual_sales', 'pred_adaptive', 'pred_stacking', 'pred_lightgbm', 'pred_naive'] if c in df_preds.columns]
+            df_30_table = df_preds[view_cols].iloc[:30].copy()
+            df_30_table['target_date'] = pd.to_datetime(df_30_table['target_date']).dt.strftime('%Y-%m-%d')
+            st.dataframe(
+                df_30_table.rename(columns={
+                    'target_date': 'Date',
+                    'actual_sales': 'Actual (R$)',
+                    'pred_adaptive': 'Adaptive CatBoost (Champion)',
+                    'pred_stacking': 'Stacking Ensemble',
+                    'pred_lightgbm': 'LightGBM',
+                    'pred_naive': 'Naive (Lag-7)'
+                }),
+                use_container_width=True,
+                height=300
+            )
+
+        st.markdown("""
+        <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 10px; padding: 14px 18px; margin-top: 10px;">
+            <div style="font-weight: 700; color: #fff; margin-bottom: 4px;">🌐 Full Competition Proposal & Interactive Chart.js Portal</div>
+            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">
+                Access the multi-tab competition submission dossier, interactive stress lab, and 6-language tool-grounded financial auditor.
+            </div>
+            <a href="/app/static/index.html" target="_blank" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; display: inline-block;">
+                🚀 Open Standalone 30-Day Portal (New Tab)
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 
 # -----------------------------------------------------------------------------
