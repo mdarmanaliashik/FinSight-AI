@@ -99,22 +99,58 @@ function switchDecisionModule(mod) {
     if (btn) btn.classList.toggle('active', m === mod);
   });
 
+  const secForecast = document.getElementById('sec-forecast');
+  const secRisk = document.getElementById('sec-risk');
+  const secSimulator = document.getElementById('sec-simulator');
+  const secTarget = document.getElementById('sec-target-planner');
+  const secLedger = document.getElementById('sec-ledger');
+
   if (mod === 'overview') {
+    // Show all modules for full comprehensive dashboard overview
+    if (secForecast) secForecast.style.display = 'block';
+    if (secRisk) secRisk.style.display = 'block';
+    if (secSimulator) secSimulator.style.display = 'block';
+    if (secTarget) secTarget.style.display = 'block';
+    if (secLedger) secLedger.style.display = 'block';
+    if (businessForecastChart) businessForecastChart.resize();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (mod === 'forecasts') {
-    const el = document.querySelector('.matrix-title');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Focus specifically on Sales Trend & Forecast Studio
+    if (secForecast) secForecast.style.display = 'block';
+    if (secRisk) secRisk.style.display = 'none';
+    if (secSimulator) secSimulator.style.display = 'none';
+    if (secTarget) secTarget.style.display = 'none';
+    if (secLedger) secLedger.style.display = 'none';
+    if (businessForecastChart) businessForecastChart.resize();
+    if (secForecast) secForecast.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else if (mod === 'cashflow') {
-    const el = document.getElementById('risk-status-badge');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Focus on Risk Center & Day-by-Day Solvency Ledger
+    if (secForecast) secForecast.style.display = 'none';
+    if (secRisk) secRisk.style.display = 'block';
+    if (secSimulator) secSimulator.style.display = 'none';
+    if (secTarget) secTarget.style.display = 'none';
+    if (secLedger) secLedger.style.display = 'block';
+    if (secRisk) secRisk.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else if (mod === 'scenarios') {
-    const el = document.getElementById('control-sales-growth');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Focus on Scenario Simulator & Target Planner
+    if (secForecast) secForecast.style.display = 'none';
+    if (secRisk) secRisk.style.display = 'none';
+    if (secSimulator) secSimulator.style.display = 'block';
+    if (secTarget) secTarget.style.display = 'block';
+    if (secLedger) secLedger.style.display = 'none';
+    if (secSimulator) secSimulator.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else if (mod === 'copilot') {
-    const el = document.getElementById('copilot-user-input');
-    if (el) {
-      el.focus();
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Show overview and focus AI Copilot chatbot
+    if (secForecast) secForecast.style.display = 'block';
+    if (secRisk) secRisk.style.display = 'block';
+    if (secSimulator) secSimulator.style.display = 'block';
+    if (secTarget) secTarget.style.display = 'block';
+    if (secLedger) secLedger.style.display = 'block';
+    if (businessForecastChart) businessForecastChart.resize();
+    const input = document.getElementById('copilot-user-input');
+    if (input) {
+      input.focus();
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 }

@@ -8,7 +8,107 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.2">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Critical UI styles embedded for instant loading and file:/// compatibility */
+    .workflow-step-bar {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      background: rgba(15, 23, 42, 0.75) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 14px !important;
+      padding: 12px 20px !important;
+      margin-bottom: 24px !important;
+    }
+    .step-item {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      flex: 1 !important;
+    }
+    .step-num {
+      width: 28px !important;
+      height: 28px !important;
+      border-radius: 8px !important;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.35)) !important;
+      border: 1px solid rgba(56, 189, 248, 0.5) !important;
+      color: #38bdf8 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 13px !important;
+      font-weight: 800 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25) !important;
+      flex-shrink: 0 !important;
+    }
+    .step-content {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .step-title {
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      color: #f8fafc !important;
+      letter-spacing: 0.01em !important;
+    }
+    .step-sub {
+      font-size: 11px !important;
+      color: #94a3b8 !important;
+      font-weight: 500 !important;
+      white-space: nowrap !important;
+    }
+    .step-arrow {
+      color: rgba(148, 163, 184, 0.4) !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      user-select: none !important;
+      padding: 0 4px !important;
+    }
+    .decision-intel-tabs {
+      display: inline-flex !important;
+      background: rgba(15, 23, 42, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 12px !important;
+      padding: 5px !important;
+      gap: 6px !important;
+      margin-bottom: 22px !important;
+      flex-wrap: wrap !important;
+    }
+    button.d-tab, .d-tab {
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      border-radius: 8px !important;
+      color: #94a3b8 !important;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      padding: 8px 18px !important;
+      cursor: pointer !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    button.d-tab:hover, .d-tab:hover {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+    button.d-tab.active, .d-tab.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(14, 165, 233, 0.18)) !important;
+      border: 1px solid rgba(56, 189, 248, 0.5) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25) !important;
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -130,15 +230,25 @@
 
         <!-- DECISION INTELLIGENCE MODULE TABS -->
         <div class="decision-intel-tabs">
-          <button class="d-tab active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">Overview</button>
-          <button class="d-tab" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">Forecasts</button>
-          <button class="d-tab" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">Cash flow</button>
-          <button class="d-tab" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">Scenarios</button>
-          <button class="d-tab" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">AI advisor</button>
+          <button class="d-tab active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
+            <span>📊</span> Overview
+          </button>
+          <button class="d-tab" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">
+            <span>📈</span> Forecasts
+          </button>
+          <button class="d-tab" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">
+            <span>🏦</span> Cash flow
+          </button>
+          <button class="d-tab" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">
+            <span>⚡</span> Scenarios
+          </button>
+          <button class="d-tab" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">
+            <span>🤖</span> AI advisor
+          </button>
         </div>
 
         <!-- 2. PREDICT: SALES TREND & FORECAST STUDIO -->
-        <div class="studio-card">
+        <div class="studio-card" id="sec-forecast">
           <div class="studio-toolbar">
             <div>
               <h2 class="matrix-title">Sales Trend & Probabilistic Forecast</h2>
@@ -184,7 +294,7 @@
         </div>
 
         <!-- 3. DETECT RISK: AUTONOMOUS RISK CENTER -->
-        <div class="control-matrix-card">
+        <div class="control-matrix-card" id="sec-risk">
           <div class="matrix-header">
             <div class="matrix-title-group">
               <span style="font-size: 20px;">🛡️</span>
@@ -235,7 +345,7 @@
         </div>
 
         <!-- SCENARIO SIMULATOR: WHAT-IF STUDIO -->
-        <div class="control-matrix-card">
+        <div class="control-matrix-card" id="sec-simulator">
           <div class="matrix-header">
             <div class="matrix-title-group">
               <span style="font-size: 20px;">⚡</span>
@@ -318,7 +428,7 @@
         </div>
 
         <!-- 4. RECOMMEND ACTIONS: BUSINESS TARGET PLANNER & ACTIONABLE STRATEGY -->
-        <div class="target-planner-box" id="target-planner-card">
+        <div class="target-planner-box" id="sec-target-planner">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
             <div>
               <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
@@ -395,7 +505,7 @@
         </div>
 
         <!-- 30-DAY DAY-BY-DAY CASHFLOW & SOLVENCY LEDGER -->
-        <div class="ledger-container">
+        <div class="ledger-container" id="sec-ledger">
           <div class="ledger-header">
             <div>
               <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
@@ -546,6 +656,6 @@
     </footer>
   </div>
 
-  <script src="app.js?v=2.2"></script>
+  <script src="app.js"></script>
 </body>
 </html>
