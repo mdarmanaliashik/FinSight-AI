@@ -9,807 +9,135 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Critical UI styles embedded for instant loading and file:/// compatibility */
+    <style>
+    /* Critical White-Theme UI Styles */
+    :root {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-glass: rgba(255, 255, 255, 0.98);
+      --border-subtle: #e2e8f0;
+      --border-highlight: rgba(37, 99, 235, 0.4);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-cyan: #0284c7;
+      --accent-blue: #2563eb;
+      --accent-emerald: #16a34a;
+      --accent-amber: #d97706;
+      --accent-purple: #7c3aed;
+      --accent-rose: #dc2626;
+    }
+    body {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
+    }
     .workflow-step-bar {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 12px !important;
-      background: rgba(15, 23, 42, 0.75) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
       border-radius: 14px !important;
       padding: 12px 20px !important;
       margin-bottom: 24px !important;
-    }
-    .step-item {
-      display: flex !important;
-      align-items: center !important;
-      gap: 12px !important;
-      flex: 1 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
     }
     .step-num {
-      width: 28px !important;
-      height: 28px !important;
-      border-radius: 8px !important;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.35)) !important;
-      border: 1px solid rgba(56, 189, 248, 0.5) !important;
-      color: #38bdf8 !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      font-size: 13px !important;
-      font-weight: 800 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25) !important;
-      flex-shrink: 0 !important;
+      background: #eff6ff !important;
+      border: 1px solid #bfdbfe !important;
+      color: #2563eb !important;
     }
-    .step-content {
-      display: flex !important;
-      flex-direction: column !important;
+    .step-item.active .step-num {
+      background: #2563eb !important;
+      color: #ffffff !important;
     }
     .step-title {
-      font-size: 13px !important;
-      font-weight: 700 !important;
-      color: #f8fafc !important;
-      letter-spacing: 0.01em !important;
+      color: #0f172a !important;
     }
     .step-sub {
-      font-size: 11px !important;
-      color: #94a3b8 !important;
-      font-weight: 500 !important;
-      white-space: nowrap !important;
-    }
-    .step-arrow {
-      color: rgba(148, 163, 184, 0.4) !important;
-      font-size: 14px !important;
-      font-weight: 700 !important;
-      user-select: none !important;
-      padding: 0 4px !important;
+      color: #64748b !important;
     }
     .decision-intel-tabs {
-      display: inline-flex !important;
-      background: rgba(15, 23, 42, 0.85) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      background: #f1f5f9 !important;
+      border: 1px solid #e2e8f0 !important;
       border-radius: 12px !important;
-      padding: 5px !important;
-      gap: 6px !important;
-      margin-bottom: 22px !important;
-      flex-wrap: wrap !important;
     }
     button.d-tab, .d-tab {
-      background: transparent !important;
-      border: 1px solid transparent !important;
-      border-radius: 8px !important;
-      color: #94a3b8 !important;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-      font-size: 13px !important;
-      font-weight: 700 !important;
-      padding: 8px 18px !important;
-      cursor: pointer !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 6px !important;
-      outline: none !important;
-      box-shadow: none !important;
+      color: #64748b !important;
     }
     button.d-tab:hover, .d-tab:hover {
-      color: #ffffff !important;
-      background: rgba(255, 255, 255, 0.08) !important;
+      color: #0f172a !important;
+      background: #e2e8f0 !important;
     }
     button.d-tab.active, .d-tab.active {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(14, 165, 233, 0.18)) !important;
-      border: 1px solid rgba(56, 189, 248, 0.5) !important;
-      color: #ffffff !important;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25) !important;
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
     }
-
-    /* Risk Center Early Warning Radar Styles */
-    .risk-live-indicator {
-      display: flex !important;
-      align-items: center !important;
-      gap: 8px !important;
-      background: rgba(16, 185, 129, 0.12) !important;
-      border: 1px solid rgba(16, 185, 129, 0.35) !important;
-      padding: 6px 14px !important;
-      border-radius: 9999px !important;
-      font-size: 11.5px !important;
-      font-weight: 700 !important;
-      color: #10b981 !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      letter-spacing: 0.04em !important;
+    .hero-summary-card, .control-matrix-card, .risk-card, .target-planner-box {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 18px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 8px 24px -4px rgba(0, 0, 0, 0.04) !important;
     }
-    .live-dot {
-      width: 7px !important;
-      height: 7px !important;
-      border-radius: 50% !important;
-      background: #10b981 !important;
-      box-shadow: 0 0 8px #10b981 !important;
-      display: inline-block !important;
+    .h-card-val, .matrix-title, .risk-val {
+      color: #0f172a !important;
     }
-    .risk-center-grid {
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr) !important;
-      gap: 16px !important;
-      margin-top: 18px !important;
-    }
-    @media (max-width: 1024px) {
-      .risk-center-grid { grid-template-columns: repeat(2, 1fr) !important; }
-    }
-    @media (max-width: 640px) {
-      .risk-center-grid { grid-template-columns: 1fr !important; }
-    }
-    .risk-card {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(8, 12, 24, 0.95)) !important;
-      backdrop-filter: blur(20px) !important;
-      -webkit-backdrop-filter: blur(20px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
-      border-radius: 16px !important;
-      padding: 20px 22px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: space-between !important;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      position: relative !important;
-      overflow: hidden !important;
-    }
-    .risk-card:hover {
-      transform: translateY(-3px) !important;
-      border-color: rgba(56, 189, 248, 0.4) !important;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.16) !important;
-    }
-    .risk-header-row {
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: center !important;
-      margin-bottom: 12px !important;
-    }
-    .risk-title {
-      font-size: 11.5px !important;
-      font-weight: 700 !important;
-      color: #94a3b8 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.06em !important;
-    }
-    .risk-badge {
-      font-size: 10.5px !important;
-      font-weight: 800 !important;
-      padding: 4px 10px !important;
-      border-radius: 6px !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      letter-spacing: 0.04em !important;
-    }
-    .risk-badge-green {
-      background: rgba(16, 185, 129, 0.15) !important;
-      color: #10b981 !important;
-      border: 1px solid rgba(16, 185, 129, 0.4) !important;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.15) !important;
-    }
-    .risk-badge-amber {
-      background: rgba(245, 158, 11, 0.15) !important;
-      color: #f59e0b !important;
-      border: 1px solid rgba(245, 158, 11, 0.4) !important;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.15) !important;
-    }
-    .risk-badge-red {
-      background: rgba(244, 63, 94, 0.15) !important;
-      color: #f43f5e !important;
-      border: 1px solid rgba(244, 63, 94, 0.4) !important;
-      box-shadow: 0 0 10px rgba(244, 63, 94, 0.15) !important;
-    }
-    .risk-val {
-      font-size: 24px !important;
-      font-weight: 800 !important;
-      color: #ffffff !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      margin-bottom: 6px !important;
-      letter-spacing: -0.02em !important;
-    }
-    .risk-sub {
-      font-size: 12px !important;
-      color: #94a3b8 !important;
-      line-height: 1.4 !important;
-      margin-bottom: 12px !important;
-    }
-    .risk-progress-track {
-      width: 100% !important;
-      height: 4px !important;
-      background: rgba(255, 255, 255, 0.08) !important;
-      border-radius: 9999px !important;
-      overflow: hidden !important;
-      margin-top: auto !important;
-    }
-    .risk-progress-bar {
-      height: 100% !important;
-      border-radius: 9999px !important;
-      transition: width 0.4s ease !important;
-    }
-    .bar-emerald { background: linear-gradient(90deg, #10b981, #34d399) !important; box-shadow: 0 0 8px #10b981 !important; }
-    .bar-cyan { background: linear-gradient(90deg, #0ea5e9, #38bdf8) !important; box-shadow: 0 0 8px #0ea5e9 !important; }
-    .bar-amber { background: linear-gradient(90deg, #d97706, #f59e0b) !important; box-shadow: 0 0 8px #f59e0b !important; }
-    .bar-purple { background: linear-gradient(90deg, #7c3aed, #a855f7) !important; box-shadow: 0 0 8px #a855f7 !important; }
-
-    /* Target Planner & Actionable Strategy Styles */
-    .target-planner-box {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(8, 12, 24, 0.95)) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.09) !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
-      border-radius: 20px !important;
-      padding: 24px 28px !important;
-      margin-top: 22px !important;
-      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45) !important;
-    }
-    .target-input-row {
-      display: grid !important;
-      grid-template-columns: 1.4fr 1fr 1fr !important;
-      align-items: center !important;
-      gap: 20px !important;
-      margin-top: 18px !important;
-      margin-bottom: 22px !important;
-      background: rgba(0, 0, 0, 0.35) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      border-radius: 16px !important;
-      padding: 18px 24px !important;
-    }
-    @media (max-width: 860px) {
-      .target-input-row { grid-template-columns: 1fr !important; gap: 16px !important; }
-    }
-    .target-input-col {
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .target-input-label {
-      font-size: 11.5px !important;
-      font-weight: 700 !important;
-      color: #94a3b8 !important;
-      display: block !important;
-      margin-bottom: 6px !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.04em !important;
-    }
-    .target-input-field {
-      background: rgba(15, 23, 42, 0.95) !important;
-      border: 1px solid rgba(255, 255, 255, 0.16) !important;
-      border-radius: 11px !important;
-      padding: 10px 16px !important;
-      color: #ffffff !important;
-      font-size: 18px !important;
-      font-weight: 700 !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      width: 100% !important;
-      max-width: 260px !important;
-      outline: none !important;
-      transition: all 0.2s ease !important;
-    }
-    .target-input-field:focus {
-      border-color: #38bdf8 !important;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3) !important;
-    }
-    .target-gap-value {
-      font-size: 22px !important;
-      font-weight: 800 !important;
-      color: #10b981 !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      letter-spacing: -0.02em !important;
-    }
-    .gap-pill {
-      font-size: 14px !important;
-      font-weight: 800 !important;
-      padding: 7px 18px !important;
-      border-radius: 10px !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      letter-spacing: 0.02em !important;
-      display: inline-block !important;
-      width: fit-content !important;
-    }
-    .gap-pill-pos {
-      background: rgba(16, 185, 129, 0.15) !important;
-      color: #10b981 !important;
-      border: 1px solid rgba(16, 185, 129, 0.4) !important;
-      box-shadow: 0 0 14px rgba(16, 185, 129, 0.2) !important;
-    }
-    .gap-pill-neg {
-      background: rgba(244, 63, 94, 0.15) !important;
-      color: #f43f5e !important;
-      border: 1px solid rgba(244, 63, 94, 0.4) !important;
-      box-shadow: 0 0 14px rgba(244, 63, 94, 0.2) !important;
-    }
-    .strategy-list {
-      display: grid !important;
-      grid-template-columns: repeat(2, 1fr) !important;
-      gap: 16px !important;
-      margin-top: 18px !important;
-    }
-    @media (max-width: 768px) {
-      .strategy-list { grid-template-columns: 1fr !important; }
-    }
-    .strategy-item {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(11, 17, 32, 0.9)) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      border-radius: 16px !important;
-      padding: 18px 20px !important;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      position: relative !important;
-    }
-    .strategy-item:hover {
-      transform: translateY(-3px) !important;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(56, 189, 248, 0.15) !important;
-      border-color: rgba(56, 189, 248, 0.35) !important;
-    }
-    .strategy-item-cyan { border-left: 4px solid #38bdf8 !important; }
-    .strategy-item-amber { border-left: 4px solid #f59e0b !important; }
-    .strategy-item-emerald { border-left: 4px solid #10b981 !important; }
-    .strategy-item-purple { border-left: 4px solid #a855f7 !important; }
-    .strategy-badge-tag {
-      font-size: 9.5px !important;
-      font-weight: 800 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.08em !important;
-      padding: 3px 8px !important;
-      border-radius: 5px !important;
-      background: rgba(255, 255, 255, 0.06) !important;
-      color: #94a3b8 !important;
-      display: inline-block !important;
-      margin-bottom: 8px !important;
-    }
-    .strategy-item-title {
-      font-size: 14px !important;
-      font-weight: 800 !important;
-      color: #ffffff !important;
-      margin-bottom: 8px !important;
-      letter-spacing: -0.01em !important;
-    }
-    .strategy-item-desc {
-      font-size: 12.5px !important;
-      color: #cbd5e1 !important;
-      line-height: 1.6 !important;
-    }
-
-    /* ==========================================================================
-       AI ADVISOR & COPILOT STUDIO - APPLE-GRADE POLISH
-       ========================================================================== */
     .copilot-panel {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.94), rgba(8, 12, 24, 0.98)) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-top: 1px solid rgba(56, 189, 248, 0.35) !important;
-      border-radius: 20px !important;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 650px !important;
-      position: relative !important;
-      overflow: hidden !important;
-      transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
     }
-    .panel-pulse-highlight {
-      border-color: #38bdf8 !important;
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.4), 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+    .copilot-title-text {
+      color: #0f172a !important;
     }
     .copilot-telemetry-strip {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      padding: 8px 18px !important;
-      background: rgba(0, 0, 0, 0.35) !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-      font-size: 11px !important;
-      color: #94a3b8 !important;
-    }
-    .telemetry-item {
-      display: flex !important;
-      align-items: center !important;
-      gap: 6px !important;
-      font-weight: 600 !important;
-    }
-    .t-dot {
-      width: 6px !important;
-      height: 6px !important;
-      border-radius: 50% !important;
-      background: #10b981 !important;
-      box-shadow: 0 0 6px #10b981 !important;
-    }
-    .telemetry-values {
-      display: flex !important;
-      align-items: center !important;
-      gap: 8px !important;
-      font-family: 'JetBrains Mono', monospace !important;
-    }
-    .telemetry-values strong {
-      color: #f8fafc !important;
-    }
-    .icon-action-btn {
-      background: rgba(255, 255, 255, 0.06) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      color: #94a3b8 !important;
-      border-radius: 8px !important;
-      padding: 4px 8px !important;
-      font-size: 12px !important;
-      cursor: pointer !important;
-      transition: all 0.2s ease !important;
-    }
-    .icon-action-btn:hover {
-      background: rgba(255, 255, 255, 0.12) !important;
-      color: #fff !important;
-    }
-    .quick-chips-grid {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 6px !important;
-      margin-top: 6px !important;
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #475569 !important;
     }
     .quick-chip {
-      background: rgba(15, 23, 42, 0.7) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      color: #cbd5e1 !important;
-      font-size: 11.5px !important;
-      font-weight: 600 !important;
-      text-align: left !important;
-      padding: 8px 12px !important;
-      border-radius: 9px !important;
-      cursor: pointer !important;
-      transition: all 0.2s ease !important;
-      display: flex !important;
-      align-items: center !important;
-      gap: 8px !important;
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #334155 !important;
     }
     .quick-chip:hover {
-      transform: translateX(3px) !important;
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    .chat-entry.bot-entry .entry-bubble {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    .chat-entry.user-entry .entry-bubble {
+      background: #2563eb !important;
       color: #ffffff !important;
-      border-color: rgba(56, 189, 248, 0.4) !important;
-      background: rgba(56, 189, 248, 0.12) !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
-    }
-    .chip-amber { border-left: 3px solid #f59e0b !important; }
-    .chip-cyan { border-left: 3px solid #38bdf8 !important; }
-    .chip-emerald { border-left: 3px solid #10b981 !important; }
-    .chip-purple { border-left: 3px solid #a855f7 !important; }
-
-    .input-inner-wrap {
-      flex: 1 !important;
-      display: flex !important;
-      align-items: center !important;
-      background: rgba(14, 21, 39, 0.95) !important;
-      border: 1px solid rgba(255, 255, 255, 0.14) !important;
-      border-radius: 12px !important;
-      padding: 4px 14px !important;
-      transition: all 0.2s ease !important;
-    }
-    .input-inner-wrap:focus-within {
-      border-color: #38bdf8 !important;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25) !important;
-    }
-    .chat-input-icon {
-      font-size: 14px !important;
-      margin-right: 8px !important;
-      opacity: 0.7 !important;
-    }
-    .input-inner-wrap input {
-      flex: 1 !important;
-      background: transparent !important;
-      border: none !important;
-      color: #ffffff !important;
-      font-family: 'Plus Jakarta Sans', sans-serif !important;
-      font-size: 13px !important;
-      padding: 8px 0 !important;
-      outline: none !important;
-    }
-    .copilot-send-btn {
-      background: linear-gradient(135deg, #0284c7, #0ea5e9) !important;
-      color: #ffffff !important;
-      border: 1px solid rgba(56, 189, 248, 0.5) !important;
-      border-radius: 12px !important;
-      padding: 0 16px !important;
-      font-weight: 700 !important;
-      font-size: 13px !important;
-      cursor: pointer !important;
-      display: flex !important;
-      align-items: center !important;
-      gap: 6px !important;
-      transition: all 0.2s ease !important;
-      box-shadow: 0 0 16px rgba(14, 165, 233, 0.3) !important;
-    }
-    .copilot-send-btn:hover {
-      transform: translateY(-1px) !important;
-      box-shadow: 0 4px 20px rgba(14, 165, 233, 0.45) !important;
-      background: linear-gradient(135deg, #0369a1, #0284c7) !important;
-    }
-
-    /* Structured AI Metric Cards in Chat Bubbles */
-    .ai-metric-grid {
-      display: grid !important;
-      grid-template-columns: repeat(2, 1fr) !important;
-      gap: 8px !important;
-      margin: 12px 0 10px 0 !important;
     }
     .ai-metric-cell {
-      background: rgba(0, 0, 0, 0.35) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      border-radius: 9px !important;
-      padding: 8px 12px !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
     }
     .ai-metric-lbl {
-      font-size: 10px !important;
-      color: #94a3b8 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.04em !important;
-      font-weight: 700 !important;
-      margin-bottom: 2px !important;
+      color: #64748b !important;
     }
     .ai-metric-val {
-      font-size: 14.5px !important;
-      font-weight: 800 !important;
-      font-family: 'JetBrains Mono', monospace !important;
+      color: #0f172a !important;
+    }
+    .input-inner-wrap {
+      background: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    .input-inner-wrap input {
+      color: #0f172a !important;
+    }
+    .copilot-send-btn {
+      background: #2563eb !important;
       color: #ffffff !important;
+      border: none !important;
     }
-    .ai-actions-row {
-      display: flex !important;
-      gap: 8px !important;
-      margin-top: 12px !important;
-      flex-wrap: wrap !important;
-    }
-    .ai-action-btn {
-      background: rgba(56, 189, 248, 0.15) !important;
-      border: 1px solid rgba(56, 189, 248, 0.35) !important;
-      color: #38bdf8 !important;
-      padding: 6px 12px !important;
-      border-radius: 8px !important;
-      font-size: 11.5px !important;
-      font-weight: 700 !important;
-      cursor: pointer !important;
-      transition: all 0.2s ease !important;
-    }
-    .ai-action-btn:hover {
-      background: rgba(56, 189, 248, 0.25) !important;
-      border-color: #38bdf8 !important;
-      color: #ffffff !important;
-      transform: translateY(-1px) !important;
-    }
-    .ai-copy-btn {
-      background: rgba(255, 255, 255, 0.06) !important;
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-      color: #cbd5e1 !important;
-      padding: 6px 10px !important;
-      border-radius: 8px !important;
-      font-size: 11.5px !important;
-      font-weight: 600 !important;
-      cursor: pointer !important;
-      transition: all 0.2s ease !important;
-    }
-    .ai-copy-btn:hover {
-      background: rgba(255, 255, 255, 0.12) !important;
-      color: #ffffff !important;
-    }
-
-    /* Typing Animation */
-    .typing-bubble {
-      display: flex !important;
-      align-items: center !important;
-      gap: 5px !important;
-      padding: 12px 18px !important;
-      background: rgba(15, 23, 42, 0.8) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      border-radius: 14px !important;
-      width: fit-content !important;
-    }
-    .typing-dot {
-      width: 7px !important;
-      height: 7px !important;
-      border-radius: 50% !important;
-      background: #38bdf8 !important;
-      display: inline-block !important;
-      animation: typingBounce 1.2s infinite ease-in-out !important;
-    }
-    .typing-dot:nth-child(2) { animation-delay: 0.2s !important; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s !important; }
-    @keyframes typingBounce {
-      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-      40% { transform: translateY(-5px); opacity: 1; }
-    }
-
-    /* AI Advisor Full Studio Dashboard Styles */
-    .advisor-ai-avatar {
-      width: 44px !important;
-      height: 44px !important;
-      border-radius: 12px !important;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(99, 102, 241, 0.35)) !important;
-      border: 1px solid rgba(56, 189, 248, 0.5) !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      color: #38bdf8 !important;
-      font-size: 22px !important;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25) !important;
-    }
-    .advisor-telemetry-row {
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr) !important;
-      gap: 14px !important;
-      margin-top: 18px !important;
-      background: rgba(0, 0, 0, 0.3) !important;
-      border: 1px solid rgba(255, 255, 255, 0.06) !important;
-      border-radius: 14px !important;
-      padding: 14px 18px !important;
-    }
-    @media (max-width: 900px) {
-      .advisor-telemetry-row { grid-template-columns: repeat(2, 1fr) !important; }
-    }
-    .advisor-tel-tile {
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .advisor-tel-label {
-      font-size: 11px !important;
-      font-weight: 700 !important;
-      color: #94a3b8 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.04em !important;
-      margin-bottom: 3px !important;
-    }
-    .advisor-tel-val {
-      font-size: 18px !important;
-      font-weight: 800 !important;
-      color: #ffffff !important;
-      font-family: 'JetBrains Mono', monospace !important;
-    }
-    .advisor-tel-sub {
-      font-size: 11px !important;
-      color: var(--text-muted) !important;
-      margin-top: 2px !important;
-    }
-
-    .advisor-launchpad-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      gap: 16px !important;
-    }
-    @media (max-width: 1024px) {
-      .advisor-launchpad-grid { grid-template-columns: repeat(2, 1fr) !important; }
-    }
-    @media (max-width: 640px) {
-      .advisor-launchpad-grid { grid-template-columns: 1fr !important; }
-    }
-    .advisor-launch-card {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(11, 17, 32, 0.94)) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      border-radius: 16px !important;
-      padding: 18px 20px !important;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
-      cursor: pointer !important;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: space-between !important;
-      position: relative !important;
-    }
-    .advisor-launch-card:hover {
-      transform: translateY(-4px) !important;
-      border-color: rgba(56, 189, 248, 0.45) !important;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.18) !important;
-    }
-    .card-glow-amber { border-top: 2px solid #f59e0b !important; }
-    .card-glow-cyan { border-top: 2px solid #38bdf8 !important; }
-    .card-glow-emerald { border-top: 2px solid #10b981 !important; }
-    .card-glow-purple { border-top: 2px solid #a855f7 !important; }
-    .card-glow-blue { border-top: 2px solid #3b82f6 !important; }
-    .card-glow-pink { border-top: 2px solid #ec4899 !important; }
-
-    .launch-card-header {
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: center !important;
-      margin-bottom: 10px !important;
-    }
-    .launch-icon {
-      font-size: 22px !important;
-    }
-    .launch-tag {
-      font-size: 9.5px !important;
-      font-weight: 800 !important;
-      letter-spacing: 0.08em !important;
-      text-transform: uppercase !important;
-      padding: 3px 8px !important;
-      border-radius: 5px !important;
-      font-family: 'JetBrains Mono', monospace !important;
-    }
-    .tag-amber { background: rgba(245, 158, 11, 0.15) !important; color: #f59e0b !important; border: 1px solid rgba(245, 158, 11, 0.3) !important; }
-    .tag-cyan { background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; }
-    .tag-emerald { background: rgba(16, 185, 129, 0.15) !important; color: #10b981 !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; }
-    .tag-purple { background: rgba(168, 85, 247, 0.15) !important; color: #c084fc !important; border: 1px solid rgba(168, 85, 247, 0.3) !important; }
-    .tag-blue { background: rgba(59, 130, 246, 0.15) !important; color: #60a5fa !important; border: 1px solid rgba(59, 130, 246, 0.3) !important; }
-    .tag-pink { background: rgba(236, 72, 153, 0.15) !important; color: #f472b6 !important; border: 1px solid rgba(236, 72, 153, 0.3) !important; }
-
-    .launch-card-title {
-      font-size: 14.5px !important;
-      font-weight: 800 !important;
-      color: #ffffff !important;
-      margin-bottom: 6px !important;
-      letter-spacing: -0.01em !important;
-    }
-    .launch-card-desc {
-      font-size: 12px !important;
-      color: #94a3b8 !important;
-      line-height: 1.55 !important;
-      margin-bottom: 14px !important;
-    }
-    .launch-action-row {
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: center !important;
-      margin-top: auto !important;
-      padding-top: 10px !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
-    }
-    .launch-query-snippet {
-      font-size: 11px !important;
-      color: #cbd5e1 !important;
-      font-style: italic !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      max-width: 60% !important;
-    }
-    .launch-btn {
-      background: rgba(56, 189, 248, 0.12) !important;
-      border: 1px solid rgba(56, 189, 248, 0.35) !important;
-      color: #38bdf8 !important;
-      padding: 4px 10px !important;
-      border-radius: 7px !important;
-      font-size: 11px !important;
-      font-weight: 700 !important;
-      cursor: pointer !important;
-      transition: all 0.2s ease !important;
-    }
-    .advisor-launch-card:hover .launch-btn {
-      background: #0ea5e9 !important;
-      color: #04060c !important;
-      box-shadow: 0 0 10px rgba(14, 165, 233, 0.4) !important;
-    }
-
-    .architecture-steps-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      gap: 14px !important;
-      margin-top: 12px !important;
-    }
-    @media (max-width: 768px) {
-      .architecture-steps-grid { grid-template-columns: 1fr !important; }
-    }
-    .arch-step {
-      background: rgba(0, 0, 0, 0.3) !important;
-      border: 1px solid rgba(255, 255, 255, 0.06) !important;
-      border-radius: 12px !important;
-      padding: 14px 16px !important;
-    }
-    .arch-step-num {
-      font-size: 11px !important;
-      font-weight: 800 !important;
-      font-family: 'JetBrains Mono', monospace !important;
-      color: #38bdf8 !important;
-      margin-bottom: 4px !important;
-    }
-    .arch-step-title {
-      font-size: 13px !important;
-      font-weight: 700 !important;
-      color: #ffffff !important;
-      margin-bottom: 4px !important;
-    }
-    .arch-step-desc {
-      font-size: 11.5px !important;
-      color: #94a3b8 !important;
-      line-height: 1.5 !important;
+    .copilot-send-btn:hover {
+      background: #1d4ed8 !important;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -891,19 +219,19 @@
     <div style="display: flex; justify-content: flex-start; margin-bottom: 22px;">
       <div class="decision-intel-tabs">
         <button class="d-tab active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
-          <span>📊</span> Overview
+          Overview
         </button>
         <button class="d-tab" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">
-          <span>📈</span> Forecasts
+          Forecasts
         </button>
         <button class="d-tab" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">
-          <span>🏦</span> Cash flow
+          Cash flow
         </button>
         <button class="d-tab" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">
-          <span>⚡</span> Scenarios
+          Scenarios
         </button>
         <button class="d-tab" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">
-          <span>🤖</span> AI advisor
+          AI Advisor
         </button>
       </div>
     </div>
@@ -961,7 +289,7 @@
           <div class="control-matrix-card" style="margin-bottom: 20px;">
             <div class="matrix-header">
               <div class="matrix-title-group">
-                <span style="font-size: 20px;">📊</span>
+                
                 <div>
                   <h2 class="matrix-title">Business Decision Intelligence Cockpit</h2>
                   <p class="matrix-desc">Comprehensive SME status: current liquidity health, horizon forecast, and risk stance.</p>
@@ -971,27 +299,27 @@
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px;">
-              <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('forecasts')">
+              <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('forecasts')">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                  <span style="font-size: 13px; font-weight: 700; color: #fff;">📈 Sales Forecast</span>
+                  <span style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Sales Forecast</span>
                   <span style="font-size: 11px; color: var(--accent-cyan);">View Tab →</span>
                 </div>
                 <div style="font-size: 18px; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono);">30-Day Outlook</div>
                 <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">P10 floor ৳8,400 · P50 expected ৳14,000 · P90 surge ৳21,000</div>
               </div>
 
-              <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('cashflow')">
+              <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('cashflow')">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                  <span style="font-size: 13px; font-weight: 700; color: #fff;">🏦 Cash Flow & Risks</span>
+                  <span style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Cash Flow & Risks</span>
                   <span style="font-size: 11px; color: var(--accent-emerald);">Audit Tab →</span>
                 </div>
                 <div style="font-size: 18px; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono);">+৳79,200 Buffer</div>
                 <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Zero reserve breach · 10 days receivables delay</div>
               </div>
 
-              <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('scenarios')">
+              <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('scenarios')">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                  <span style="font-size: 13px; font-weight: 700; color: #fff;">⚡ Scenarios & Target</span>
+                  <span style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Scenarios & Target</span>
                   <span style="font-size: 11px; color: var(--accent-amber);">Simulate Tab →</span>
                 </div>
                 <div style="font-size: 18px; font-weight: 800; color: var(--accent-amber); font-family: var(--font-mono);">৳500,000 Target</div>
@@ -1061,7 +389,7 @@
         <div class="control-matrix-card" id="sec-risk">
           <div class="matrix-header">
             <div class="matrix-title-group">
-              <span style="font-size: 20px;">🛡️</span>
+              
               <div>
                 <h2 class="matrix-title">Autonomous Risk Center & Early Warning Radar</h2>
                 <p class="matrix-desc">Continuous real-time audit for cash reserve breach, payment delays, and liquidity shocks.</p>
@@ -1127,7 +455,7 @@
         <div class="ledger-container" id="sec-ledger">
           <div class="ledger-header">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px;">
+              <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
                 Granular Day-by-Day Cashflow Ledger
               </h3>
               <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
@@ -1168,7 +496,7 @@
         <div class="control-matrix-card" id="sec-simulator">
           <div class="matrix-header">
             <div class="matrix-title-group">
-              <span style="font-size: 20px;">⚡</span>
+              
               <div>
                 <h2 class="matrix-title">Cash-Flow Scenario Simulator</h2>
                 <p class="matrix-desc">Adjust assumptions and explore how the business might respond in real-time.</p>
@@ -1240,7 +568,7 @@
 
           <!-- DYNAMIC SHORTFALL ALERT BANNER -->
           <div id="sim-alert-banner" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px 16px; margin-top: 14px; display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 18px;" id="sim-alert-icon">✅</span>
+            <span id="sim-alert-icon" style="font-weight: 800; font-family: var(--font-mono); font-size: 11px;">[SAFE]</span>
             <div style="font-size: 12.5px; color: #cbd5e1;" id="sim-alert-text">
               <strong>Adequate Liquidity Standing:</strong> Available cash and operating surplus exceed the required ৳260,400 reserve cushion.
             </div>
@@ -1251,8 +579,8 @@
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 20px;">🎯</span>
-                <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin: 0; letter-spacing: -0.01em;">
+                
+                <h3 style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.01em;">
                   Business Target Planner & Actionable Strategy
                 </h3>
               </div>
@@ -1264,8 +592,8 @@
               <button class="curr-btn" id="btn-toggle-planner" onclick="toggleTargetPlanner()" style="background: rgba(255,255,255,0.06); padding: 8px 16px; border: 1px solid var(--border-subtle); color: #cbd5e1; border-radius: 9px; cursor: pointer;">
                 Hide target planner
               </button>
-              <button class="cta-btn" onclick="generateTargetStrategy()" style="background: linear-gradient(135deg, #0284c7, #0ea5e9); color: #fff; border: 1px solid rgba(56,189,248,0.5); padding: 8px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 16px rgba(14,165,233,0.35);">
-                ⚡ Generate Target Strategy
+              <button class="cta-btn" onclick="generateTargetStrategy()" style="background: linear-gradient(135deg, #0284c7, #0ea5e9); color: var(--text-primary); border: 1px solid rgba(56,189,248,0.5); padding: 8px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 16px rgba(14,165,233,0.35);">
+                Generate Target Strategy
               </button>
             </div>
           </div>
@@ -1297,7 +625,7 @@
             <div class="strategy-list" id="strategy-roadmap-cards">
               <div class="strategy-item strategy-item-cyan">
                 <div class="strategy-badge-tag">GROWTH</div>
-                <div class="strategy-item-title">📦 1. Product & Basket Size Optimization</div>
+                <div class="strategy-item-title">1. Product & Basket Size Optimization</div>
                 <div class="strategy-item-desc">
                   Focus on the top 20% margin SKUs. Bundle complimentary retail items to increase average transaction basket size by ৳120 to bridge the revenue gap.
                 </div>
@@ -1305,7 +633,7 @@
 
               <div class="strategy-item strategy-item-amber">
                 <div class="strategy-badge-tag">LIQUIDITY</div>
-                <div class="strategy-item-title">⚡ 2. Cash Inflow Acceleration</div>
+                <div class="strategy-item-title">2. Cash Inflow Acceleration</div>
                 <div class="strategy-item-desc">
                   Offer a 2% early-settlement incentive to major retail channels to compress payment delay lag from 10 days down to 4 days, pulling forward liquidity.
                 </div>
@@ -1313,7 +641,7 @@
 
               <div class="strategy-item strategy-item-emerald">
                 <div class="strategy-badge-tag">COST CONTROL</div>
-                <div class="strategy-item-title">✂️ 3. Cost Containment & Expense Delay</div>
+                <div class="strategy-item-title">3. Cost Containment & Expense Delay</div>
                 <div class="strategy-item-desc">
                   Keep the operating cost ratio capped below 62%. Postpone discretionary marketing outlays until the ৳260,400 reserve cushion is fully locked in.
                 </div>
@@ -1321,7 +649,7 @@
 
               <div class="strategy-item strategy-item-purple">
                 <div class="strategy-badge-tag">MILESTONES</div>
-                <div class="strategy-item-title">📆 4. Weekly Milestone Targets</div>
+                <div class="strategy-item-title">4. Weekly Milestone Targets</div>
                 <div class="strategy-item-desc" id="strategy-weekly-milestones">
                   Week 1 Target: <strong>৳125,000</strong> · Week 2: <strong>৳125,000</strong> · Week 3: <strong>৳125,000</strong> · Week 4: <strong>৳125,000</strong>. Track daily via ledger.
                 </div>
@@ -1334,181 +662,166 @@
         <!-- ============================================== -->
         <!-- VIEW 5: AI ADVISOR -->
         <!-- ============================================== -->
+                <!-- ============================================== -->
+        <!-- VIEW 5: AI ADVISOR (MONTHLY GRAPH & CHATBOT STUDIO) -->
+        <!-- ============================================== -->
         <div class="module-view" id="view-copilot" style="display: none;">
-          <!-- ADVISOR HERO CARD -->
-          <div class="control-matrix-card" style="margin-bottom: 22px;">
-            <div class="matrix-header">
-              <div class="matrix-title-group">
-                <div class="advisor-ai-avatar">◈</div>
-                <div>
-                  <h2 class="matrix-title" style="font-size: 19px;">Autonomous AI Financial Copilot Studio</h2>
-                  <p class="matrix-desc">Mathematical tool-grounded financial decision intelligence with zero numerical hallucination.</p>
-                </div>
-              </div>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <span class="risk-badge risk-badge-green">● GROUNDED INTELLIGENCE ONLINE</span>
-              </div>
-            </div>
-
-            <!-- REAL-TIME TELEMETRY TILES -->
-            <div class="advisor-telemetry-row">
-              <div class="advisor-tel-tile">
-                <span class="advisor-tel-label">Current Treasury</span>
-                <span class="advisor-tel-val" id="adv-tel-cash">৳180,000</span>
-                <span class="advisor-tel-sub">Available Balance</span>
-              </div>
-              <div class="advisor-tel-tile">
-                <span class="advisor-tel-label">30-Day Proj. Revenue</span>
-                <span class="advisor-tel-val" id="adv-tel-rev" style="color: var(--accent-cyan);">৳420,000</span>
-                <span class="advisor-tel-sub">Grounded Model Mean</span>
-              </div>
-              <div class="advisor-tel-tile">
-                <span class="advisor-tel-label">Statutory Reserve Cushion</span>
-                <span class="advisor-tel-val" id="adv-tel-target" style="color: var(--accent-amber);">৳260,400</span>
-                <span class="advisor-tel-sub">Operating Threshold</span>
-              </div>
-              <div class="advisor-tel-tile">
-                <span class="advisor-tel-label">Surplus Safety Margin</span>
-                <span class="advisor-tel-val" id="adv-tel-cushion" style="color: var(--accent-emerald);">+৳79,200</span>
-                <span class="advisor-tel-sub" style="color: var(--accent-emerald);">● Safe Liquidity Buffer</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 6 INTERACTIVE ONE-CLICK SCENARIO AUDIT LAUNCHPADS -->
-          <div style="margin-bottom: 22px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <!-- 1. MONTHLY FINANCIAL TRAJECTORY & FORECAST GRAPH CARD -->
+          <div class="monthly-trajectory-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
               <div>
-                <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin: 0;">
-                  ⚡ Instant Executive Advisory Launchpad
-                </h3>
-                <p style="font-size: 12px; color: var(--text-secondary); margin: 3px 0 0 0;">
-                  Click any strategic scenario card to trigger full tool-verified financial diagnosis in the chat copilot.
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #2563eb; background: #eff6ff; border: 1px solid #bfdbfe; padding: 3px 10px; border-radius: 6px; font-family: var(--font-mono); text-transform: uppercase;">
+                    Monthly Financial Model
+                  </span>
+                  <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">
+                    Multi-Horizon Dynamic Projections
+                  </span>
+                </div>
+                <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0 0 4px 0;">
+                  Monthly Financial Trajectory & Working Capital Forecast
+                </h2>
+                <p style="font-size: 12.5px; color: var(--text-secondary); margin: 0;">
+                  Dynamic month-by-month projection of Sales Revenue, Operating Costs, Cumulative Cash, and Statutory Reserve Cushion.
                 </p>
               </div>
-              <span style="font-size: 11.5px; font-weight: 700; color: var(--accent-cyan); font-family: var(--font-mono); background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25); padding: 5px 12px; border-radius: 8px;">
-                6 Decision Models Ready
-              </span>
+
+              <div class="horizon-switch-bar">
+                <button class="chart-tab-btn" id="btn-mhorizon-3" onclick="setMonthlyHorizon(3)">3 Months</button>
+                <button class="chart-tab-btn active" id="btn-mhorizon-6" onclick="setMonthlyHorizon(6)">6 Months</button>
+                <button class="chart-tab-btn" id="btn-mhorizon-12" onclick="setMonthlyHorizon(12)">12 Months</button>
+              </div>
             </div>
 
-            <div class="advisor-launchpad-grid">
-              <!-- Card 1 -->
-              <div class="advisor-launch-card card-glow-amber" onclick="askCopilot('বিক্রয় ২০% কমলে আমাদের কি নগদ ঘাটতি হবে?')">
-                <div class="launch-card-header">
-                  <span class="launch-icon">📉</span>
-                  <span class="launch-tag tag-amber">REVENUE SHOCK</span>
-                </div>
-                <div class="launch-card-title">Stress Test: 20% Sales Contraction</div>
-                <div class="launch-card-desc">Audit whether a 20% decline in monthly sales breaches the ৳260,400 statutory reserve cushion.</div>
-                <div class="launch-action-row">
-                  <span class="launch-query-snippet">"বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে কি?"</span>
-                  <button class="launch-btn">Run Audit →</button>
-                </div>
+            <!-- 4 MONTHLY TELEMETRY KPI TILES -->
+            <div class="monthly-kpi-row">
+              <div class="monthly-kpi-tile">
+                <span class="monthly-kpi-lbl">Monthly Run-Rate</span>
+                <span class="monthly-kpi-val" id="adv-m-rev" style="color: var(--accent-blue);">৳420,000</span>
+                <span class="monthly-kpi-sub">Baseline monthly revenue</span>
               </div>
+              <div class="monthly-kpi-tile">
+                <span class="monthly-kpi-lbl">Modeled OPEX (Costs)</span>
+                <span class="monthly-kpi-val" id="adv-m-cost" style="color: var(--accent-amber);">৳260,400</span>
+                <span class="monthly-kpi-sub">Cost ratio (62% OPEX)</span>
+              </div>
+              <div class="monthly-kpi-tile">
+                <span class="monthly-kpi-lbl">Net Monthly Surplus</span>
+                <span class="monthly-kpi-val" id="adv-m-surplus" style="color: var(--accent-emerald);">+৳159,600</span>
+                <span class="monthly-kpi-sub">Operating cash generation</span>
+              </div>
+              <div class="monthly-kpi-tile">
+                <span class="monthly-kpi-lbl">Reserve Cushion Buffer</span>
+                <span class="monthly-kpi-val" id="adv-m-cushion" style="color: var(--accent-emerald);">+৳79,200</span>
+                <span class="monthly-kpi-sub">Above statutory reserve</span>
+              </div>
+            </div>
 
-              <!-- Card 2 -->
-              <div class="advisor-launch-card card-glow-cyan" onclick="askCopilot('টার্গেট রেভেনিউ পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?')">
-                <div class="launch-card-header">
-                  <span class="launch-icon">🎯</span>
-                  <span class="launch-tag tag-cyan">GROWTH STRATEGY</span>
-                </div>
-                <div class="launch-card-title">Strategic Revenue Target Bridge</div>
-                <div class="launch-card-desc">Calculate required SKU basket optimization (+৳120/order) and milestone targets to bridge +৳80,000.</div>
-                <div class="launch-action-row">
-                  <span class="launch-query-snippet">"টার্গেট পূরণে কী কৌশল নেওয়া উচিত?"</span>
-                  <button class="launch-btn">Run Audit →</button>
-                </div>
-              </div>
-
-              <!-- Card 3 -->
-              <div class="advisor-launch-card card-glow-emerald" onclick="askCopilot('আমাদের বর্তমান ক্যাশ ব্যালেন্স ও রানওয়ে কত দিন চলবে?')">
-                <div class="launch-card-header">
-                  <span class="launch-icon">⏱️</span>
-                  <span class="launch-tag tag-emerald">LIQUIDITY RUNWAY</span>
-                </div>
-                <div class="launch-card-title">Cash Runway & Operating Burn Rate</div>
-                <div class="launch-card-desc">Calculate exact survival days if sales stop completely vs ongoing positive operational surplus.</div>
-                <div class="launch-action-row">
-                  <span class="launch-query-snippet">"ক্যাশ রানওয়ে কত দিন চলবে?"</span>
-                  <button class="launch-btn">Run Audit →</button>
-                </div>
-              </div>
-
-              <!-- Card 4 -->
-              <div class="advisor-launch-card card-glow-purple" onclick="askCopilot('যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?')">
-                <div class="launch-card-header">
-                  <span class="launch-icon">💸</span>
-                  <span class="launch-tag tag-purple">EXPENSE SHOCK</span>
-                </div>
-                <div class="launch-card-title">Cost Inflation Sensitivity (+8% COGS)</div>
-                <div class="launch-card-desc">Assess impact if supplier price hikes push operating expenses from 62% to 70% of gross revenue.</div>
-                <div class="launch-action-row">
-                  <span class="launch-query-snippet">"কস্ট রেশিও ৭০% হলে বাফার কত?"</span>
-                  <button class="launch-btn">Run Audit →</button>
-                </div>
-              </div>
-
-              <!-- Card 5 -->
-              <div class="advisor-launch-card card-glow-blue" onclick="askCopilot('পেমেন্ট ডিলে ১০ দিন থেকে কমিয়ে ৪ দিনে আনলে ক্যাশ ফ্লোতে কী উন্নতি হবে?')">
-                <div class="launch-card-header">
-                  <span class="launch-icon">⚡</span>
-                  <span class="launch-tag tag-blue">WORKING CAPITAL</span>
-                </div>
-                <div class="launch-card-title">Receivables Settlement Acceleration</div>
-                <div class="launch-card-desc">Model compressing payment delays from 10 days to 4 days via early-settlement incentive discounts.</div>
-                <div class="launch-action-row">
-                  <span class="launch-query-snippet">"পেমেন্ট ল্যাগ ৪ দিনে আনলে লাভ কি?"</span>
-                  <button class="launch-btn">Run Audit →</button>
-                </div>
-              </div>
-
-              <!-- Card 6 -->
-              <div class="advisor-launch-card card-glow-pink" onclick="askCopilot('P10 ডাউনসাইড এবং P90 সার্জ সিনারিওতে ঝুঁকি ও লাভ কেমন হবে?')">
-                <div class="launch-card-header">
-                  <span class="launch-icon">📊</span>
-                  <span class="launch-tag tag-pink">PROBABILISTIC BANDS</span>
-                </div>
-                <div class="launch-card-title">P10 Floor vs P90 Optimistic Surge</div>
-                <div class="launch-card-desc">Synthesize conservative floor (৳8,400/day) against high-demand ceiling (৳21,000/day) risk bounds.</div>
-                <div class="launch-action-row">
-                  <span class="launch-query-snippet">"P10 এবং P90 সিনারিও বিশ্লেষণ"</span>
-                  <button class="launch-btn">Run Audit →</button>
-                </div>
-              </div>
+            <!-- MONTHLY CHART CANVAS -->
+            <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; position: relative; height: 290px;">
+              <canvas id="monthlyAdvisorChart"></canvas>
             </div>
           </div>
 
-          <!-- DETERMINISTIC ARCHITECTURE TRANSPARENCY PIPELINE -->
-          <div class="control-matrix-card">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+          <!-- 2. DEDICATED AI FINANCIAL ADVISOR CHATBOT CARD -->
+          <div class="advisor-chat-studio-card">
+            <div class="studio-chat-header">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="copilot-avatar">◈</div>
+                <div>
+                  <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    FinSight AI Financial Advisor
+                  </h3>
+                  <span style="font-size: 11.5px; color: var(--text-secondary);">
+                    Explainable SME Cash-Flow Copilot · Zero-Hallucination
+                  </span>
+                </div>
+              </div>
+
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 18px;">🛡️</span>
-                <span style="font-size: 14px; font-weight: 800; color: #fff;">Mathematical Zero-Hallucination Architecture</span>
+                <button class="action-outline-btn" onclick="clearCopilotChat()" title="Reset Chat Conversation">
+                  Reset Conversation
+                </button>
+                <div class="currency-toggle">
+                  <button class="curr-btn active" id="clang-studio-bn" onclick="setCopilotLanguage('bn')">বাংলা</button>
+                  <button class="curr-btn" id="clang-studio-en" onclick="setCopilotLanguage('en')">EN</button>
+                  <button class="curr-btn" id="clang-studio-zh" onclick="setCopilotLanguage('zh')">中文</button>
+                  <button class="curr-btn" id="clang-studio-es" onclick="setCopilotLanguage('es')">ES</button>
+                </div>
               </div>
-              <span style="font-size: 11px; font-family: var(--font-mono); color: #10b981; background: rgba(16,185,129,0.12); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(16,185,129,0.3);">
-                ✓ Deterministic Python Execution
-              </span>
             </div>
-            <div class="architecture-steps-grid">
-              <div class="arch-step">
-                <div class="arch-step-num">01</div>
-                <div class="arch-step-title">Intent & Entity Extraction</div>
-                <div class="arch-step-desc">Identifies scenario parameters (shifts, cost ratios, target revenue) in natural language.</div>
+
+            <!-- QUICK INQUIRY CHIPS (NO EMOJIS) -->
+            <div class="studio-quick-prompts-bar">
+              <span style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em;">
+                Quick Financial Inquiries:
+              </span>
+              <div class="quick-chips-grid" style="margin-top: 8px;">
+                <button class="quick-chip" onclick="askCopilot('মাসিক রেভেনিউ ও খরচের পূর্বাভাস কেমন?')">
+                  <span>মাসিক রেভেনিউ ও ব্যয়ের পূর্বাভাস কেমন?</span>
+                </button>
+                <button class="quick-chip" onclick="askCopilot('টার্গেট রেভেনিউ পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?')">
+                  <span>টার্গেট পূরণে কী কৌশল নেব?</span>
+                </button>
+                <button class="quick-chip" onclick="askCopilot('আমাদের বর্তমান ক্যাশ ব্যালেন্স ও রানওয়ে কত দিন চলবে?')">
+                  <span>ক্যাশ রানওয়ে কত দিন চলবে?</span>
+                </button>
+                <button class="quick-chip" onclick="askCopilot('পেমেন্ট ডিলে ১০ দিন থেকে কমিয়ে ৪ দিনে আনলে ক্যাশ ফ্লোতে কী উন্নতি হবে?')">
+                  <span>পেমেন্ট ল্যাগ ৪ দিনে আনলে লাভ কি?</span>
+                </button>
+                <button class="quick-chip" onclick="askCopilot('যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?')">
+                  <span>খরচ ৭০% হলে বাফার কত থাকবে?</span>
+                </button>
+                <button class="quick-chip" onclick="askCopilot('বিক্রি ২০% কমলে আমাদের কি ক্যাশ ঘাটতি হবে?')">
+                  <span>বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে কি?</span>
+                </button>
               </div>
-              <div class="arch-step">
-                <div class="arch-step-num">02</div>
-                <div class="arch-step-title">Deterministic Python Dispatch</div>
-                <div class="arch-step-desc">Executes exact integer-cent arithmetic via FinSightToolKit with zero LLM math guessing.</div>
+            </div>
+
+            <!-- CHAT LOG CONTAINER -->
+            <div class="studio-chat-history-log" id="copilot-chat-history">
+              <div class="chat-entry bot-entry">
+                <div class="copilot-avatar" style="width: 32px; height: 32px; font-size: 16px;">◈</div>
+                <div class="entry-bubble">
+                  <p><strong>FinSight Business Decision Intelligence সক্রিয়।</strong></p>
+                  <p>আমি আপনার SME ব্যবসার মাসিক আর্থিক পূর্বাভাস, চলতি ক্যাশ ব্যালেন্স এবং রিজার্ভ ঝুঁকি রিয়েল-টাইমে বিশ্লেষণ করছি। উপরের গ্রাফে আগামী মাসগুলোর সম্ভাব্য রেভেনিউ ও ব্যয় দৃশ্যমান।</p>
+                  
+                  <div class="ai-metric-grid">
+                    <div class="ai-metric-cell">
+                      <div class="ai-metric-lbl">Available Cash</div>
+                      <div class="ai-metric-val" id="chat-cash-ref">৳১৮০,০০০</div>
+                    </div>
+                    <div class="ai-metric-cell">
+                      <div class="ai-metric-lbl">Monthly Projected Revenue</div>
+                      <div class="ai-metric-val" id="chat-rev-ref">৳৪২০,০০০</div>
+                    </div>
+                    <div class="ai-metric-cell">
+                      <div class="ai-metric-lbl">Statutory Reserve Target</div>
+                      <div class="ai-metric-val">৳২৬০,৪০০</div>
+                    </div>
+                    <div class="ai-metric-cell">
+                      <div class="ai-metric-lbl">Safety Cushion Buffer</div>
+                      <div class="ai-metric-val" style="color: var(--accent-emerald);" id="chat-cushion-ref">+৳৭৯,২০০</div>
+                    </div>
+                  </div>
+
+                  <div class="tool-badge-pill">[Verified by FinSightToolKit.audit_treasury_solvency]</div>
+                </div>
               </div>
-              <div class="arch-step">
-                <div class="arch-step-num">03</div>
-                <div class="arch-step-title">Explainable Multilingual Audit</div>
-                <div class="arch-step-desc">Generates grounded executive recommendations with interactive studio action buttons.</div>
+            </div>
+
+            <!-- INPUT COMPOSER -->
+            <div class="chat-compose-bar">
+              <div class="input-inner-wrap">
+                <input type="text" id="copilot-user-input" placeholder="আর্থিক প্রশ্ন লিখুন (যেমন: 'মাসিক বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে কি?')..." onkeydown="handleCopilotKey(event)">
               </div>
+              <button class="copilot-send-btn" onclick="sendCopilotMessage()" id="btn-send-copilot">
+                <span>Send</span>
+              </button>
             </div>
           </div>
         </div>
-      </main>
+</main>
 
       <!-- RIGHT COLUMN: AUTONOMOUS AI COPILOT CHATBOT -->
       <aside>
@@ -1523,7 +836,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <button class="icon-action-btn" onclick="clearCopilotChat()" title="Reset conversation">
-                🔄
+                Reset
               </button>
               <div class="currency-toggle">
                 <button class="curr-btn active" id="clang-bn" onclick="setCopilotLanguage('bn')">বাংলা</button>
@@ -1550,21 +863,21 @@
           <!-- QUICK INQUIRY CHIPS -->
           <div class="quick-prompts-bar">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-              <span class="quick-title">⚡ Instant Executive Scenarios:</span>
+              <span class="quick-title">Quick Financial Scenarios:</span>
               <span style="font-size: 10.5px; color: var(--accent-cyan); font-weight: 700; cursor: pointer;" onclick="document.getElementById('copilot-user-input').focus()">Click any ↵</span>
             </div>
             <div class="quick-chips-grid">
               <button class="quick-chip chip-amber" onclick="askCopilot('বিক্রি ২০% কমলে আমাদের কি ক্যাশ ঘাটতি হবে?')">
-                📉 <span>বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে?</span>
+                <span>বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে?</span>
               </button>
               <button class="quick-chip chip-cyan" onclick="askCopilot('টার্গেট রেভেনিউ পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?')">
-                🎯 <span>টার্গেট পূরণে কী কৌশল নেব?</span>
+                <span>টার্গেট পূরণে কী কৌশল নেব?</span>
               </button>
               <button class="quick-chip chip-emerald" onclick="askCopilot('আমাদের বর্তমান ক্যাশ ব্যালেন্স ও রানওয়ে কত দিন চলবে?')">
-                ⏱️ <span>ক্যাশ রানওয়ে কত দিন চলবে?</span>
+                <span>ক্যাশ রানওয়ে কত দিন চলবে?</span>
               </button>
               <button class="quick-chip chip-purple" onclick="askCopilot('যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?')">
-                💸 <span>কস্ট রেশিও ৭০% হলে বাফার কত?</span>
+                <span>কস্ট রেশিও ৭০% হলে বাফার কত?</span>
               </button>
             </div>
           </div>
@@ -1596,7 +909,7 @@
                   </div>
                 </div>
 
-                <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+                <div class="tool-badge-pill">[Verified by FinSightToolKit.audit_treasury_solvency]</div>
               </div>
             </div>
           </div>
@@ -1604,12 +917,12 @@
           <!-- INPUT COMPOSER -->
           <div class="chat-compose-bar">
             <div class="input-inner-wrap">
-              <span class="chat-input-icon">💬</span>
+              
               <input type="text" id="copilot-user-input" placeholder="আর্থিক প্রশ্ন জিজ্ঞাসা করুন (যেমন: 'বিক্রি ২০% কমলে ক্যাশ কত থাকবে?')..." onkeydown="handleCopilotKey(event)">
             </div>
             <button class="copilot-send-btn" onclick="sendCopilotMessage()" id="btn-send-copilot">
               <span>Send</span>
-              <span style="font-size: 14px;">➤</span>
+              
             </button>
           </div>
         </div>
