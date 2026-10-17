@@ -2,14 +2,14 @@
   "Primary Micro-Daily Forecasting Benchmark (Table 2A)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_forecasting_benchmark.parquet",
     "downstream_phase": "Phase 4 (Risk Warning Engine)",
-    "records": 13,
-    "sha256": "c070761b1b93f3912ad630147aaf8c6d8c8c797831b112608a6e6b4c896acbe3"
+    "records": 16,
+    "sha256": "3911b7152d3ac66e6dbdfe46d9b18663d1a81b1a6698b0a53f200930cc2a8d16"
   },
   "Multi-Model Prediction Ledger": {
     "file_path": "d:\\Others\\data\\processed\\phase3_multi_model_predictions.parquet",
     "downstream_phase": "Phase 4 (Ensemble Warning Evaluation)",
     "records": 225,
-    "sha256": "92bf241c15ed6437383bad1d7edd1a4bf3aea20e9101e756957bb3a72421e389"
+    "sha256": "617cb19821de6efbd245110281a423b7a8a1966daf5e07dde03a98ce28fce56c"
   },
   "Rolling-Origin Chronological Backtesting (Table 2B-1)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_rolling_backtest.parquet",
@@ -26,8 +26,8 @@
   "Dedicated Macro-Treasury Cumulative Scorecard (Table 2B-2)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_cumulative_forecasting_benchmark.parquet",
     "downstream_phase": "Phase 4 (CFO Treasury Verification)",
-    "records": 5,
-    "sha256": "60cd1e3cafba0dec53983bdf00f005e0ca48ea9e9b4bd7e57ba428487d30f4c9"
+    "records": 8,
+    "sha256": "21f7ac587f3469e2e11cfa4b57eec177f89b54f60a7abb2c68fdeab07ceec190"
   },
   "Dual-Resolution Grandmaster Scorecard (Table 2C)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_dual_resolution_benchmark.parquet",
