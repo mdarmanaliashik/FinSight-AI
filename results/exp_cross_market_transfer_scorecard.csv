@@ -1,0 +1,15 @@
+Evaluation Stream,Model / Strategy,Transfer Paradigm,MAE,RMSE,WAPE (%),R2 Score,Bias (ME),Directional Acc (%)
+JD.com Top SKU (Micro),Naive Persistence (lag_1),Local Heuristic,48134.02,68381.92,22.35%,0.3203,-12703.73,0.0%
+JD.com Top SKU (Micro),3-Day Moving Average (MA-3),Local Smoothing,42711.55,71639.59,19.83%,0.254,-31583.6,50.0%
+JD.com Top SKU (Micro),CatBoost (Raw Currency),Naive Zero-Shot (No Scale Adj),214593.16,230059.72,99.63%,-6.6937,-214593.16,40.0%
+JD.com Top SKU (Micro),LightGBM (Scale-Invariant),Grandmaster Zero-Shot Ratio,40487.07,60338.74,18.80%,0.4708,-21429.41,60.0%
+JD.com Top SKU (Micro),CatBoost (Scale-Invariant),Grandmaster Zero-Shot Ratio,75482.05,93932.64,35.04%,-0.2826,-75482.05,40.0%
+JD.com Top SKU (Micro),Stacking Ensemble (CB + LGB),Grandmaster Zero-Shot Stacking,53860.99,77349.94,25.01%,0.1303,-53860.99,50.0%
+JD.com Top SKU (Micro),CatBoost (Few-Shot Fine-Tuned),Warm-Start Adaptation (14d),84801.63,101183.29,39.37%,-0.4882,-84801.63,40.0%
+JD.com Platform (Macro),Platform Naive (lag_1),Local Heuristic,238925.14,270641.91,14.22%,0.1743,-64788.7,0.0%
+JD.com Platform (Macro),Platform MA-3,Local Smoothing,265756.86,311743.05,15.82%,-0.0956,-144687.26,40.0%
+JD.com Platform (Macro),LightGBM Macro Transfer,Grandmaster Zero-Shot Ratio,342069.81,406333.24,20.36%,-0.8613,-187187.89,20.0%
+JD.com Platform (Macro),CatBoost Macro Transfer,Grandmaster Zero-Shot Ratio,289742.13,343086.0,17.25%,-0.327,-242266.53,40.0%
+JD.com Platform Cum (H=7),Cumulative Persistence,Baseline Persistence,11097899.1,11287423.05,29.68%,-3.9342,-11097899.1,0.0%
+JD.com Platform Cum (H=7),Trend-Adjusted Trajectory (MA-7),External Macro Validation,2777332.52,3416723.18,7.43%,0.5479,-2130302.02,100.0%
+JD.com Platform Cum (H=7),Trend-Adjusted Trajectory (MA-3),External Macro Validation,2819104.32,3325551.36,7.54%,0.5717,-2303742.95,100.0%

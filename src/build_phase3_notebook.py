@@ -1172,9 +1172,9 @@ display(df_foundation_frontier)
 | **Mean Delivery Lag** | 12.5 Days (Long Carrier Tail) | 0.99 Days (Same-Day / Next-Day) |
 | **Zero-Sales Days Intermittency** | 39.53% Zero-Sales Days | 0.00% Zero-Sales Days |
 | **Micro-Daily Naive Benchmark WAPE** | 80.60% WAPE | 22.35% WAPE (Top SKU) / 14.22% (Platform) |
-| **Micro-Daily Best Model WAPE** | 59.80% WAPE (Adaptive CatBoost) | 19.83% WAPE (MA-3 Adaptive) |
-| **Macro-Treasury Inflow WAPE** | 0.93% WAPE (Trend-Adjusted Naive) | 5.90% WAPE (Cumulative Trajectory) |
-| **CFO Target Precision (<10%)** | **ACHIEVED (0.93% < 10.0%)** | **ACHIEVED (5.90% < 10.0%)** |
+| **Micro-Daily Best Model WAPE** | 59.80% WAPE (Adaptive CatBoost) | 19.83% WAPE (MA-3 Smoothing) / 18.80% (Cross-Market LightGBM) |
+| **Macro-Treasury Inflow WAPE** | 0.93% WAPE (SME H=7) / 0.39% (Platform H=7) | 5.90% WAPE (SKU H=3) / 7.43% (Platform H=7) |
+| **CFO Target Precision (<10%)** | **ACHIEVED (0.93% < 10.0%)** | **ACHIEVED (7.43% < 10.0%)** |
 """))
 
     # =========================================================================
@@ -1267,7 +1267,7 @@ wape_c = np.sum(np.abs(y_true_cum_jd - y_pred_cum_jd)) / np.sum(y_true_cum_jd) *
 r2_c = r2_score(y_true_cum_jd, y_pred_cum_jd)
 
 cum_rows_jd = [{
-    "Stream": "JD.com Cumulative Inflow (H=3)",
+    "Stream": "JD.com SKU Cumulative Inflow (H=3)",
     "Model": "Trend-Adjusted Trajectory",
     "MAE (RMB)": round(mae_c, 2),
     "RMSE (RMB)": round(rmse_c, 2),
@@ -1276,7 +1276,34 @@ cum_rows_jd = [{
     "Dir Acc (%)": "100.0%"
 }]
 
-df_jd_scorecard = pd.DataFrame(sku_rows + plat_rows_jd + cum_rows_jd)
+df_plat_cum_jd = df_jd_plat.copy()
+df_plat_cum_jd["cum_sales"] = df_plat_cum_jd["sales"].cumsum()
+df_plat_cum_jd["target_cum_h7"] = df_plat_cum_jd["cum_sales"].shift(-7)
+df_plat_cum_jd["cum_lag_1"] = df_plat_cum_jd["cum_sales"].shift(1)
+df_plat_cum_jd["roll_mean_7"] = df_plat_cum_jd["sales"].shift(1).rolling(7).mean()
+valid_plat_cum_jd = df_plat_cum_jd.dropna().reset_index(drop=True)
+
+test_plat_cum_jd = valid_plat_cum_jd.iloc[-10:].copy()
+plat_cum_dates_jd = test_plat_cum_jd["Date"].values
+y_true_plat_cum_jd = test_plat_cum_jd["target_cum_h7"].values
+y_pred_plat_cum_jd = test_plat_cum_jd["cum_lag_1"].values + 8 * test_plat_cum_jd["roll_mean_7"].values
+
+mae_pc = mean_absolute_error(y_true_plat_cum_jd, y_pred_plat_cum_jd)
+rmse_pc = np.sqrt(mean_squared_error(y_true_plat_cum_jd, y_pred_plat_cum_jd))
+wape_pc = np.sum(np.abs(y_true_plat_cum_jd - y_pred_plat_cum_jd)) / np.sum(y_true_plat_cum_jd) * 100
+r2_pc = r2_score(y_true_plat_cum_jd, y_pred_plat_cum_jd)
+
+plat_cum_rows_jd = [{
+    "Stream": "JD.com Platform Cumulative (H=7)",
+    "Model": "Trend-Adjusted Trajectory (MA-7 Drift)",
+    "MAE (RMB)": round(mae_pc, 2),
+    "RMSE (RMB)": round(rmse_pc, 2),
+    "WAPE (%)": f"{wape_pc:.2f}%",
+    "R2 Score": round(r2_pc, 4),
+    "Dir Acc (%)": "100.0%"
+}]
+
+df_jd_scorecard = pd.DataFrame(sku_rows + plat_rows_jd + cum_rows_jd + plat_cum_rows_jd)
 print("=" * 105)
 print("TABLE 2D-1: JD.COM EMPIRICAL BENCHMARK SCORECARD")
 print("=" * 105)
@@ -1288,8 +1315,8 @@ df_cross_market = pd.DataFrame([
     {"Market Dimension": "Demand Intermittency (% Zero-Sales)", "Olist Brazilian E-Commerce": "39.53% Zero-Sales Days", "JD.com Asian Retail Benchmark": "0.00% Zero-Sales Days"},
     {"Market Dimension": "Micro-Daily Naive Benchmark WAPE", "Olist Brazilian E-Commerce": "80.60% WAPE", "JD.com Asian Retail Benchmark": "22.35% WAPE (Top SKU) / 14.22% WAPE (Platform)"},
     {"Market Dimension": "Micro-Daily Best Model WAPE", "Olist Brazilian E-Commerce": "59.80% WAPE (Adaptive CatBoost)", "JD.com Asian Retail Benchmark": "19.83% WAPE (MA-3 Smoothing)"},
-    {"Market Dimension": "Macro-Treasury Inflow WAPE", "Olist Brazilian E-Commerce": "0.93% WAPE (Trend-Adjusted Naive)", "JD.com Asian Retail Benchmark": "5.90% WAPE (Cumulative Trajectory)"},
-    {"Market Dimension": "CFO Precision Target (<10%)", "Olist Brazilian E-Commerce": "ACHIEVED (0.93% < 10.0%)", "JD.com Asian Retail Benchmark": "ACHIEVED (5.90% < 10.0%)"}
+    {"Market Dimension": "Macro-Treasury Inflow WAPE", "Olist Brazilian E-Commerce": "0.93% WAPE (SME H=7) / 0.39% (Platform H=7)", "JD.com Asian Retail Benchmark": "5.90% WAPE (SKU H=3) / 7.43% (Platform H=7)"},
+    {"Market Dimension": "CFO Precision Target (<10%)", "Olist Brazilian E-Commerce": "ACHIEVED (0.93% < 10.0%)", "JD.com Asian Retail Benchmark": "ACHIEVED (7.43% < 10.0%)"}
 ])
 print("\n" + "=" * 105)
 print("TABLE 2D-2: CROSS-MARKET EMPIRICAL SCORECARD (BRAZIL VS. CHINA)")
@@ -1312,16 +1339,16 @@ axes3[0, 1].set_ylabel("Sales (RMB ¥)")
 axes3[0, 1].legend(loc="upper right", frameon=True, facecolor="white", edgecolor="#CBD5E1")
 axes3[0, 1].grid(True, alpha=0.25)
 
-axes3[1, 0].plot(cum_dates_jd, y_true_cum_jd, color="#0F172A", lw=2.5, marker="o", label="Observed Cumulative Revenue")
-axes3[1, 0].plot(cum_dates_jd, y_pred_cum_jd, color="#DC2626", lw=2.0, linestyle="--", marker="d", label="Inflow Forecast (WAPE=5.90%, R²=0.7710)")
-axes3[1, 0].set_title("Figure 3C: JD.com Cumulative Inflow Trajectory", fontweight="bold", pad=10)
+axes3[1, 0].plot(plat_cum_dates_jd, y_true_plat_cum_jd, color="#0F172A", lw=2.5, marker="o", label="Observed Cumulative Revenue")
+axes3[1, 0].plot(plat_cum_dates_jd, y_pred_plat_cum_jd, color="#DC2626", lw=2.0, linestyle="--", marker="d", label="Inflow Forecast (WAPE=7.43%, R²=0.5479)")
+axes3[1, 0].set_title("Figure 3C: JD.com Platform Cumulative Inflow Trajectory (H=7)", fontweight="bold", pad=10)
 axes3[1, 0].set_ylabel("Cumulative Inflow (RMB ¥)")
 axes3[1, 0].legend(loc="upper left", frameon=True, facecolor="white", edgecolor="#CBD5E1")
 axes3[1, 0].grid(True, alpha=0.25)
 
-markets = ["Olist Naive", "Olist Best ML", "JD SKU Naive", "JD SKU MA-3", "JD Plat Naive", "Olist Cum Inflow", "JD Cum Trajectory"]
-wapes = [80.60, 59.80, 22.35, 19.83, 14.22, 0.93, 5.90]
-bar_colors3 = ["#64748B", "#0284C7", "#D97706", "#0891B2", "#059669", "#059669", "#DC2626"]
+markets = ["Olist Naive", "Olist Best ML", "JD SKU Naive", "JD SKU MA-3", "JD Plat Naive", "Olist Cum Inflow", "JD SKU Cum H=3", "JD Plat Cum H=7"]
+wapes = [80.60, 59.80, 22.35, 19.83, 14.22, 0.93, 5.90, 7.43]
+bar_colors3 = ["#64748B", "#0284C7", "#D97706", "#0891B2", "#059669", "#059669", "#DC2626", "#059669"]
 axes3[1, 1].bar(markets, wapes, color=bar_colors3, edgecolor="#1E293B", lw=1.2, width=0.55)
 axes3[1, 1].axhline(10.0, color="#059669", linestyle="--", lw=1.8, label="CFO Solvency Target (WAPE < 10%)")
 axes3[1, 1].set_title("Figure 3D: Cross-Market WAPE Benchmark (Latin America vs. China)", fontweight="bold", pad=10)
@@ -1447,7 +1474,7 @@ display(df_plat_scorecard)
 df_hierarchical = pd.DataFrame([
     {"Hierarchical Scale": "Micro-SME (Single Merchant, Table 2A)", "Scope / Merchants": "1 Specific SME Merchant", "Zero-Sales Days (%)": "39.53% (Intermittent)", "Mean Daily Sales (R$)": "R$ 366.11", "Best Daily WAPE": "59.80% (Adaptive CatBoost)", "Best Daily R²": "-0.0142", "Cumulative Inflow WAPE": "0.93% (Trend-Adjusted)", "Strategic Focus": "SME Solvency & Liquidity"},
     {"Hierarchical Scale": "Macro-Platform (All Merchants, Table 2E-1)", "Scope / Merchants": "3,095 Marketplace Merchants", "Zero-Sales Days (%)": "0.00% (Continuous)", "Mean Daily Sales (R$)": "R$ 35,230.82", "Best Daily WAPE": "21.12% (LightGBM)", "Best Daily R²": "+0.1925", "Cumulative Inflow WAPE": "0.39% (Cumulative Drift)", "Strategic Focus": "Marketplace Logistics & SLAs"},
-    {"Hierarchical Scale": "Cross-Market (JD.com China, Table 2D)", "Scope / Merchants": "Direct Rapid-Fulfillment", "Zero-Sales Days (%)": "0.00% (Continuous)", "Mean Daily Sales (R$)": "¥ 181,142.95 (Top SKU)", "Best Daily WAPE": "19.83% (MA-3 Adaptive)", "Best Daily R²": "+0.2540", "Cumulative Inflow WAPE": "5.90% (Cumulative Trajectory)", "Strategic Focus": "Cross-Border Liquidity Benchmarking"}
+    {"Hierarchical Scale": "Cross-Market (JD.com China, Table 2D)", "Scope / Merchants": "Direct Rapid-Fulfillment", "Zero-Sales Days (%)": "0.00% (Continuous)", "Mean Daily Sales (R$)": "¥ 181,142.95 (Top SKU)", "Best Daily WAPE": "19.83% (MA-3 Adaptive)", "Best Daily R²": "+0.2540", "Cumulative Inflow WAPE": "5.90% (SKU H=3) / 7.43% (Platform H=7)", "Strategic Focus": "Cross-Border Liquidity Benchmarking"}
 ])
 print("\n" + "=" * 110)
 print("TABLE 2E-2: HIERARCHICAL MULTI-SCALE RESOLUTION SCORECARD")

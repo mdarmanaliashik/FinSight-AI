@@ -38,14 +38,14 @@
   "JD.com Empirical Benchmark Scorecard (Table 2D-1)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_jd_forecasting_benchmark.parquet",
     "downstream_phase": "Phase 4 (Cross-Market AI Copilot)",
-    "records": 8,
-    "sha256": "985a520e2d1d0066354e933543aed08374b2425955c1207cc9aed3150084bde8"
+    "records": 9,
+    "sha256": "58d0c11b3415fe2276364e29f149d2de265f5f99505430ae9e61565997638013"
   },
   "Cross-Market Synthesis Scorecard (Table 2D-2)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_cross_market_scorecard.parquet",
     "downstream_phase": "Phase 5 (Cross-Border Ablation)",
     "records": 7,
-    "sha256": "813906d0a0670dfc4c66b75ff02c73876ebe4de08cbec28a660b35f01d279ffb"
+    "sha256": "b5c2e860e99da0b28c94d45ec70f1f5ecbdcd4d5706dd2849c1674b86820eef1"
   },
   "Olist Platform Macro Scorecard (Table 2E-1)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_platform_forecasting_benchmark.parquet",
@@ -57,6 +57,6 @@
     "file_path": "d:\\Others\\data\\processed\\phase3_hierarchical_benchmark.parquet",
     "downstream_phase": "Phase 5 (System Synthesis)",
     "records": 3,
-    "sha256": "198fae1bf1d86ddcf4cb0d6cde3b50523731061bda35f03fad8eb3774ed3c3a2"
+    "sha256": "47926c94cff9da14efea9f6e8c64f232dd01e89c644d93d3b1ac96a7f5fe16eb"
   }
 }
