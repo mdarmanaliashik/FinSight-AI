@@ -1,0 +1,32 @@
+{
+  "timestamp_utc": "2026-10-17T10:04:17.096111+00:00",
+  "run_date": "2026-10-17",
+  "opening_cash_brl": 60000.0,
+  "reserve_floor_brl": 50000.0,
+  "baseline_projection": {
+    "ending_cash_brl": -147155.97,
+    "minimum_cash_brl": -147206.09,
+    "breach_risk": true,
+    "breach_days_count": 28,
+    "max_shortfall_brl": 197206.09,
+    "runway_days": 8
+  },
+  "stress_projection": {
+    "scenario": "Moderate Compound Stress",
+    "ending_cash_brl": -148626.65,
+    "minimum_cash_brl": -148652.96,
+    "breach_risk": true,
+    "breach_days_count": 28,
+    "max_shortfall_brl": 198652.96,
+    "runway_days": 8
+  },
+  "alert_triggered": true,
+  "severity": "CRITICAL",
+  "model_provenance": {
+    "forecasting_engine": "Phase 3 Adaptive Trend-Calibrated CatBoost",
+    "resolution": "Micro-Daily Downside Quantile Stream (P10/P50/P90)",
+    "wape_benchmark": "59.80% (SME Micro) / 25.72% (Platform Macro)",
+    "directional_accuracy": "71.1%",
+    "early_warning_lead_time": "+18.2 Days advance hazard detection"
+  }
+}

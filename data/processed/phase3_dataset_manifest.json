@@ -21,7 +21,7 @@
     "file_path": "d:\\Others\\data\\processed\\phase3_quantile_uncertainty.parquet",
     "downstream_phase": "Phase 4 (Downside Solvency Stress Testing)",
     "records": 225,
-    "sha256": "91600619f6e552b6354f8711c9f70c1aa4af8f3da2d57582c7a18b4f8c903dc4"
+    "sha256": "0962ebff017e1ae61c1cef51a01880973f65a3ee55d34e00b973a7312c16f61b"
   },
   "Dedicated Macro-Treasury Cumulative Scorecard (Table 2B-2)": {
     "file_path": "d:\\Others\\data\\processed\\phase3_cumulative_forecasting_benchmark.parquet",
@@ -64,5 +64,29 @@
     "downstream_phase": "Phase 5 (System Synthesis)",
     "records": 3,
     "sha256": "47926c94cff9da14efea9f6e8c64f232dd01e89c644d93d3b1ac96a7f5fe16eb"
+  },
+  "Phase 3 Champion Adaptive CatBoost Binary": {
+    "file_path": "d:\\Others\\models\\olist_best_catboost_ratio.joblib",
+    "downstream_phase": "Production App & Daily Batch Inference",
+    "records": 1,
+    "sha256": "c73a9425dc292f07ca883d6f81807f88e21dd1743e32a13900646d72a313016f"
+  },
+  "Phase 3 Champion Stacking Ensemble Binary": {
+    "file_path": "d:\\Others\\models\\olist_best_stacking_ratio.joblib",
+    "downstream_phase": "Production App Multi-Model Suite",
+    "records": 1,
+    "sha256": "4166715161de538a13d11dad66e7c9d4c8d9ef4db034bd34dff99c2f4069c952"
+  },
+  "Phase 3 Scale-Invariant LightGBM Transfer Binary": {
+    "file_path": "d:\\Others\\models\\olist_best_lightgbm_ratio.joblib",
+    "downstream_phase": "Cross-Border Transfer Engine",
+    "records": 1,
+    "sha256": "764a1f70ce40e385a9c90f656b66a227bf7177778cbac3a1c91ac5743f46b2e7"
+  },
+  "Phase 3 Platform Macro CatBoost Binary": {
+    "file_path": "d:\\Others\\models\\olist_platform_cb_ratio.joblib",
+    "downstream_phase": "Macro Logistics & Capacity Planning",
+    "records": 1,
+    "sha256": "6bb780c12f3e3d7d0aa77ac57d38a8c76b9ed88ba910c0fe14ebcea917f0fb4f"
   }
 }

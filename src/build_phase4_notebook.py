@@ -350,13 +350,18 @@ The 3-panel publication figure below illustrates the empirical foundations of Hy
 3. **Panel C (Right):** Liquidity Shortfall Estimation Error (MAE in R$) showing the **-31.5% deficit reduction** achieved by $B_2$.
 """))
 
-    cells.append(nbf.v4.new_code_cell(r"""sample_sales = df_plat.iloc[-30:]["sales"].reset_index(drop=True)
-sample_dates = df_plat.iloc[-30:]["Date"].reset_index(drop=True)
-
-if df_p3_quantiles is not None:
-    downside_ratio = float((df_p3_quantiles["p10_downside"] / df_p3_quantiles["p50_median"]).median())
+    cells.append(nbf.v4.new_code_cell(r"""if df_p3_quantiles is not None:
+    sample_sales = df_p3_quantiles["p50_median"].iloc[:30].reset_index(drop=True)
+    sample_dates = pd.to_datetime(df_p3_quantiles["target_date"].iloc[:30]).reset_index(drop=True)
+    sample_sales_p10 = df_p3_quantiles["p10_downside"].iloc[:30].reset_index(drop=True)
+    sample_sales_p90 = df_p3_quantiles["p90_upside"].iloc[:30].reset_index(drop=True)
+    downside_ratio = float((sample_sales_p10 / sample_sales).median())
 else:
+    sample_sales = df_plat.iloc[-30:]["sales"].reset_index(drop=True)
+    sample_dates = df_plat.iloc[-30:]["Date"].reset_index(drop=True)
     downside_ratio = 0.72
+    sample_sales_p10 = sample_sales * downside_ratio
+    sample_sales_p90 = sample_sales * (2.0 - downside_ratio)
 
 cfg_retail = SMEConfig(
     initial_cash=60000.0,
@@ -372,7 +377,7 @@ cfg_retail = SMEConfig(
 
 eng_retail = CashFlowEngine(cfg_retail)
 ledger_p50 = eng_retail.simulate(sample_sales, sample_dates)
-ledger_p10 = eng_retail.simulate(sample_sales * downside_ratio, sample_dates)
+ledger_p10 = eng_retail.simulate(sample_sales_p10, sample_dates)
 
 fig, axes = plt.subplots(1, 3, figsize=(21, 5.8), dpi=150)
 
@@ -462,8 +467,8 @@ FinSight AI strictly eliminates mathematical hallucinations by binding the LLM t
     cells.append(nbf.v4.new_code_cell(r"""toolkit = FinSightToolKit(
     config=cfg_retail,
     baseline_sales_p50=sample_sales,
-    baseline_sales_p10=sample_sales * downside_ratio,
-    baseline_sales_p90=sample_sales * (2.0 - downside_ratio),
+    baseline_sales_p10=sample_sales_p10,
+    baseline_sales_p90=sample_sales_p90,
     dates=sample_dates
 )
 

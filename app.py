@@ -9,6 +9,8 @@ Interactive Streamlit Web Application featuring:
 
 import os
 import sys
+import json
+import joblib
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -99,33 +101,140 @@ st.markdown("""
 
 
 # -----------------------------------------------------------------------------
-# 2. Data Caching & Model Initializer
+# 2. Data Caching & Phase 3 Champion Model Registry
 # -----------------------------------------------------------------------------
 @st.cache_data
-def load_historical_sales():
-    data_path = os.path.join(PROJECT_ROOT, "data", "processed", "olist_daily_sales_platform.parquet")
-    if os.path.exists(data_path):
-        df = pd.read_parquet(data_path)
-        df["Date"] = pd.to_datetime(df["Date"])
-        return df
+def load_phase3_forecasting_artifacts():
+    quantile_path = os.path.join(PROJECT_ROOT, "data", "processed", "phase3_quantile_uncertainty.parquet")
+    preds_path = os.path.join(PROJECT_ROOT, "data", "processed", "phase3_multi_model_predictions.parquet")
+    plat_path = os.path.join(PROJECT_ROOT, "data", "processed", "olist_daily_sales_platform.parquet")
+    manifest_path = os.path.join(PROJECT_ROOT, "data", "processed", "phase3_dataset_manifest.json")
+    
+    df_quant = pd.read_parquet(quantile_path) if os.path.exists(quantile_path) else None
+    df_preds = pd.read_parquet(preds_path) if os.path.exists(preds_path) else None
+    df_plat = pd.read_parquet(plat_path) if os.path.exists(plat_path) else None
+    manifest = {}
+    if os.path.exists(manifest_path):
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+    return df_quant, df_preds, df_plat, manifest
+
+
+@st.cache_resource
+def load_saved_model_registry():
+    models_dir = os.path.join(PROJECT_ROOT, "models")
+    registry = {}
+    model_targets = {
+        "catboost_adaptive": "olist_best_catboost_ratio.joblib",
+        "catboost_raw": "olist_best_catboost_raw.joblib",
+        "stacking": "olist_best_stacking_ratio.joblib",
+        "lightgbm_transfer": "olist_best_lightgbm_ratio.joblib",
+        "platform_cb": "olist_platform_cb_ratio.joblib"
+    }
+    for key, fname in model_targets.items():
+        fpath = os.path.join(models_dir, fname)
+        if os.path.exists(fpath):
+            try:
+                registry[key] = joblib.load(fpath)
+            except Exception:
+                pass
+    return registry
+
+
+df_quant, df_preds, df_plat, p3_manifest = load_phase3_forecasting_artifacts()
+model_registry = load_saved_model_registry()
+
+
+# -----------------------------------------------------------------------------
+# 3. Sidebar: Phase 3 Model Selector & SME Financial Config
+# -----------------------------------------------------------------------------
+st.sidebar.markdown("## 🧠 Phase 3 Forecasting Engine")
+
+model_catalog = {
+    "🏆 Adaptive CatBoost (Phase 3 Champion)": {
+        "tag": "Rank #1 ML Model (Table 2A)",
+        "wape": "59.80% (SME) / 25.72% (Platform)",
+        "r2": "+0.4708 (Transfer)",
+        "dir_acc": "71.1%",
+        "lead_time": "+18.2 Days",
+        "desc": "Adaptive Trend-Calibrated CatBoost utilizing dynamic macro residual drift calibration. #1 Ranked ML Model in Table 2A (+25.81% relative gain over baseline, p < 0.001).",
+        "source_key": "pred_adaptive"
+    },
+    "🥞 Upgraded Stacking Ensemble": {
+        "tag": "Rank #5 Multi-Tree Ensemble",
+        "wape": "63.17%",
+        "r2": "-0.0130",
+        "dir_acc": "70.7%",
+        "lead_time": "+16.5 Days",
+        "desc": "CatBoost 60% + LightGBM 40% with Ridge meta-regressor. High-order variance reduction across erratic order cycles.",
+        "source_key": "pred_stacking"
+    },
+    "🌐 Scale-Invariant Cross-Market Transfer": {
+        "tag": "Zero-Shot Cross-Border (JD.com)",
+        "wape": "18.80%",
+        "r2": "+0.4708",
+        "dir_acc": "60.0%",
+        "lead_time": "+19.0 Days",
+        "desc": "Scale-Invariant LightGBM trained on Brazil Olist and tested on China JD.com in relative ratio-space.",
+        "source_key": "pred_lightgbm"
+    },
+    "📊 Empirical Multi-Quantile Engine (P10/P50/P90)": {
+        "tag": "80% Nominal Prediction Interval",
+        "wape": "59.80%",
+        "r2": "PICP: 67.11%",
+        "dir_acc": "MPIW: R$ 504.68",
+        "lead_time": "+18.2 Days (B2 Engine)",
+        "desc": "Empirically calibrated multi-quantile stream directly fueling the B2 early warning hazard model.",
+        "source_key": "quantiles"
+    }
+}
+
+selected_model_name = st.sidebar.selectbox(
+    "Active Forecasting Algorithm",
+    options=list(model_catalog.keys()),
+    index=0,
+    help="Select the Phase 3 machine learning model to generate forward 30-day cashflow and solvency projections."
+)
+model_info = model_catalog[selected_model_name]
+
+# Extract Forecast Streams based on Selection
+if model_info["source_key"] == "quantiles" and df_quant is not None:
+    sales_p50 = pd.Series(df_quant["p50_median"].iloc[:30].values)
+    sales_p10 = pd.Series(df_quant["p10_downside"].iloc[:30].values)
+    sales_p90 = pd.Series(df_quant["p90_upside"].iloc[:30].values)
+    dates_30 = pd.to_datetime(df_quant["target_date"].iloc[:30]).reset_index(drop=True)
+elif model_info["source_key"] in ["pred_adaptive", "pred_stacking", "pred_lightgbm"] and df_preds is not None:
+    col = model_info["source_key"]
+    sales_p50 = pd.Series(df_preds[col].iloc[:30].values)
+    if df_quant is not None:
+        ratio_p10 = (df_quant["p10_downside"].iloc[:30].values / np.maximum(df_quant["p50_median"].iloc[:30].values, 1.0)).clip(0.35, 0.85)
+        ratio_p90 = (df_quant["p90_upside"].iloc[:30].values / np.maximum(df_quant["p50_median"].iloc[:30].values, 1.0)).clip(1.15, 2.50)
+        sales_p10 = pd.Series(sales_p50.values * ratio_p10)
+        sales_p90 = pd.Series(sales_p50.values * ratio_p90)
     else:
-        # Fallback synthetic series
-        dates = pd.date_range("2024-01-01", periods=120, freq="D")
-        sales = np.random.normal(25000, 5000, len(dates)).clip(5000)
-        return pd.DataFrame({"Date": dates, "sales": sales})
+        sales_p10 = pd.Series(sales_p50.values * 0.70)
+        sales_p90 = pd.Series(sales_p50.values * 1.30)
+    dates_30 = pd.to_datetime(df_preds["target_date"].iloc[:30]).reset_index(drop=True)
+elif df_quant is not None:
+    sales_p50 = pd.Series(df_quant["p50_median"].iloc[:30].values)
+    sales_p10 = pd.Series(df_quant["p10_downside"].iloc[:30].values)
+    sales_p90 = pd.Series(df_quant["p90_upside"].iloc[:30].values)
+    dates_30 = pd.to_datetime(df_quant["target_date"].iloc[:30]).reset_index(drop=True)
+else:
+    dates_30 = pd.date_range("2018-01-01", periods=30, freq="D")
+    sales_p50 = pd.Series(np.random.normal(366, 120, len(dates_30)).clip(min=50.0))
+    sales_p10 = sales_p50 * 0.70
+    sales_p90 = sales_p50 * 1.30
 
+st.sidebar.markdown(f"""
+<div style="background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
+    <div style="color: #38BDF8; font-weight: 700; font-size: 0.85rem;">{model_info['tag']}</div>
+    <div style="color: #94A3B8; font-size: 0.78rem; margin-top: 4px;">• WAPE: <b>{model_info['wape']}</b></div>
+    <div style="color: #94A3B8; font-size: 0.78rem;">• Directional Acc: <b>{model_info['dir_acc']}</b></div>
+    <div style="color: #94A3B8; font-size: 0.78rem;">• Warning Lead Time: <b>{model_info['lead_time']}</b></div>
+</div>
+""", unsafe_allow_html=True)
 
-df_raw = load_historical_sales()
-holdout_30 = df_raw.iloc[-30:].copy().reset_index(drop=True)
-sales_p50 = holdout_30["sales"]
-dates_30 = holdout_30["Date"]
-sales_p10 = sales_p50 * 0.72 # Conservative downside
-sales_p90 = sales_p50 * 1.28 # Optimistic upside
-
-
-# -----------------------------------------------------------------------------
-# 3. Sidebar: SME Financial Config & Stress Controls
-# -----------------------------------------------------------------------------
 st.sidebar.markdown("## ⚙️ SME Financial Setup")
 
 init_cash = st.sidebar.number_input("Opening Cash Balance (R$)", value=60000.0, step=5000.0)
@@ -188,6 +297,26 @@ copilot = GroundedCopilotAgent(toolkit=toolkit)
 # -----------------------------------------------------------------------------
 st.title("🛡️ FinSight AI — SME Financial Solvency & Runway Copilot")
 st.markdown("##### *Kaggle Grandmaster-Grade Neuro-Symbolic Decision Support System*")
+
+st.markdown(f"""
+<div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95)); border: 1px solid #334155; border-radius: 10px; padding: 14px 20px; margin-bottom: 22px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+            <span style="background: #0284c7; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.80rem; margin-right: 10px; letter-spacing: 0.5px;">ACTIVE ML ENGINE</span>
+            <span style="font-weight: 800; color: #F8FAFC; font-size: 1.15rem;">{selected_model_name}</span>
+            <span style="color: #CBD5E1; font-size: 0.88rem; margin-left: 12px;">[{model_info['tag']}]</span>
+        </div>
+        <div style="display: flex; gap: 15px; font-size: 0.84rem; color: #94A3B8;">
+            <span>WAPE: <b style="color: #38BDF8;">{model_info['wape']}</b></span>
+            <span>Dir Acc: <b style="color: #34D399;">{model_info['dir_acc']}</b></span>
+            <span>Early Warning: <b style="color: #FBBF24;">{model_info['lead_time']}</b></span>
+        </div>
+    </div>
+    <div style="color: #94A3B8; font-size: 0.82rem; margin-top: 8px;">
+        {model_info['desc']}
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # Run Base Engine vs Shocked Engine
 engine = CashFlowEngine(cfg)

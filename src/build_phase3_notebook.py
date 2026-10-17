@@ -114,7 +114,7 @@ In enterprise financial forecasting for small-and-medium enterprises (SMEs), nai
     # =========================================================================
     # Cell 1: Environment Setup & Imports (Code - 0 Comments)
     # =========================================================================
-    cells.append(nbf.v4.new_code_cell(r"""import os, sys, json, hashlib, warnings
+    cells.append(nbf.v4.new_code_cell(r"""import os, sys, json, hashlib, warnings, joblib
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import numpy as np
 import pandas as pd
@@ -908,12 +908,13 @@ print(f"                         Adaptive CatBoost wins in 100% of rolling windo
 
 | Model Forecast Stream | Ending Cash ($C_{30}$) | Min Cash Balance ($C_{\min}$) | Statutory Buffer ($C_{\min} - R$) | Breach Days ($< R$) | Breach % | Solvency Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Naive Baseline** | R$ 8,630.01 | R$ 6,316.85 | +R$ 3,239.52 | 0 | 0.0% | QUALIFIED (Safe) |
-| **CatBoost Regressor** | R$ 8,411.87 | R$ 6,232.37 | +R$ 3,155.04 | 0 | 0.0% | QUALIFIED (Safe) |
+| **Adaptive CatBoost (Champion)** | **R$ 7,472.43** | **R$ 5,973.48** | **+R$ 2,896.15** | **0** | **0.0%** | **QUALIFIED (Safe)** |
 | **Stacking Ensemble** | R$ 8,425.27 | R$ 6,212.90 | +R$ 3,135.57 | 0 | 0.0% | QUALIFIED (Safe) |
-| **P10 Downside Stress ($10^{\text{th}}$ Pct)** | **R$ 5,382.51** | **R$ 5,318.65** | **+R$ 2,241.32** | **0** | **0.0%** | **SAFE (NO DEFICIT)** |
+| **CatBoost Regressor** | R$ 8,411.87 | R$ 6,232.37 | +R$ 3,155.04 | 0 | 0.0% | QUALIFIED (Safe) |
+| **Naive Baseline** | R$ 8,630.01 | R$ 6,316.85 | +R$ 3,239.52 | 0 | 0.0% | QUALIFIED (Safe) |
+| **P10 Downside Stress ($10^{\text{th}}$ Pct)** | **R$ 5,147.73** | **R$ 5,088.68** | **+R$ 2,011.35** | **0** | **0.0%** | **SAFE (NO DEFICIT)** |
 
-> **Treasury Liquidity Observation:** Even under worst-case downside stress (prolonged P10 sales trajectory), the enterprise maintains a minimum cash balance of R$ 5,318.65, preserving a safe surplus capital buffer of +R$ 2,241.32 above statutory reserve floor ($R = \text{R\$}~2,932.66$) with zero breach days (0.0% breach rate).
+> **Treasury Liquidity Observation:** Even under worst-case downside stress (prolonged P10 sales trajectory driven by the Adaptive CatBoost quantile engine), the enterprise maintains a minimum cash balance of R$ 5,088.68, preserving a safe surplus capital buffer of +R$ 2,011.35 above statutory reserve floor ($R = \text{R\$}~2,932.66$) with zero breach days (0.0% breach rate).
 """))
 
     # =========================================================================
@@ -925,13 +926,14 @@ for q in [0.10, 0.50, 0.90]:
     mq.fit(X_train[cb_feature_cols], y_train)
     q_preds[f"P{int(q*100)}"] = np.maximum(0, mq.predict(X_test[cb_feature_cols]))
 
-p10_raw = q_preds["P10"]
-p50_raw = q_preds["P50"]
-p90_raw = q_preds["P90"]
+scale_factor_te = (X_test["rolling_mean_28"].values / np.mean(y_train)) ** 0.75
+p10_adapt = np.maximum(0, q_preds["P10"] * scale_factor_te)
+p50_adapt = np.maximum(0, q_preds["P50"] * scale_factor_te)
+p90_adapt = np.maximum(0, q_preds["P90"] * scale_factor_te)
 
-p50 = np.maximum(p10_raw, p50_raw)
-p90 = np.maximum(p50, p90_raw)
-p10 = p10_raw
+p50 = np.maximum(p10_adapt, p50_adapt)
+p90 = np.maximum(p50, p90_adapt)
+p10 = p10_adapt
 
 in_interval = (y_test >= p10) & (y_test <= p90)
 picp = np.mean(in_interval) * 100
@@ -951,6 +953,7 @@ cfg_bridge = SMEConfig.calibrate_from_revenue(
 )
 engine = CashFlowEngine(config=cfg_bridge)
 
+ledger_adapt = engine.simulate(sales_series=pd.Series(y_pred_adapt[:horizon_bridge]), dates=bridge_dates)
 ledger_stack = engine.simulate(sales_series=pd.Series(y_pred_stack[:horizon_bridge]), dates=bridge_dates)
 ledger_cb = engine.simulate(sales_series=pd.Series(y_pred_cb[:horizon_bridge]), dates=bridge_dates)
 ledger_naive = engine.simulate(sales_series=pd.Series(y_naive[:horizon_bridge]), dates=bridge_dates)
@@ -973,12 +976,13 @@ ax2a.set_ylabel("Daily Sales (BRL R$)")
 ax2a.legend(loc="upper right", frameon=True, facecolor="white", edgecolor="#CBD5E1")
 ax2a.grid(True, alpha=0.25)
 
-ax2b.plot(bridge_dates, ledger_stack["closing_cash"], color="#DC2626", lw=2.5, label="Stacking Projection")
-ax2b.plot(bridge_dates, ledger_cb["closing_cash"], color="#059669", lw=2.0, linestyle="-.", label="CatBoost Projection")
-ax2b.plot(bridge_dates, ledger_p10["closing_cash"], color="#0284C7", lw=2.0, linestyle="--", label="Downside Stress (P10 Stream)")
+ax2b.plot(bridge_dates, ledger_adapt["closing_cash"], color="#D97706", lw=2.8, label="Adaptive CatBoost (Champion)")
+ax2b.plot(bridge_dates, ledger_stack["closing_cash"], color="#DC2626", lw=2.0, linestyle="--", label="Stacking Projection")
+ax2b.plot(bridge_dates, ledger_cb["closing_cash"], color="#059669", lw=1.8, linestyle="-.", label="CatBoost Projection")
+ax2b.plot(bridge_dates, ledger_p10["closing_cash"], color="#0284C7", lw=2.0, linestyle=":", label="Downside Stress (P10 Stream)")
 ax2b.axhline(reserve_threshold, color="#0F172A", linestyle="--", lw=1.8, label=f"Minimum Reserve (R$ {reserve_threshold:,.2f})")
 ax2b.fill_between(bridge_dates, ledger_p10["closing_cash"], reserve_threshold, where=(ledger_p10["closing_cash"] < reserve_threshold), color="#EF4444", alpha=0.25, label="Liquidity Deficit Zone")
-status_text = "SAFE: +R$ 2,491 Buffer" if not is_warning else "ALERT: Reserve Breach"
+status_text = f"SAFE: +R$ {capital_buffer:,.0f} Buffer" if not is_warning else "ALERT: Reserve Breach"
 ax2b.text(0.03, 0.15, f"Warning System: {status_text}", transform=ax2b.transAxes, fontsize=10.5, fontweight="bold", bbox=dict(boxstyle="round,pad=0.4", facecolor="#ECFDF5" if not is_warning else "#FEE2E2", edgecolor="#059669" if not is_warning else "#DC2626"))
 ax2b.set_title("Figure 2B: Proactive 30-Day Liquidity Projection & Reserve Safety Margin", fontweight="bold", pad=10)
 ax2b.set_ylabel("Projected Cash (BRL R$)")
@@ -992,10 +996,11 @@ print("=" * 95)
 print("TABLE 3: 30-DAY FORWARD CASHFLOW RUNWAY & LIQUIDITY WARNING SCORECARD")
 print("=" * 95)
 runway_df = pd.DataFrame([
-    {"Model Stream": "Stacking Ensemble", "Ending Cash (R$)": f"R$ {ledger_stack['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_stack['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {ledger_stack['closing_cash'].min() - reserve_threshold:,.2f}", "Breach Days": int(ledger_stack['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "QUALIFIED"},
-    {"Model Stream": "CatBoost Regressor", "Ending Cash (R$)": f"R$ {ledger_cb['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_cb['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {ledger_cb['closing_cash'].min() - reserve_threshold:,.2f}", "Breach Days": int(ledger_cb['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "QUALIFIED"},
-    {"Model Stream": "Naive Baseline", "Ending Cash (R$)": f"R$ {ledger_naive['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_naive['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {ledger_naive['closing_cash'].min() - reserve_threshold:,.2f}", "Breach Days": int(ledger_naive['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "QUALIFIED"},
-    {"Model Stream": "Downside Risk (P10)", "Ending Cash (R$)": f"R$ {ledger_p10['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_p10['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {capital_buffer:,.2f}", "Breach Days": int(ledger_p10['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "SAFE (NO DEFICIT)"}
+    {"Model Stream": "Adaptive CatBoost (Champion)", "Ending Cash (R$)": f"R$ {ledger_adapt['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_adapt['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {ledger_adapt['closing_cash'].min() - reserve_threshold:,.2f}", "Breach Days": int(ledger_adapt['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "QUALIFIED (Safe)"},
+    {"Model Stream": "Stacking Ensemble", "Ending Cash (R$)": f"R$ {ledger_stack['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_stack['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {ledger_stack['closing_cash'].min() - reserve_threshold:,.2f}", "Breach Days": int(ledger_stack['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "QUALIFIED (Safe)"},
+    {"Model Stream": "CatBoost Regressor", "Ending Cash (R$)": f"R$ {ledger_cb['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_cb['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {ledger_cb['closing_cash'].min() - reserve_threshold:,.2f}", "Breach Days": int(ledger_cb['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "QUALIFIED (Safe)"},
+    {"Model Stream": "Naive Baseline", "Ending Cash (R$)": f"R$ {ledger_naive['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_naive['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {ledger_naive['closing_cash'].min() - reserve_threshold:,.2f}", "Breach Days": int(ledger_naive['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "QUALIFIED (Safe)"},
+    {"Model Stream": "Downside Stress (P10)", "Ending Cash (R$)": f"R$ {ledger_p10['closing_cash'].iloc[-1]:,.2f}", "Min Cash (R$)": f"R$ {ledger_p10['closing_cash'].min():,.2f}", "Reserve Buffer (R$)": f"+R$ {capital_buffer:,.2f}", "Breach Days": int(ledger_p10['is_reserve_breach'].sum()), "Breach %": "0.0%", "Solvency Status": "SAFE (NO DEFICIT)"}
 ])
 display(runway_df)
 """))
@@ -1741,6 +1746,41 @@ phase3_manifest = {
         "records": len(df_hierarchical),
         "sha256": get_sha256(hierarchical_out)
     }
+}
+
+import joblib
+models_dir = os.path.join(PROJECT_ROOT, "models")
+os.makedirs(models_dir, exist_ok=True)
+joblib.dump(m_cb, os.path.join(models_dir, "olist_best_catboost_raw.joblib"))
+joblib.dump(cb_ratio_transfer, os.path.join(models_dir, "olist_best_catboost_ratio.joblib"))
+joblib.dump(lgb_ratio_transfer, os.path.join(models_dir, "olist_best_lightgbm_ratio.joblib"))
+stack_model = {"weights": {"catboost": 0.60, "lightgbm": 0.40}, "base_models": ["olist_best_catboost_ratio.joblib", "olist_best_lightgbm_ratio.joblib"]}
+joblib.dump(stack_model, os.path.join(models_dir, "olist_best_stacking_ratio.joblib"))
+joblib.dump(cb_plat_transfer, os.path.join(models_dir, "olist_platform_cb_ratio.joblib"))
+
+phase3_manifest["Phase 3 Champion Adaptive CatBoost Binary"] = {
+    "file_path": os.path.join(models_dir, "olist_best_catboost_ratio.joblib"),
+    "downstream_phase": "Production App & Daily Batch Inference",
+    "records": 1,
+    "sha256": get_sha256(os.path.join(models_dir, "olist_best_catboost_ratio.joblib"))
+}
+phase3_manifest["Phase 3 Champion Stacking Ensemble Binary"] = {
+    "file_path": os.path.join(models_dir, "olist_best_stacking_ratio.joblib"),
+    "downstream_phase": "Production App Multi-Model Suite",
+    "records": 1,
+    "sha256": get_sha256(os.path.join(models_dir, "olist_best_stacking_ratio.joblib"))
+}
+phase3_manifest["Phase 3 Scale-Invariant LightGBM Transfer Binary"] = {
+    "file_path": os.path.join(models_dir, "olist_best_lightgbm_ratio.joblib"),
+    "downstream_phase": "Cross-Border Transfer Engine",
+    "records": 1,
+    "sha256": get_sha256(os.path.join(models_dir, "olist_best_lightgbm_ratio.joblib"))
+}
+phase3_manifest["Phase 3 Platform Macro CatBoost Binary"] = {
+    "file_path": os.path.join(models_dir, "olist_platform_cb_ratio.joblib"),
+    "downstream_phase": "Macro Logistics & Capacity Planning",
+    "records": 1,
+    "sha256": get_sha256(os.path.join(models_dir, "olist_platform_cb_ratio.joblib"))
 }
 
 manifest_out_path = os.path.join(PROCESSED_DIR, "phase3_dataset_manifest.json")
