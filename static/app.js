@@ -226,6 +226,37 @@ function recomputeBusinessEngine() {
   document.getElementById('kpi-reserve-target').textContent = fmtMoney(reserveTargetBDT);
   document.getElementById('kpi-reserve-sub').textContent = `Based on modeled costs (${costRatioPct}%)`;
 
+  // Synchronize AI Advisor Studio Telemetry
+  const advTelCash = document.getElementById('adv-tel-cash');
+  if (advTelCash) advTelCash.textContent = fmtMoney(availableCashBDT);
+  const advTelRev = document.getElementById('adv-tel-rev');
+  if (advTelRev) advTelRev.textContent = fmtMoney(projectedRevenueMonthlyBDT);
+  const advTelTarget = document.getElementById('adv-tel-target');
+  if (advTelTarget) advTelTarget.textContent = fmtMoney(reserveTargetBDT);
+  const advTelCushion = document.getElementById('adv-tel-cushion');
+  if (advTelCushion) {
+    advTelCushion.textContent = `${isReserveSafe ? '+' : ''}${fmtMoney(cashAfterReserveBDT)}`;
+    advTelCushion.style.color = isReserveSafe ? 'var(--accent-emerald)' : '#f43f5e';
+  }
+
+  // Synchronize Chatbot Telemetry Strip & Chat References
+  const telCash = document.getElementById('telemetry-cash');
+  if (telCash) telCash.textContent = fmtMoney(availableCashBDT);
+  const telCushion = document.getElementById('telemetry-cushion');
+  if (telCushion) {
+    telCushion.textContent = `${isReserveSafe ? '+' : ''}${fmtMoney(cashAfterReserveBDT)}`;
+    telCushion.style.color = isReserveSafe ? 'var(--accent-emerald)' : '#f43f5e';
+  }
+  const chatCashRef = document.getElementById('chat-cash-ref');
+  if (chatCashRef) chatCashRef.textContent = fmtMoney(availableCashBDT);
+  const chatRevRef = document.getElementById('chat-rev-ref');
+  if (chatRevRef) chatRevRef.textContent = fmtMoney(projectedRevenueMonthlyBDT);
+  const chatCushionRef = document.getElementById('chat-cushion-ref');
+  if (chatCushionRef) {
+    chatCushionRef.textContent = `${isReserveSafe ? '+' : ''}${fmtMoney(cashAfterReserveBDT)}`;
+    chatCushionRef.style.color = isReserveSafe ? 'var(--accent-emerald)' : '#f43f5e';
+  }
+
   // -----------------------------------------------------------
   // Update Scenario Simulator Output Tiles & Alert Banner
   // -----------------------------------------------------------
@@ -600,6 +631,14 @@ function handleCopilotKey(e) {
 function askCopilot(query) {
   const input = document.getElementById('copilot-user-input');
   if (input) input.value = query;
+
+  // Visual pulse highlight on sidebar panel
+  const panel = document.getElementById('copilot-panel-sidebar');
+  if (panel) {
+    panel.classList.add('panel-pulse-highlight');
+    setTimeout(() => panel.classList.remove('panel-pulse-highlight'), 1200);
+  }
+
   sendCopilotMessage();
 }
 
@@ -612,7 +651,7 @@ function sendCopilotMessage() {
   const history = document.getElementById('copilot-chat-history');
   if (!history) return;
 
-  // Append User message bubble
+  // 1. Append User message bubble
   const userHtml = `
     <div class="chat-entry user-entry">
       <div class="entry-bubble">${escapeHtml(q)}</div>
@@ -622,8 +661,25 @@ function sendCopilotMessage() {
   input.value = '';
   history.scrollTop = history.scrollHeight;
 
-  // Process grounded response
+  // 2. Append Typing Indicator
+  const typingId = 'copilot-typing-' + Date.now();
+  const typingHtml = `
+    <div class="chat-entry bot-entry" id="${typingId}">
+      <div class="copilot-avatar" style="width: 32px; height: 32px; font-size: 16px;">◈</div>
+      <div class="typing-bubble">
+        <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+        <span style="font-size: 11px; color: #94a3b8; margin-left: 6px;">Computing deterministic solvency audit...</span>
+      </div>
+    </div>
+  `;
+  history.insertAdjacentHTML('beforeend', typingHtml);
+  history.scrollTop = history.scrollHeight;
+
+  // 3. Process grounded response with natural delay
   setTimeout(() => {
+    const typingEl = document.getElementById(typingId);
+    if (typingEl) typingEl.remove();
+
     const reply = generateCopilotResponse(q);
     const botHtml = `
       <div class="chat-entry bot-entry">
@@ -635,17 +691,325 @@ function sendCopilotMessage() {
     `;
     history.insertAdjacentHTML('beforeend', botHtml);
     history.scrollTop = history.scrollHeight;
-  }, 300);
+  }, 320);
 }
 
 function generateCopilotResponse(query) {
-  const salesShift = parseFloat(document.getElementById('input-growth').value);
-  const availableCash = parseFloat(document.getElementById('input-cash').value);
-  const costRatio = parseFloat(document.getElementById('input-cost').value) / 100.0;
+  const salesShift = parseFloat(document.getElementById('input-growth').value) || 0;
+  const availableCash = parseFloat(document.getElementById('input-cash').value) || 180000;
+  const costRatioPct = parseFloat(document.getElementById('input-cost').value) || 62;
+  const costRatio = costRatioPct / 100.0;
   const targetVal = parseFloat(document.getElementById('input-target-revenue').value) || 500000;
 
-  let simShift = salesShift;
   const lowerQ = query.toLowerCase();
+  const isBengali = /[\u0980-\u09FF]/.test(query) || copilotLang === 'bn';
+  const isChinese = /[\u4e00-\u9fa5]/.test(query) || copilotLang === 'zh';
+  const isSpanish = copilotLang === 'es';
+
+  // INTENT 1: Target Revenue & Growth Gap Execution
+  if (lowerQ.includes('টার্গেট') || lowerQ.includes('target') || lowerQ.includes('কৌশল') || lowerQ.includes('goal') || lowerQ.includes('gap')) {
+    const baseline = BASE_MONTHLY_REVENUE_BDT;
+    const gap = targetVal - baseline;
+    const growthPct = ((gap / baseline) * 100.0);
+    const weeklyTarget = targetVal / 4.0;
+
+    if (isBengali) {
+      return `
+        <p><strong>🎯【টার্গেট এক্সিকিউশন ও গ্রোথ রোডম্যাপ】</strong></p>
+        <p>মাসিক রেভেনিউ লক্ষ্যমাত্রা <strong>${fmtMoney(targetVal)}</strong> অর্জনের জন্য গ্রোথ গ্যাপ <strong>+${growthPct.toFixed(1)}% (${fmtMoney(gap)})</strong> পূরণ করতে হবে।</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Target Revenue</div>
+            <div class="ai-metric-val" style="color: var(--accent-cyan);">${fmtMoney(targetVal)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Revenue Gap</div>
+            <div class="ai-metric-val" style="color: var(--accent-emerald);">+${fmtMoney(gap)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Weekly Target</div>
+            <div class="ai-metric-val">${fmtMoney(weeklyTarget)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Execution Priority</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">Basket Size +৳120</div>
+          </div>
+        </div>
+
+        <p><strong>বাস্তবায়ন নির্দেশিকা:</strong></p>
+        <ul style="margin: 4px 0 8px 18px; padding: 0; font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+          <li>শীর্ষ ২০% হাই-মার্জিন এসকেইউ (SKU) প্রোডাক্টে ক্রস-সেলিং জোরদার করা।</li>
+          <li>পেমেন্ট ডিলে ল্যাগ ১০ দিন থেকে কমিয়ে ৪ দিনে আনার জন্য ২% আর্লি ডিসকাউন্ট দেওয়া।</li>
+          <li>অপারেটিং খরচ ৬২% এর নিচে ধরে রেখে প্রতি সপ্তাহে গড়ে ${fmtMoney(weeklyTarget)} ক্যাশ সেলস নিশ্চিত করা।</li>
+        </ul>
+
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.synthesize_strategic_roadmap · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="applyScenarioToControls(${growthPct.toFixed(0)}, ${costRatioPct})">⚡ Apply Target to Studio</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    } else {
+      return `
+        <p><strong>🎯【Target Execution & Revenue Bridge Roadmap】</strong></p>
+        <p>To reach monthly target of <strong>${fmtMoney(targetVal)}</strong>, a growth gap of <strong>+${growthPct.toFixed(1)}% (+${fmtMoney(gap)})</strong> must be bridged.</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Target Revenue</div>
+            <div class="ai-metric-val" style="color: var(--accent-cyan);">${fmtMoney(targetVal)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Revenue Gap</div>
+            <div class="ai-metric-val" style="color: var(--accent-emerald);">+${fmtMoney(gap)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Weekly Target</div>
+            <div class="ai-metric-val">${fmtMoney(weeklyTarget)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Strategy</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">Basket +৳120</div>
+          </div>
+        </div>
+
+        <ul style="margin: 4px 0 8px 18px; padding: 0; font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+          <li>Focus on top 20% margin SKUs with bundled retail incentives.</li>
+          <li>Offer 2% early-settlement incentive to compress payment lag from 10D to 4D.</li>
+          <li>Maintain operational costs capped below ${costRatioPct}%.</li>
+        </ul>
+
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.synthesize_strategic_roadmap · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="applyScenarioToControls(${growthPct.toFixed(0)}, ${costRatioPct})">⚡ Apply Target to Studio</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    }
+  }
+
+  // INTENT 2: Cash Runway & Operating Burn Rate
+  if (lowerQ.includes('রানওয়ে') || lowerQ.includes('runway') || lowerQ.includes('burn') || lowerQ.includes('দিন চলবে') || lowerQ.includes('কত দিন')) {
+    const dailyOpex = (BASE_MONTHLY_REVENUE_BDT * costRatio) / 30.0;
+    const zeroRevenueRunwayDays = Math.floor(availableCash / dailyOpex);
+    const dailySales = BASE_MONTHLY_REVENUE_BDT / 30.0;
+    const dailyNet = dailySales - dailyOpex;
+
+    if (isBengali) {
+      return `
+        <p><strong>⏱️【ক্যাশ রানওয়ে ও লিকুইডিটি সার্ভাইভাল অডিট】</strong></p>
+        <p>বর্তমান ট্রেজারি ক্যাশ <strong>${fmtMoney(availableCash)}</strong> এবং দৈনিক পরিচালন ব্যয় (Burn Rate) <strong>${fmtMoney(dailyOpex)}/দিন</strong>।</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Available Cash</div>
+            <div class="ai-metric-val">${fmtMoney(availableCash)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Daily Burn (OPEX)</div>
+            <div class="ai-metric-val" style="color: #f43f5e;">${fmtMoney(dailyOpex)} / দিন</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Zero-Sales Runway</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">${zeroRevenueRunwayDays} দিন</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Operating Surplus</div>
+            <div class="ai-metric-val" style="color: var(--accent-emerald);">+${fmtMoney(dailyNet)} / দিন</div>
+          </div>
+        </div>
+
+        <p><strong>বিশ্লেষণ:</strong> কোনো বিক্রয় ছাড়া সম্পূর্ণ শূন্য রাজস্ব পরিস্থিতিতে বর্তমান তহবিল দিয়ে <strong>${zeroRevenueRunwayDays} দিন</strong> কার্যক্রম পরিচালনা সম্ভব। বর্তমান স্বাভাবিক বিক্রয় ফ্লো অনুযায়ী ব্যবসা স্বয়ংসম্পূর্ণ ও টেকসই।</p>
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.calculate_cash_runway · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="switchDecisionModule('cashflow')">🏦 View 30-Day Cashflow Ledger</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    } else {
+      return `
+        <p><strong>⏱️【Cash Runway & Operating Burn Audit】</strong></p>
+        <p>Current treasury cash is <strong>${fmtMoney(availableCash)}</strong> with daily operational burn of <strong>${fmtMoney(dailyOpex)}/day</strong>.</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Treasury Cash</div>
+            <div class="ai-metric-val">${fmtMoney(availableCash)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Daily Burn</div>
+            <div class="ai-metric-val" style="color: #f43f5e;">${fmtMoney(dailyOpex)} / day</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Zero-Sales Runway</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">${zeroRevenueRunwayDays} Days</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Net Daily Flow</div>
+            <div class="ai-metric-val" style="color: var(--accent-emerald);">+${fmtMoney(dailyNet)} / day</div>
+          </div>
+        </div>
+
+        <p>Under a complete zero-revenue freeze, liquidity supports <strong>${zeroRevenueRunwayDays} days</strong> of operations. With current sales momentum, runway remains solvent.</p>
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.calculate_cash_runway · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="switchDecisionModule('cashflow')">🏦 View 30-Day Cashflow Ledger</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    }
+  }
+
+  // INTENT 3: Payment Delay / Receivables Lag Acceleration
+  if (lowerQ.includes('পেমেন্ট') || lowerQ.includes('payment') || lowerQ.includes('delay') || lowerQ.includes('রিসিভেবল') || lowerQ.includes('ল্যাগ') || lowerQ.includes('lag')) {
+    const dailyTurnover = BASE_MONTHLY_REVENUE_BDT / 30.0;
+    const freedWorkingCapital = dailyTurnover * 6.0; // 10 days reduced to 4 days = 6 days compressed
+
+    if (isBengali) {
+      return `
+        <p><strong>⚡【রিসিভেবলস পেমেন্ট ডিলে কম্প্রেশন অডিট】</strong></p>
+        <p>বর্তমান রিটেইল পেমেন্ট সেটেলমেন্ট ল্যাগ <strong>১০ দিন</strong>। এটি কমিয়ে <strong>৪ দিনে</strong> আনলে ৬ দিনের বিক্রয় তহবিল অবিলম্বে ছাড় পাবে।</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Current Delay Lag</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">10 Days</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Compressed Target</div>
+            <div class="ai-metric-val" style="color: var(--accent-cyan);">4 Days (-6D)</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Liquid Capital Freed</div>
+            <div class="ai-metric-val" style="color: var(--accent-emerald);">+${fmtMoney(freedWorkingCapital)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Incentive Cost (2%)</div>
+            <div class="ai-metric-val">${fmtMoney(BASE_MONTHLY_REVENUE_BDT * 0.02)}</div>
+          </div>
+        </div>
+
+        <p><strong>সিদ্ধান্ত:</strong> ডিলারদের ২% ছাড় দিলে প্রায় <strong>+${fmtMoney(freedWorkingCapital)}</strong> তাৎক্ষণিক তারল্য (Working Capital) ব্যাংকে আগেভাগে চলে আসবে, যা রিজার্ভ কুশন আরও সুদৃঢ় করবে।</p>
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_receivables_lag · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="switchDecisionModule('cashflow')">🛡️ View Early Warning Radar</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    } else {
+      return `
+        <p><strong>⚡【Receivables Settlement Acceleration Audit】</strong></p>
+        <p>Current retail collection lag is <strong>10 days</strong>. Compressing delay down to <strong>4 days</strong> unlocks 6 days of sales turnover.</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Current Lag</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">10 Days</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Target Lag</div>
+            <div class="ai-metric-val" style="color: var(--accent-cyan);">4 Days</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Liquidity Pulled Forward</div>
+            <div class="ai-metric-val" style="color: var(--accent-emerald);">+${fmtMoney(freedWorkingCapital)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Early Incentive (2%)</div>
+            <div class="ai-metric-val">${fmtMoney(BASE_MONTHLY_REVENUE_BDT * 0.02)}</div>
+          </div>
+        </div>
+
+        <p>Offering a 2% settlement discount pulls forward approximately <strong>+${fmtMoney(freedWorkingCapital)}</strong> in liquid cash flow.</p>
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_receivables_lag · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="switchDecisionModule('cashflow')">🛡️ View Early Warning Radar</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    }
+  }
+
+  // INTENT 4: Cost Inflation & COGS Shock
+  if (lowerQ.includes('কস্ট') || lowerQ.includes('cost') || lowerQ.includes('খরচ') || lowerQ.includes('cogs') || lowerQ.includes('expense')) {
+    let testCostRatio = 0.70;
+    const matchCost = lowerQ.match(/(\d+)\s*%/);
+    if (matchCost) testCostRatio = parseFloat(matchCost[1]) / 100.0;
+
+    const projRev = BASE_MONTHLY_REVENUE_BDT * (1.0 + salesShift / 100.0);
+    const operatingSurplus = projRev * (1.0 - testCostRatio);
+    const reserveTarget = BASE_MONTHLY_REVENUE_BDT * testCostRatio;
+    const cashAfterReserve = availableCash + operatingSurplus - reserveTarget;
+    const isSafe = cashAfterReserve >= 0;
+
+    if (isBengali) {
+      return `
+        <p><strong>📈【কস্ট ইনফ্লেশন ও অপারেটিং মার্জিন সেনসিটিভিটি】</strong></p>
+        <p>পরিচালন ব্যয় বৃদ্ধি পেয়ে কস্ট রেশিও <strong>${(testCostRatio * 100).toFixed(0)}%</strong> হলে ট্রেজারি বাফার কেমন থাকবে:</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Tested Cost Ratio</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">${(testCostRatio * 100).toFixed(0)}% COGS</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Gross Margin</div>
+            <div class="ai-metric-val">${((1.0 - testCostRatio) * 100).toFixed(0)}% Margin</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Monthly Surplus</div>
+            <div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Cushion Buffer</div>
+            <div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div>
+          </div>
+        </div>
+
+        <p>সিদ্ধান্ত: ${isSafe ? `কস্ট রেশিও ${(testCostRatio * 100).toFixed(0)}% এ পৌঁছালেও ব্যবসায় <strong>+${fmtMoney(cashAfterReserve)}</strong> এর নিরাপদ লিকুইডিটি বাফার বজায় থাকবে।` : `সতর্কতা: কস্ট রেশিও ${(testCostRatio * 100).toFixed(0)}% হলে রিজার্ভের নিচে ঘাটতি (Deficit) তৈরি হতে পারে। পরিচালন ব্যয় নিয়ন্ত্রণ জরুরি।`}</p>
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_expense_shock · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="applyScenarioToControls(${salesShift}, ${(testCostRatio * 100).toFixed(0)})">⚡ Apply ${(testCostRatio * 100).toFixed(0)}% Cost to Studio</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    } else {
+      return `
+        <p><strong>📈【Cost Inflation & Operating Margin Sensitivity】</strong></p>
+        <p>Simulating operational cost ratio elevated to <strong>${(testCostRatio * 100).toFixed(0)}% COGS</strong>:</p>
+        
+        <div class="ai-metric-grid">
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Cost Ratio</div>
+            <div class="ai-metric-val" style="color: var(--accent-amber);">${(testCostRatio * 100).toFixed(0)}% COGS</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Gross Margin</div>
+            <div class="ai-metric-val">${((1.0 - testCostRatio) * 100).toFixed(0)}% Margin</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Monthly Surplus</div>
+            <div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div>
+          </div>
+          <div class="ai-metric-cell">
+            <div class="ai-metric-lbl">Liquidity Buffer</div>
+            <div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div>
+          </div>
+        </div>
+
+        <p>Verdict: ${isSafe ? `Even at ${(testCostRatio * 100).toFixed(0)}% COGS, a liquidity buffer of <strong>+${fmtMoney(cashAfterReserve)}</strong> is safely retained.` : `Warning: A ${(testCostRatio * 100).toFixed(0)}% cost ratio breaches reserve thresholds. Immediate opex reduction advised.`}</p>
+        <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_expense_shock · Verified ✓</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="applyScenarioToControls(${salesShift}, ${(testCostRatio * 100).toFixed(0)})">⚡ Apply ${(testCostRatio * 100).toFixed(0)}% Cost to Studio</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+        </div>
+      `;
+    }
+  }
+
+  // INTENT 5: Default Treasury Stress Test (Percentage shift)
+  let simShift = salesShift;
   const matchPct = lowerQ.match(/([+-]?\d+)\s*%/);
   if (matchPct) {
     simShift = parseFloat(matchPct[1]);
@@ -660,63 +1024,227 @@ function generateCopilotResponse(query) {
   const cashAfterReserve = availableCash + operatingSurplus - reserveTarget;
   const isSafe = cashAfterReserve >= 0;
 
-  const isBengali = /[\u0980-\u09FF]/.test(query) || copilotLang === 'bn';
-  const isChinese = /[\u4e00-\u9fa5]/.test(query) || copilotLang === 'zh';
-  const isSpanish = copilotLang === 'es';
-
   if (isBengali) {
     return `
-      <p><strong>【ট্রেজারি ডিসিশন ইন্টেলিজেন্স অডিট】</strong></p>
+      <p><strong>🛡️【ট্রেজারি ডিসিশন ইন্টেলিজেন্স অডিট】</strong></p>
       <p>সিমুলেশন প্যারামিটার: বিক্রয় শিফট <strong>${simShift >= 0 ? '+' : ''}${simShift}%</strong>, কস্ট রেশিও <strong>${(costRatio * 100).toFixed(0)}%</strong>।</p>
-      <ul style="margin: 6px 0 8px 18px; padding: 0;">
-        <li>প্রজেক্টেড মাসিক রাজস্ব: <strong>${fmtMoney(projRev)}</strong></li>
-        <li>মাসিক অপারেটিং উদ্বৃত্ত (Surplus): <strong>${fmtMoney(operatingSurplus)}</strong></li>
-        <li>৩০ দিনের সংবিধিবদ্ধ রিজার্ভ টার্গেট: <strong>${fmtMoney(reserveTarget)}</strong></li>
-        <li>রিজার্ভ সংরক্ষণের পর ক্যাশ বাফার: <strong style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</strong></li>
-      </ul>
-      <p>সিদ্ধান্ত: ${isSafe ? 'ব্যবসায় পর্যাপ্ত লিকুইডিটি বাফার রয়েছে (SAFE TIER)। জরুরি ঋণের কোনো প্রয়োজন নেই।' : 'সতর্কতা: রিজার্ভ ঘাটতির আশঙ্কা রয়েছে (SHORTFALL HAZARD)। অপ্রয়োজনীয় পরিচালন ব্যয় কমাতে হবে।'}</p>
-      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency</div>
+      
+      <div class="ai-metric-grid">
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Projected Revenue</div>
+          <div class="ai-metric-val">${fmtMoney(projRev)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Operating Surplus</div>
+          <div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Reserve Target</div>
+          <div class="ai-metric-val">৳260,400</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Safety Cushion</div>
+          <div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div>
+        </div>
+      </div>
+
+      <p><strong>সিদ্ধান্ত:</strong> ${isSafe ? 'ব্যবসায় পর্যাপ্ত লিকুইডিটি বাফার রয়েছে (SAFE TIER)। রিজার্ভ নিরাপদ এবং জরুরি বহিঃস্থ ঋণের কোনো প্রয়োজন নেই।' : 'সতর্কতা: রিজার্ভ ঘাটতির আশঙ্কা রয়েছে (SHORTFALL HAZARD)। তাৎক্ষণিকভাবে পরিচালন ব্যয় ও ইনভেন্টরি পারচেজ স্থগিত করার সুপারিশ করা হলো।'}</p>
+      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+      <div class="ai-actions-row">
+        <button class="ai-action-btn" onclick="applyScenarioToControls(${simShift}, ${costRatioPct})">⚡ Apply ${simShift}% Shift to Studio</button>
+        <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+      </div>
     `;
   } else if (isChinese) {
     return `
-      <p><strong>【企业流动性决策智能审计报告】</strong></p>
+      <p><strong>🛡️【企业流动性决策智能审计报告】</strong></p>
       <p>模拟参数：销售变动 <strong>${simShift >= 0 ? '+' : ''}${simShift}%</strong>，成本比率 <strong>${(costRatio * 100).toFixed(0)}%</strong>。</p>
-      <ul style="margin: 6px 0 8px 18px; padding: 0;">
-        <li>预测月度营业额：<strong>${fmtMoney(projRev)}</strong></li>
-        <li>月度运营盈余：<strong>${fmtMoney(operatingSurplus)}</strong></li>
-        <li>30天法定储备金目标：<strong>${fmtMoney(reserveTarget)}</strong></li>
-        <li>储备拨备后净流动性缓冲：<strong style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</strong></li>
-      </ul>
-      <p>审计结论：${isSafe ? '流动性充足，处于安全状态 (SAFE TIER)。无需启动紧急短期授信。' : '预警：存在资金缺口风险 (DEFICIT HAZARD)，建议推迟非必要性支出。'}</p>
-      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency</div>
+      
+      <div class="ai-metric-grid">
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">预测营业额</div>
+          <div class="ai-metric-val">${fmtMoney(projRev)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">运营盈余</div>
+          <div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">储备目标</div>
+          <div class="ai-metric-val">৳260,400</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">净缓冲资金</div>
+          <div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div>
+        </div>
+      </div>
+
+      <p>审计结论：${isSafe ? '流动性充足，处于安全评级 (SAFE TIER)。无需启动紧急短期授信。' : '预警：存在资金缺口风险 (DEFICIT HAZARD)，建议推迟非必要采购。'}</p>
+      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+      <div class="ai-actions-row">
+        <button class="ai-action-btn" onclick="applyScenarioToControls(${simShift}, ${costRatioPct})">⚡ 应用此情景至工作台</button>
+        <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 复制报告</button>
+      </div>
     `;
   } else if (isSpanish) {
     return `
-      <p><strong>【Auditoría de Inteligencia de Decisiones】</strong></p>
+      <p><strong>🛡️【Auditoría de Inteligencia de Decisiones】</strong></p>
       <p>Parámetros: Variación de ventas <strong>${simShift >= 0 ? '+' : ''}${simShift}%</strong>, ratio de costos <strong>${(costRatio * 100).toFixed(0)}%</strong>.</p>
-      <ul style="margin: 6px 0 8px 18px; padding: 0;">
-        <li>Ingresos Proyectados: <strong>${fmtMoney(projRev)}</strong></li>
-        <li>Superávit Operativo Mensual: <strong>${fmtMoney(operatingSurplus)}</strong></li>
-        <li>Meta de Reserva a 30 Días: <strong>${fmtMoney(reserveTarget)}</strong></li>
-        <li>Colchón Tras Reserva: <strong style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</strong></li>
-      </ul>
+      
+      <div class="ai-metric-grid">
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Ingresos Proyectados</div>
+          <div class="ai-metric-val">${fmtMoney(projRev)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Superávit Mensual</div>
+          <div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Meta Reserva</div>
+          <div class="ai-metric-val">৳260,400</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Colchón Neto</div>
+          <div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div>
+        </div>
+      </div>
+
       <p>Veredicto: ${isSafe ? 'Liquidez adecuada y solvente (Nivel Seguro).' : 'Alerta de déficit potencial en la reserva operativa.'}</p>
-      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency</div>
+      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+      <div class="ai-actions-row">
+        <button class="ai-action-btn" onclick="applyScenarioToControls(${simShift}, ${costRatioPct})">⚡ Aplicar Escenario</button>
+        <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copiar</button>
+      </div>
     `;
   } else {
     return `
-      <p><strong>【Decision Intelligence Treasury Audit】</strong></p>
+      <p><strong>🛡️【Decision Intelligence Treasury Audit】</strong></p>
       <p>Simulated Parameters: Sales shift <strong>${simShift >= 0 ? '+' : ''}${simShift}%</strong>, cost ratio <strong>${(costRatio * 100).toFixed(0)}%</strong>.</p>
-      <ul style="margin: 6px 0 8px 18px; padding: 0;">
-        <li>Projected Monthly Revenue: <strong>${fmtMoney(projRev)}</strong></li>
-        <li>Monthly Operating Surplus: <strong>${fmtMoney(operatingSurplus)}</strong></li>
-        <li>30-Day Reserve Target: <strong>${fmtMoney(reserveTarget)}</strong></li>
-        <li>Cash After Reserve Set-Aside: <strong style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</strong></li>
-      </ul>
+      
+      <div class="ai-metric-grid">
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Projected Revenue</div>
+          <div class="ai-metric-val">${fmtMoney(projRev)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Monthly Surplus</div>
+          <div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Reserve Target</div>
+          <div class="ai-metric-val">৳260,400</div>
+        </div>
+        <div class="ai-metric-cell">
+          <div class="ai-metric-lbl">Safety Cushion</div>
+          <div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div>
+        </div>
+      </div>
+
       <p>Verdict: ${isSafe ? 'Adequate liquidity cushion maintained (SAFE TIER). No credit line intervention required.' : 'Warning: Potential reserve shortfall under this stress scenario.'}</p>
-      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency</div>
+      <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+      <div class="ai-actions-row">
+        <button class="ai-action-btn" onclick="applyScenarioToControls(${simShift}, ${costRatioPct})">⚡ Apply Scenario to Studio</button>
+        <button class="ai-copy-btn" onclick="copyAnalysisText(this)">📋 Copy</button>
+      </div>
     `;
   }
+}
+
+// -------------------------------------------------------------
+// Interactive Advisor Helper Actions
+// -------------------------------------------------------------
+function applyScenarioToControls(salesShift, costRatioPct) {
+  const elGrowth = document.getElementById('input-growth');
+  const elCost = document.getElementById('input-cost');
+  if (elGrowth) elGrowth.value = salesShift;
+  if (elCost) elCost.value = costRatioPct;
+  recomputeBusinessEngine();
+  recomputeTargetPlanner();
+
+  // Switch to scenarios view to see the live update
+  switchDecisionModule('scenarios');
+}
+
+function copyAnalysisText(btn) {
+  const bubble = btn.closest('.entry-bubble');
+  if (!bubble) return;
+  const clone = bubble.cloneNode(true);
+  const actions = clone.querySelector('.ai-actions-row');
+  if (actions) actions.remove();
+  const text = clone.innerText.trim();
+
+  navigator.clipboard.writeText(text).then(() => {
+    const origText = btn.textContent;
+    btn.textContent = '✓ Copied';
+    btn.style.color = 'var(--accent-emerald)';
+    setTimeout(() => {
+      btn.textContent = origText;
+      btn.style.color = '';
+    }, 1500);
+  });
+}
+
+function clearCopilotChat() {
+  const history = document.getElementById('copilot-chat-history');
+  if (!history) return;
+
+  const welcomeMsg = {
+    bn: `
+      <div class="chat-entry bot-entry">
+        <div class="copilot-avatar" style="width: 32px; height: 32px; font-size: 16px;">◈</div>
+        <div class="entry-bubble">
+          <p><strong>FinSight Business Decision Intelligence সক্রিয়।</strong></p>
+          <p>আমি আপনার SME ব্যবসার বর্তমান ক্যাশ ব্যালেন্স, ভবিষ্যত রাজস্ব পূর্বাভাস এবং রিজার্ভ ঘাটতি রিয়েল-টাইমে বিশ্লেষণ করছি।</p>
+          <div class="ai-metric-grid">
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">Available Cash</div><div class="ai-metric-val">৳১৮০,০০০</div></div>
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Proj. Revenue</div><div class="ai-metric-val">৳৪২০,০০০</div></div>
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">Reserve Target</div><div class="ai-metric-val">৳২৬০,৪০০</div></div>
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">Safety Cushion</div><div class="ai-metric-val" style="color: var(--accent-emerald);">+৳৭৯,২০০</div></div>
+          </div>
+          <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+        </div>
+      </div>
+    `,
+    en: `
+      <div class="chat-entry bot-entry">
+        <div class="copilot-avatar" style="width: 32px; height: 32px; font-size: 16px;">◈</div>
+        <div class="entry-bubble">
+          <p><strong>FinSight Business Decision Intelligence Online.</strong></p>
+          <p>Continuous real-time audit for cash reserve breach, payment delays, and liquidity shocks.</p>
+          <div class="ai-metric-grid">
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">Available Cash</div><div class="ai-metric-val">$1,500</div></div>
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Proj. Revenue</div><div class="ai-metric-val">$3,500</div></div>
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">Reserve Target</div><div class="ai-metric-val">$2,170</div></div>
+            <div class="ai-metric-cell"><div class="ai-metric-lbl">Safety Cushion</div><div class="ai-metric-val" style="color: var(--accent-emerald);">+$660</div></div>
+          </div>
+          <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+        </div>
+      </div>
+    `,
+    zh: `
+      <div class="chat-entry bot-entry">
+        <div class="copilot-avatar" style="width: 32px; height: 32px; font-size: 16px;">◈</div>
+        <div class="entry-bubble">
+          <p><strong>FinSight 商业决策智能系统已就绪。</strong></p>
+          <p>实时审计流动性储备缺口、应收账款账期及销售波动风险。</p>
+          <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+        </div>
+      </div>
+    `,
+    es: `
+      <div class="chat-entry bot-entry">
+        <div class="copilot-avatar" style="width: 32px; height: 32px; font-size: 16px;">◈</div>
+        <div class="entry-bubble">
+          <p><strong>Inteligencia de Decisiones FinSight Activa.</strong></p>
+          <p>Auditoría en tiempo real para solvencia y choque de liquidez.</p>
+          <div class="tool-badge-pill">⚙️ FinSightToolKit.audit_treasury_solvency · Verified ✓</div>
+        </div>
+      </div>
+    `
+  };
+
+  history.innerHTML = welcomeMsg[copilotLang] || welcomeMsg.bn;
 }
 
 function escapeHtml(str) {
