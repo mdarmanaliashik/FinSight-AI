@@ -19,7 +19,7 @@ let businessForecastChart = null;
 
 // Currency conversion rates (Base = BDT)
 const CURRENCIES = {
-  BDT: { symbol: '৳', rate: 1.0, locale: 'bn-BD', label: 'BDT' },
+  BDT: { symbol: '৳', rate: 1.0, locale: 'en-US', label: 'BDT' },
   USD: { symbol: '$', rate: 0.00833, locale: 'en-US', label: 'USD' },
   BRL: { symbol: 'R$ ', rate: 0.045, locale: 'pt-BR', label: 'BRL' },
   CNY: { symbol: '¥', rate: 0.060, locale: 'zh-CN', label: 'CNY' },

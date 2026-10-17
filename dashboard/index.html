@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.2">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -53,33 +53,33 @@
     <div class="workflow-step-bar">
       <div class="step-item active" id="wf-step-1">
         <div class="step-num">1</div>
-        <div>
-          <span>Monitor</span>
-          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">Sales, profit & cash balance</span>
+        <div class="step-content">
+          <span class="step-title">Monitor</span>
+          <span class="step-sub">Sales, profit & cash balance</span>
         </div>
       </div>
       <span class="step-arrow">→</span>
       <div class="step-item active" id="wf-step-2">
         <div class="step-num">2</div>
-        <div>
-          <span>Predict</span>
-          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">7 / 14 / 30-day forecast & bands</span>
+        <div class="step-content">
+          <span class="step-title">Predict</span>
+          <span class="step-sub">7 / 14 / 30-day forecast & bands</span>
         </div>
       </div>
       <span class="step-arrow">→</span>
       <div class="step-item active" id="wf-step-3">
         <div class="step-num">3</div>
-        <div>
-          <span>Detect Risk</span>
-          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">Reserve breach & liquidity hazard</span>
+        <div class="step-content">
+          <span class="step-title">Detect Risk</span>
+          <span class="step-sub">Reserve breach & liquidity hazard</span>
         </div>
       </div>
       <span class="step-arrow">→</span>
       <div class="step-item active" id="wf-step-4">
         <div class="step-num">4</div>
-        <div>
-          <span>Recommend Actions</span>
-          <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 500;">Targets, strategy & simulations</span>
+        <div class="step-content">
+          <span class="step-title">Recommend Actions</span>
+          <span class="step-sub">Targets, strategy & simulations</span>
         </div>
       </div>
     </div>
@@ -546,6 +546,6 @@
     </footer>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2.2"></script>
 </body>
 </html>
