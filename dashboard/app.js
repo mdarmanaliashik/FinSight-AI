@@ -314,10 +314,10 @@ function setCostPreset(val) {
 }
 
 function resetControls() {
-  document.getElementById('input-growth').value = 0;
-  document.getElementById('input-cash').value = 180000;
-  document.getElementById('input-cost').value = 62;
-  document.getElementById('input-target-revenue').value = 500000;
+  const g = document.getElementById('input-growth'); if (g) g.value = 0;
+  const c = document.getElementById('input-cash'); if (c) c.value = 180000;
+  const k = document.getElementById('input-cost'); if (k) k.value = 62;
+  const t = document.getElementById('input-target-revenue'); if (t) t.value = 500000;
   recomputeBusinessEngine();
   recomputeTargetPlanner();
 }
@@ -1938,11 +1938,11 @@ function generateDynamicFollowUps(intentKey, targetLang, isSafe, state) {
 
 function _computeCopilotResponseRaw(query) {
   const prevTurn = copilotConversationHistory.length > 0 ? copilotConversationHistory[copilotConversationHistory.length - 1] : null;
-  const salesShift = parseFloat(document.getElementById('input-growth').value) || 0;
-  const availableCash = parseFloat(document.getElementById('input-cash').value) || 180000;
-  const costRatioPct = parseFloat(document.getElementById('input-cost').value) || 62;
+  const salesShift = parseFloat(document.getElementById('input-growth')?.value) || 0;
+  const availableCash = parseFloat(document.getElementById('input-cash')?.value) || 180000;
+  const costRatioPct = parseFloat(document.getElementById('input-cost')?.value) || 62;
   const costRatio = costRatioPct / 100.0;
-  const targetVal = parseFloat(document.getElementById('input-target-revenue').value) || 500000;
+  const targetVal = parseFloat(document.getElementById('input-target-revenue')?.value) || 500000;
 
   const targetLang = detectScriptLanguage(query, copilotLang);
   const normQuery = normalizeAsianDigits(query);
