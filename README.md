@@ -46,7 +46,7 @@
 
 ---
 
-## 📚 Complete Pre-Rendered Research Notebook Suite
+## Complete Pre-Rendered Research Notebook Suite
 
 All research notebooks are fully executed and pre-rendered with interactive Plotly visual analytics, styled benchmark scorecards, and formal mathematical proofs:
 
@@ -60,20 +60,20 @@ All research notebooks are fully executed and pre-rendered with interactive Plot
 
 ---
 
-## 🏆 Phase 3 Benchmark Scorecard Highlights
+## Phase 3 Benchmark Scorecard Highlights
 
 ### 1. Primary Micro-SME Tactical Daily Forecasting (Holdout Horizon $H=225$ Days)
 
 | Model Architecture | MAE (R$) | RMSE (R$) | WAPE (%) | Directional Accuracy | Diebold-Mariano $p$-value | Relative Improvement |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| 🏆 **Adaptive CatBoost (Champion)** | **218.93** | 358.37 | **59.80%** | **71.1%** | **< 0.001** | **+25.81%** |
-| 🥞 **Upgraded Stacking Ensemble** | 231.26 | **295.40** | 63.17% | 68.4% | < 0.001 | +21.63% |
-| ⚡ **Walk-Forward LightGBM** | 238.12 | 344.20 | 65.04% | 69.8% | < 0.001 | +19.31% |
-| 📈 **CatBoost (Raw Features)** | 240.50 | 360.10 | 65.69% | 68.0% | < 0.001 | +18.50% |
-| 📉 **Support Vector Regression (RBF)** | 260.15 | 390.45 | 71.06% | 62.5% | 0.012 | +11.84% |
-| 🧠 **LSTM Recurrent Network** | 275.40 | 410.20 | 75.22% | 58.2% | 0.045 | +6.68% |
-| 🛑 **Zero-Predictor Hurdle Baseline** | 366.11 | 498.70 | 100.00% | 0.0% | — | -24.06% |
-| 📊 **Historical Mean Baseline** | 295.10 | 425.80 | 80.61% | 50.0% | — | Baseline |
+| **Adaptive CatBoost (Champion)** | **218.93** | 358.37 | **59.80%** | **71.1%** | **< 0.001** | **+25.81%** |
+| **Upgraded Stacking Ensemble** | 231.26 | **295.40** | 63.17% | 68.4% | < 0.001 | +21.63% |
+| **Walk-Forward LightGBM** | 238.12 | 344.20 | 65.04% | 69.8% | < 0.001 | +19.31% |
+| **CatBoost (Raw Features)** | 240.50 | 360.10 | 65.69% | 68.0% | < 0.001 | +18.50% |
+| **Support Vector Regression (RBF)** | 260.15 | 390.45 | 71.06% | 62.5% | 0.012 | +11.84% |
+| **LSTM Recurrent Network** | 275.40 | 410.20 | 75.22% | 58.2% | 0.045 | +6.68% |
+| **Zero-Predictor Hurdle Baseline** | 366.11 | 498.70 | 100.00% | 0.0% | — | -24.06% |
+| **Historical Mean Baseline** | 295.10 | 425.80 | 80.61% | 50.0% | — | Baseline |
 
 ### 2. Platform Macro Cumulative Inflow ($H=7$ Horizon)
 
@@ -91,37 +91,37 @@ All research notebooks are fully executed and pre-rendered with interactive Plot
 
 ---
 
-## 🌐 6-Language Multilingual Performance ($N=6,000$ Stress Suite)
+## 6-Language Multilingual Performance ($N=6,000$ Stress Suite)
 
 | Language | Script | Prompts | Language Detection | Tool Dispatch Accuracy | Zero-Hallucination Rate | Mean Rubric Score | Mean Latency |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| 🇬🇧 **English** | Latin | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.50 / 10** | 4.34 ms |
-| 🇧🇩 **Bengali (বাংলা)** | Bengali | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.05 / 10** | 6.00 ms |
-| 🇨🇳 **Chinese (中文)** | Hanzi | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.05 / 10** | 6.17 ms |
-| 🇯🇵 **Japanese (日本語)** | Kana/Kanji | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.00 / 10** | 5.59 ms |
-| 🇮🇳 **Hindi (हिन्दी)** | Devanagari | 1,000 | **100.0%** | **75.0%** | **100.0%** | **8.50 / 10** | 3.42 ms |
-| 🇵🇰 **Urdu (اردو)** | Nastaliq | 1,000 | **100.0%** | **75.0%** | **100.0%** | **8.06 / 10** | 4.68 ms |
+| **English** | Latin | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.50 / 10** | 4.34 ms |
+| **Bengali (বাংলা)** | Bengali | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.05 / 10** | 6.00 ms |
+| **Chinese (中文)** | Hanzi | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.05 / 10** | 6.17 ms |
+| **Japanese (日本語)** | Kana/Kanji | 1,000 | **100.0%** | **100.0%** | **100.0%** | **9.00 / 10** | 5.59 ms |
+| **Hindi (हिन्दी)** | Devanagari | 1,000 | **100.0%** | **75.0%** | **100.0%** | **8.50 / 10** | 3.42 ms |
+| **Urdu (اردو)** | Nastaliq | 1,000 | **100.0%** | **75.0%** | **100.0%** | **8.06 / 10** | 4.68 ms |
 | **Overall Suite** | **6 Languages** | **6,000** | **100.0%** | **91.67%** | **100.0%** | **8.86 / 10** | **5.04 ms** |
 
 ---
 
-## 📦 Serialized Model Binaries (`models/`)
+## Serialized Model Binaries (`models/`)
 
 All trained models are serialized using `joblib` and cryptographically tracked in `data/processed/phase3_dataset_manifest.json`:
 
 ```
 models/
-├── olist_best_catboost_ratio.joblib       # 🏆 Phase 3 Champion: Adaptive Trend-Calibrated CatBoost (WAPE 59.80%)
-├── olist_best_stacking_ratio.joblib       # 🥞 Upgraded Stacking Meta-Learner (CatBoost + LightGBM + Ridge)
-├── olist_best_lightgbm_ratio.joblib       # ⚡ Scale-Invariant Ratio Space LightGBM
-├── olist_best_catboost_raw.joblib         # 📈 Uncalibrated Baseline CatBoost
-├── olist_platform_cb_ratio.joblib         # 🌐 Macro Platform CatBoost (Cumulative Inflow WAPE 0.93%)
-└── olist_platform_lgb_ratio.joblib        # 🌐 Macro Platform LightGBM
+├── olist_best_catboost_ratio.joblib       # Phase 3 Champion: Adaptive Trend-Calibrated CatBoost (WAPE 59.80%)
+├── olist_best_stacking_ratio.joblib       # Upgraded Stacking Meta-Learner (CatBoost + LightGBM + Ridge)
+├── olist_best_lightgbm_ratio.joblib       # Scale-Invariant Ratio Space LightGBM
+├── olist_best_catboost_raw.joblib         # Uncalibrated Baseline CatBoost
+├── olist_platform_cb_ratio.joblib         # Macro Platform CatBoost (Cumulative Inflow WAPE 0.93%)
+└── olist_platform_lgb_ratio.joblib        # Macro Platform LightGBM
 ```
 
 ---
 
-## ⚡ Quickstart & Reproducibility
+## Quickstart & Reproducibility
 
 ### 1. Environment Setup
 ```bash
@@ -165,7 +165,7 @@ Open `http://localhost:8501` to test the interactive scenario sliders, dynamic P
 
 ---
 
-## 📄 Academic Data Statement & Licensing
+## Academic Data Statement & Licensing
 - **Olist Brazilian E-Commerce Dataset:** Olist & André Sionek (DOI: [10.5281/zenodo.10515152](https://doi.org/10.5281/zenodo.10515152), CC BY-NC-SA 4.0).
 - **JD.com Retail Dataset:** Asian e-commerce transaction repository (550,000 verified purchase orders).
 - **Codebase License:** Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
