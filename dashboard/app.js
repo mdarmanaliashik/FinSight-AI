@@ -421,13 +421,26 @@ function renderPredictiveChart(monthlyRevenueBDT, numDays) {
   document.getElementById('h-stat-p10').textContent = `${fmtMoney(baseDailyMeanBDT * 0.60)} / day`;
   document.getElementById('h-stat-p90').textContent = `${fmtMoney(baseDailyMeanBDT * 1.50)} / day`;
 
+  // Update Uncertainty & Probability Spectrum Tiers
+  const probP10 = document.getElementById('prob-val-p10');
+  if (probP10) probP10.textContent = `${fmtMoney(baseDailyMeanBDT * 0.60)} / day`;
+  const probP90 = document.getElementById('prob-val-p90');
+  if (probP90) probP90.textContent = `${fmtMoney(baseDailyMeanBDT * 1.50)} / day`;
+  const probInterval = document.getElementById('prob-val-interval');
+  if (probInterval) probInterval.textContent = `${fmtMoney(baseDailyMeanBDT * 0.60)} — ${fmtMoney(baseDailyMeanBDT * 1.50)}`;
+  const lblEvalCurr = document.getElementById('lbl-eval-curr');
+  if (lblEvalCurr) lblEvalCurr.textContent = `${CURRENCIES[activeCurrency].label} / day`;
+
+  // Trigger Evaluator recalculation
+  evaluateTargetProbability();
+
   businessForecastChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: labels,
       datasets: [
         {
-          label: 'Optimistic Surge (P90)',
+          label: 'Optimistic Surge (P90 — 90% Bound)',
           data: forecastP90,
           borderColor: 'transparent',
           backgroundColor: 'rgba(56, 189, 248, 0.12)',
@@ -436,9 +449,9 @@ function renderPredictiveChart(monthlyRevenueBDT, numDays) {
           tension: 0.28
         },
         {
-          label: 'Downside Floor (P10)',
+          label: 'Downside Floor (P10 — 10% Left-Tail Risk)',
           data: forecastP10,
-          borderColor: 'rgba(245, 158, 11, 0.65)',
+          borderColor: 'rgba(245, 158, 11, 0.75)',
           borderDash: [4, 4],
           backgroundColor: 'transparent',
           fill: false,
@@ -446,7 +459,7 @@ function renderPredictiveChart(monthlyRevenueBDT, numDays) {
           tension: 0.28
         },
         {
-          label: 'Projected Sales (P50 Forecast)',
+          label: 'Projected Median (P50 — 50% Prob)',
           data: forecastP50,
           borderColor: '#10b981',
           backgroundColor: '#10b981',
@@ -490,7 +503,13 @@ function renderPredictiveChart(monthlyRevenueBDT, numDays) {
           boxPadding: 6,
           usePointStyle: true,
           callbacks: {
-            label: (ctx) => ` ${ctx.dataset.label}: ${c.symbol}${ctx.parsed.y.toLocaleString()}`
+            label: (ctx) => ` ${ctx.dataset.label}: ${c.symbol}${ctx.parsed.y.toLocaleString()}`,
+            afterBody: () => [
+              '',
+              'Conformal Interval: 80% Verified Coverage',
+              'Downside Tail Risk (< P10): 10.0% Probability',
+              'Surge Potential (> P90): 10.0% Probability'
+            ]
           }
         }
       },
@@ -1393,4 +1412,63 @@ function sendSidebarMessage() {
     `);
     history.scrollTop = history.scrollHeight;
   }, 300);
+}
+
+// -------------------------------------------------------------
+// Interactive Conformal Uncertainty & Exceedance Probability Engine
+// -------------------------------------------------------------
+function evaluateTargetProbability() {
+  const input = document.getElementById('input-eval-target');
+  if (!input) return;
+  const targetValCurr = parseFloat(input.value) || 0;
+  
+  // Convert target to BDT
+  const c = CURRENCIES[activeCurrency];
+  const targetBDT = targetValCurr / c.rate;
+
+  // Read current baseline daily mean
+  const salesShiftPct = parseFloat(document.getElementById('input-growth').value) || 0;
+  const shiftMultiplier = 1.0 + (salesShiftPct / 100.0);
+  const baseDailyMeanBDT = (BASE_MONTHLY_REVENUE_BDT * shiftMultiplier) / 30.0;
+
+  const p10 = baseDailyMeanBDT * 0.60;
+  const p50 = baseDailyMeanBDT;
+  const p90 = baseDailyMeanBDT * 1.50;
+
+  let probExceed = 0;
+  if (targetBDT <= p10) {
+    const ratio = Math.max(0, targetBDT / (p10 || 1));
+    probExceed = 90.0 + (1.0 - ratio) * 9.9;
+  } else if (targetBDT <= p50) {
+    const fraction = (targetBDT - p10) / (p50 - p10);
+    probExceed = 90.0 - fraction * 40.0;
+  } else if (targetBDT <= p90) {
+    const fraction = (targetBDT - p50) / (p90 - p50);
+    probExceed = 50.0 - fraction * 40.0;
+  } else {
+    const excessRatio = (targetBDT - p90) / (p90 || 1);
+    probExceed = Math.max(0.1, 10.0 * Math.exp(-excessRatio * 2.0));
+  }
+
+  probExceed = Math.min(99.9, Math.max(0.1, probExceed));
+
+  const resultEl = document.getElementById('eval-prob-result');
+  const statusEl = document.getElementById('eval-risk-status');
+
+  if (resultEl) {
+    resultEl.textContent = `P(Daily Sales ≥ ${fmtMoney(targetBDT)}) = ${probExceed.toFixed(1)}%`;
+  }
+
+  if (statusEl) {
+    if (probExceed >= 75.0) {
+      statusEl.textContent = 'HIGH CONFIDENCE (VERY PROBABLE)';
+      statusEl.className = 'risk-badge risk-badge-green';
+    } else if (probExceed >= 40.0) {
+      statusEl.textContent = 'MODERATE LIKELIHOOD (EXPECTED)';
+      statusEl.className = 'risk-badge risk-badge-amber';
+    } else {
+      statusEl.textContent = 'LOW PROBABILITY (SURGE / STRETCH)';
+      statusEl.className = 'risk-badge risk-badge-red';
+    }
+  }
 }

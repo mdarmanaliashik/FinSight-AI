@@ -1526,3 +1526,188 @@ input[type="range"]::-webkit-slider-thumb:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   UNCERTAINTY QUANTIFICATION & PROBABILITY SPECTRUM COMPONENTS
+   ========================================================================== */
+.uncertainty-spectrum-card {
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-3d-recessed);
+}
+
+.spectrum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.spectrum-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin-bottom: 3px;
+}
+
+.spectrum-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.prob-spectrum-bar-wrap {
+  background: #060910;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 16px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.prob-bar-track {
+  display: flex;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  gap: 3px;
+}
+
+.prob-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prob-seg-tail-left {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.4));
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #fcd34d;
+}
+
+.prob-seg-confidence {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.35) 0%, rgba(6, 182, 212, 0.4) 50%, rgba(16, 185, 129, 0.35) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.6);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
+}
+
+.prob-seg-tail-right {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.25), rgba(59, 130, 246, 0.4));
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  color: #7dd3fc;
+}
+
+.prob-tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.prob-tier-card {
+  background: #0c121e;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.tier-prob-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.tier-tail .tier-prob-badge {
+  color: #f59e0b;
+}
+
+.tier-confidence .tier-prob-badge {
+  color: #10b981;
+}
+
+.tier-surge .tier-prob-badge {
+  color: #38bdf8;
+}
+
+.tier-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.tier-val {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 2px 0;
+}
+
+.tier-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.prob-evaluator-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #060910;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.evaluator-input-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.evaluator-result-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.evaluator-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-family: var(--font-mono);
+}
+
+.evaluator-prob-val {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 800;
+  color: #38bdf8;
+}
