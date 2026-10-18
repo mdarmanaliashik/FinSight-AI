@@ -3091,7 +3091,7 @@ function _computeCopilotResponseRaw(query) {
         </ul>
         <div class="tool-badge-pill">[Verified by FinSightToolKit.synthesize_strategic_roadmap]</div>
         <div class="ai-actions-row">
-          <button class="ai-action-btn" onclick="openStrategyRoadmap(this)">Open Strategy Roadmap</button>
+          <button class="ai-action-btn" onclick="openStressSimulator(this)">Open Stress Simulator</button>
           <button class="ai-copy-btn" onclick="copyAnalysisText(this)">Copy Strategy</button>
         </div>
       `;
@@ -3112,7 +3112,7 @@ function _computeCopilotResponseRaw(query) {
         </ul>
         <div class="tool-badge-pill">[Verified by FinSightToolKit.synthesize_strategic_roadmap]</div>
         <div class="ai-actions-row">
-          <button class="ai-action-btn" onclick="openStrategyRoadmap(this)">Open Strategy Roadmap</button>
+          <button class="ai-action-btn" onclick="openStressSimulator(this)">Open Stress Simulator</button>
           <button class="ai-copy-btn" onclick="copyAnalysisText(this)">Copy Strategy</button>
         </div>
       `;
@@ -3401,11 +3401,9 @@ function applyScenarioToControls(salesShift, costRatioPct, targetRevenue = null,
   // 8. Switch to scenarios view without resetting scroll to top
   switchDecisionModule('scenarios', false);
 
-  // 9. Smoothly scroll to the relevant section (target planner or simulator)
+  // 9. Smoothly scroll to the scenario simulator
   setTimeout(() => {
-    const targetSection = (targetRevenue !== null && targetRevenue !== undefined)
-      ? document.getElementById('sec-target-planner')
-      : document.getElementById('sec-simulator');
+    const targetSection = document.getElementById('sec-simulator');
     if (targetSection) {
       targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       targetSection.classList.add('section-highlight-pulse');
@@ -3414,26 +3412,20 @@ function applyScenarioToControls(salesShift, costRatioPct, targetRevenue = null,
   }, 100);
 }
 
-function openStrategyRoadmap(btnElement = null) {
+function openStressSimulator(btnElement = null) {
   if (btnElement && (btnElement.nodeType === 1 || btnElement.classList)) {
     const orig = btnElement.innerHTML;
-    btnElement.innerHTML = '✓ Opening Studio...';
+    btnElement.innerHTML = '✓ Opening Simulator...';
     btnElement.classList.add('applied');
     setTimeout(() => {
       btnElement.innerHTML = orig;
       btnElement.classList.remove('applied');
     }, 2000);
   }
-  showStudioToast('🎯 Navigating to Strategy Roadmap...');
+  showStudioToast('🎯 Navigating to Scenario Simulator...');
   switchDecisionModule('scenarios', false);
   setTimeout(() => {
-    const targetBody = document.getElementById('target-planner-body');
-    if (targetBody && targetBody.style.display === 'none') {
-      targetBody.style.display = 'block';
-      const btnToggle = document.getElementById('btn-toggle-planner');
-      if (btnToggle) btnToggle.textContent = 'Hide target planner';
-    }
-    const sec = document.getElementById('sec-target-planner');
+    const sec = document.getElementById('sec-simulator');
     if (sec) {
       sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       sec.classList.add('section-highlight-pulse');
@@ -3441,6 +3433,7 @@ function openStrategyRoadmap(btnElement = null) {
     }
   }, 100);
 }
+const openStrategyRoadmap = openStressSimulator;
 
 function copyAnalysisText(btn) {
   const bubble = btn.closest('.entry-bubble');
