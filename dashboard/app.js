@@ -1603,7 +1603,7 @@ function detectScriptLanguage(text, fallback) {
     return 'zh'; // Chinese
   }
   // Detect phonetic Banglish phrasing
-  if (/(\b(ki|korte|kora|korbo|pabo|uchit|amar|amader|kemon|cholche|bhalo|hobe|koto|taka|bariye|komiye|lagbe|dorkar|ache|shob|thik|kivabe)\b)/i.test(text)) {
+  if (/(\b(ki|korte|kora|korbo|pabo|uchit|amar|amader|kemon|cholche|bhalo|hobe|koto|taka|bariye|komiye|lagbe|dorkar|ache|shob|thik|kivabe|nam|naam|tumi|apni|bolo|bolte|janau)\b)/i.test(text)) {
     return 'bn';
   }
   return fallback || 'en';
@@ -2095,35 +2095,45 @@ function _computeCopilotResponseRaw(query) {
     }
   }
 
-  // INTENT 0: Greetings, Introduction & Help
+  // INTENT 0: Greetings, Identity, Introduction & Help
   // -------------------------------------------------------------
   const isGreeting = /^(hi|hello|hey|good\s*(morning|afternoon|evening)|salam|assalamu|namaste|hola|bonjour)/i.test(lowerQ) ||
-    lowerQ.includes('who are you') || lowerQ.includes('what can you do') || lowerQ.includes('help') || lowerQ.includes('how are you') ||
-    lowerQ.includes('features') || lowerQ.includes('kemon acho') || lowerQ.includes('tumi ke') || lowerQ.includes('ki korte paro') ||
+    lowerQ.includes('what is your name') || lowerQ.includes('whats your name') || lowerQ.includes("what's your name") ||
+    lowerQ.includes('your name') || lowerQ.includes('who are you') || lowerQ.includes('who made you') ||
+    lowerQ.includes('what can you do') || lowerQ.includes('what do you do') || lowerQ.includes('help') ||
+    lowerQ.includes('how are you') || lowerQ.includes('features') ||
+    lowerQ.includes('tomar nam ki') || lowerQ.includes('tomar naam ki') || lowerQ.includes('apnar nam ki') ||
+    lowerQ.includes('apnar naam ki') || lowerQ.includes('kemon acho') || lowerQ.includes('tumi ke') ||
+    lowerQ.includes('ki korte paro') || lowerQ.includes('tumi kar') ||
+    lowerQ.includes('তোমার নাম কি') || lowerQ.includes('তোমার নাম কী') || lowerQ.includes('আপনার নাম কি') ||
+    lowerQ.includes('আপনার নাম কী') || lowerQ.includes('নাম কি') || lowerQ.includes('নাম কী') ||
+    lowerQ.includes('তুমি কে') || lowerQ.includes('আপনি কে') || lowerQ.includes('কী করতে পার') ||
     lowerQ.includes('হ্যালো') || lowerQ.includes('হাই') || lowerQ.includes('সালাম') || lowerQ.includes('নমস্কার') ||
-    lowerQ.includes('কেমন আছো') || lowerQ.includes('কেমন আছেন') || lowerQ.includes('তুমি কে') || lowerQ.includes('কী করতে পার') ||
-    lowerQ.includes('সাহায্য') || lowerQ.includes('হেল্প') || lowerQ.includes('পরিচয়') ||
-    lowerQ.includes('नमस्ते') || lowerQ.includes('मदद') || lowerQ.includes('आप कौन हैं') ||
-    lowerQ.includes('سلام') || lowerQ.includes('مدد') || lowerQ.includes('آپ کون ہیں') ||
-    lowerQ.includes('你好') || lowerQ.includes('您好') || lowerQ.includes('帮助') || lowerQ.includes('你是谁') ||
-    lowerQ.includes('こんにちは') || lowerQ.includes('ヘルプ') || lowerQ.includes('あなたは誰');
+    lowerQ.includes('কেমন আছো') || lowerQ.includes('কেমন আছেন') || lowerQ.includes('সাহায্য') ||
+    lowerQ.includes('হেল্প') || lowerQ.includes('পরিচয়') || lowerQ.includes('পরিচয় কি') || lowerQ.includes('পরিচয় দাও') ||
+    lowerQ.includes('आपका नाम क्या है') || lowerQ.includes('तुम कौन हो') || lowerQ.includes('आप कौन हैं') ||
+    lowerQ.includes('नमस्ते') || lowerQ.includes('मदद') ||
+    lowerQ.includes('آپ کا نام کیا ہے') || lowerQ.includes('آپ کون ہیں') || lowerQ.includes('سلام') || lowerQ.includes('مدد') ||
+    lowerQ.includes('你叫什么名字') || lowerQ.includes('你的名字') || lowerQ.includes('你是谁') || lowerQ.includes('你好') || lowerQ.includes('您好') || lowerQ.includes('帮助') ||
+    lowerQ.includes('お名前は何ですか') || lowerQ.includes('名前は何') || lowerQ.includes('あなたは誰') || lowerQ.includes('こんにちは') || lowerQ.includes('ヘルプ');
 
   if (isGreeting) {
     lastDetectedIntent = 'general';
     if (targetLang === 'bn') {
       return `
-        <p><strong>【FinSight AI — ডিসিশন ইন্টেলিজেন্স অ্যাসিস্ট্যান্ট】</strong></p>
-        <p>হ্যালো! আমি আপনার ব্যবসার রিয়েল-টাইম ক্যাশ ফ্লো, বিক্রয় পূর্বাভাস, লিকুইডিটি ঝুঁকি এবং স্ট্র্যাটেজিক পরিকল্পনা বিশ্লেষণে সাহায্য করি।</p>
+        <p><strong>【FinSight AI — SME বিজনেস ডিসিশন ইন্টেলিজেন্স কো-পাইলট】</strong></p>
+        <p>আমার নাম <strong>FinSight AI</strong> (ফিনসাইট এআই)। আমি ক্ষুদ্র ও মাঝারি ব্যবসা (SME) এবং উদ্যোক্তাদের জন্য নির্মিত একটি বিশেষজ্ঞ <strong>বিজনেস ডিসিশন ইন্টেলিজেন্স ও ফিন্যান্সিয়াল কো-পাইলট</strong>।</p>
+        <p><strong>আমার মূল দায়িত্ব ও বৈশিষ্ট্য:</strong> <em>আমি শুধুমাত্র আপনার ব্যবসা এবং অর্থসংক্রান্ত বিষয়ে সিদ্ধান্ত নিতে সহায়তা করি</em>—যেমন নগদ ক্যাশ ফ্লো অডিট, বিক্রয় পূর্বাভাস (P10/P50/P90), রানওয়ে পর্যবেক্ষণ, লাভ বৃদ্ধি, পরিচালন ব্যয় নিয়ন্ত্রণ এবং ট্রেজারি বাফার প্রতিরক্ষা।</p>
         <div class="ai-metric-grid">
           <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Forecast (P50)</div><div class="ai-metric-val" style="color: var(--accent-blue);">${fmtMoney(projRev)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Gross Margin</div><div class="ai-metric-val" style="color: var(--accent-emerald);">${Math.round(grossMarginRatio * 100)}%</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Available Cash</div><div class="ai-metric-val">${fmtMoney(availableCash)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Safety Cushion</div><div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div></div>
         </div>
-        <p><strong>আমি যেসব বিষয়ে সহায়তা করতে পারি:</strong></p>
+        <p><strong>আপনি ব্যবসা সংক্রান্ত যেকোনো প্রশ্ন করতে পারেন, যেমন:</strong></p>
         <ul style="margin: 4px 0 8px 18px; padding: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-          <li>ক্যাশ রানওয়ে এবং দৈনিক অপারেটিং বার্ন নিরীক্ষা।</li>
-          <li>P10 ডাউনসাইড এবং P90 সার্জ বিক্রয় পূর্বাভাস।</li>
+          <li>আমাদের বর্তমান ক্যাশ ব্যালেন্স ও রানওয়ে কত দিন চলবে?</li>
+          <li>বিক্রি বা মুনাফা বাড়াতে কী কী পদক্ষেপ নেওয়া উচিত?</li>
           <li>টার্গেট রেভেনিউ পূরণের জন্য ৩-ধাপের কৌশলগত রোডম্যাপ।</li>
           <li>কস্ট ইনফ্লেশন বা পেমেন্ট ডিলে সংক্রান্ত লিকুইডিটি স্ট্রেস টেস্ট।</li>
         </ul>
@@ -2136,8 +2146,9 @@ function _computeCopilotResponseRaw(query) {
       `;
     } else if (targetLang === 'hi') {
       return `
-        <p><strong>【FinSight AI — वित्तीय निर्णय सहायता सहायक】</strong></p>
-        <p>नमस्ते! मैं आपके व्यापार के कैश फ्लो, बिक्री पूर्वानुमान, तरलता जोखिम और रणनीति विश्लेषण में सहायता के लिए तैयार हूँ।</p>
+        <p><strong>【FinSight AI — वित्तीय एवं व्यापार निर्णय सहायक】</strong></p>
+        <p>नमस्ते! मेरा नाम <strong>FinSight AI</strong> है। मैं विशेष रूप से छोटे और मध्यम व्यवसायों (SME) के लिए निर्मित एक <strong>बिजनेस डिसीजन इंटेलिजेंस एवं फाइनेंशियल को-पायलট</strong> हूँ।</p>
+        <p><strong>मुख्य भूमिका:</strong> <em>मैं केवल व्यापार और वित्तीय रणनीतियों से संबंधित प्रश्नों के सटीक उत्तर देता हूँ</em>—जैसे कैश फ्लो ऑडिट, बिक्री पूर्वानुमान, लाभ मार्जिन, रनवे और लागत नियंत्रण।</p>
         <div class="ai-metric-grid">
           <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Forecast</div><div class="ai-metric-val" style="color: var(--accent-blue);">${fmtMoney(projRev)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Gross Margin</div><div class="ai-metric-val" style="color: var(--accent-emerald);">${Math.round(grossMarginRatio * 100)}%</div></div>
@@ -2154,8 +2165,9 @@ function _computeCopilotResponseRaw(query) {
     } else if (targetLang === 'ur') {
       return `
         <div dir="rtl">
-          <p><strong>【FinSight AI — فنانشل ڈیسیژن کوپائلٹ】</strong></p>
-          <p>سلام! میں آپ کے کاروبار کے نقد بہاؤ، پیشین گوئی اور لیکویڈیٹی کے تجزیے میں مدد فراہم کرتا ہوں۔</p>
+          <p><strong>【FinSight AI — کاروباری اور مالیاتی فیصلہ ساز کوپائلٹ】</strong></p>
+          <p>سلام! میرا نام <strong>FinSight AI</strong> ہے۔ میں خاص طور پر چھوٹے اور درمیانے درجے کے کاروبار (SME) کے لیے بنایا گیا ایک <strong>بزنس ڈیسیژن انٹیلی جنس اور فنانشل کوپائلٹ</strong> ہوں۔</p>
+          <p><em>میں صرف اور صرف کاروباری اور مالیاتی معاملات سے متعلق سوالات کے تفصیلی جوابات فراہم کرتا ہوں</em>—جیسے نقد بہاؤ، سیلز کی پیشن گوئی، رن وے، اور منافع کی حکمت عملی۔</p>
         </div>
         <div class="ai-metric-grid">
           <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Forecast</div><div class="ai-metric-val" style="color: var(--accent-blue);">${fmtMoney(projRev)}</div></div>
@@ -2172,8 +2184,9 @@ function _computeCopilotResponseRaw(query) {
       `;
     } else if (targetLang === 'zh') {
       return `
-        <p><strong>【FinSight AI — 确定性财务决策智能助手】</strong></p>
-        <p>您好！我是您的中小微企业财务副驾驶，能够为您提供实时的现金流审计、销售分位数预测、法定储备监控及情景模拟。</p>
+        <p><strong>【FinSight AI — 中小微企业商业决策智能与财务副驾驶】</strong></p>
+        <p>您好！我的名字是 <strong>FinSight AI</strong>。我是专为中小微企业（SME）量身打造的<strong>商业决策智能与确定性财务推理副驾驶</strong>。</p>
+        <p><strong>核心职能：</strong> <em>我专注于严格回答与商业运营和企业财务相关的一切问题</em>——包括实时现金流跑道、销售分位数预测（P10/P50/P90）、毛利率优化、营运资金加速、以及准备金偿债能力防卫。</p>
         <div class="ai-metric-grid">
           <div class="ai-metric-cell"><div class="ai-metric-lbl">30天预测营业额</div><div class="ai-metric-val" style="color: var(--accent-blue);">${fmtMoney(projRev)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">综合毛利率</div><div class="ai-metric-val" style="color: var(--accent-emerald);">${Math.round(grossMarginRatio * 100)}%</div></div>
@@ -2189,8 +2202,9 @@ function _computeCopilotResponseRaw(query) {
       `;
     } else if (targetLang === 'ja') {
       return `
-        <p><strong>【FinSight AI — 意思決定インテリジェンス・コパイロット】</strong></p>
-        <p>こんにちは！企業のキャッシュフロー健全性、高精度売上予測、法定準備金維持、および戦略的意思決定を支援します。</p>
+        <p><strong>【FinSight AI — 中小企業向け事業意思決定・財務コパイロット】</strong></p>
+        <p>こんにちは！私の名前は <strong>FinSight AI</strong> です。中小企業（SME）および起業家のために設計された、<strong>事業意思決定インテリジェンス兼財務推論コパイロット</strong>です。</p>
+        <p><strong>主な機能：</strong> <em>事業運営および企業財務に関する質問に特化して正確な回答を提供します</em>——リアルタイムのキャッシュフロー監査、売上分位数予測（P10/P50/P90）、ランウェイ維持、粗利改善、コスト統制、融資適正評価など。</p>
         <div class="ai-metric-grid">
           <div class="ai-metric-cell"><div class="ai-metric-lbl">30日予測売上</div><div class="ai-metric-val" style="color: var(--accent-blue);">${fmtMoney(projRev)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">粗利益率</div><div class="ai-metric-val" style="color: var(--accent-emerald);">${Math.round(grossMarginRatio * 100)}%</div></div>
@@ -2206,19 +2220,82 @@ function _computeCopilotResponseRaw(query) {
       `;
     } else {
       return `
-        <p><strong>【FinSight AI — Grounded Decision Intelligence Copilot】</strong></p>
-        <p>Hello! I am your deterministic financial reasoning copilot, continuously auditing SME cashflow health, conformal sales projections, and statutory solvency invariants.</p>
+        <p><strong>【FinSight AI — Grounded SME Decision Intelligence Copilot】</strong></p>
+        <p>My name is <strong>FinSight AI</strong>. I am an enterprise-grade <strong>Business Decision Intelligence and Financial Copilot</strong> engineered specifically for SMEs and entrepreneurs.</p>
+        <p><strong>Core Focus & Capabilities:</strong> <em>I specialize strictly and exclusively in business and financial decision intelligence</em>—including real-time cashflow audits, conformal sales projections (P10/P50/P90), operational runway, profit optimization, cost control, debt capacity, and statutory solvency invariants.</p>
         <div class="ai-metric-grid">
           <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Forecast (P50)</div><div class="ai-metric-val" style="color: var(--accent-blue);">${fmtMoney(projRev)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Gross Margin</div><div class="ai-metric-val" style="color: var(--accent-emerald);">${Math.round(grossMarginRatio * 100)}%</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Treasury Cash</div><div class="ai-metric-val">${fmtMoney(availableCash)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Safety Cushion</div><div class="ai-metric-val" style="color: ${isSafe ? 'var(--accent-emerald)' : '#f43f5e'};">${isSafe ? '+' : ''}${fmtMoney(cashAfterReserve)}</div></div>
         </div>
+        <p><strong>You can ask any business or financial question, such as:</strong></p>
+        <ul style="margin: 4px 0 8px 18px; padding: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+          <li>What is our current cash runway and statutory reserve buffer?</li>
+          <li>What strategic levers can we apply to increase sales and basket size?</li>
+          <li>How does compressing payment lag from 10 to 4 days impact working capital?</li>
+          <li>How should we manage operating cost inflation?</li>
+        </ul>
         <div class="tool-badge-pill">[Verified by FinSightToolKit.system_diagnostics]</div>
         <div class="ai-actions-row">
           <button class="ai-action-btn" onclick="switchDecisionModule('forecasts')">Open Conformal Forecaster</button>
           <button class="ai-action-btn" onclick="switchDecisionModule('cashflow')">View Solvency Radar</button>
           <button class="ai-copy-btn" onclick="copyAnalysisText(this)">Copy Summary</button>
+        </div>
+      `;
+    }
+  }
+
+  // -------------------------------------------------------------
+  // INTENT 0B: Out-of-Scope / Non-Business Domain Guardrail
+  // -------------------------------------------------------------
+  const isNonBusiness = lowerQ.includes('joke') || lowerQ.includes('poem') || lowerQ.includes('poetry') ||
+    lowerQ.includes('movie') || lowerQ.includes('song') || lowerQ.includes('music') ||
+    lowerQ.includes('cricket') || lowerQ.includes('football') || lowerQ.includes('recipe') ||
+    lowerQ.includes('cook') || lowerQ.includes('weather') || lowerQ.includes('politics') ||
+    lowerQ.includes('president') || lowerQ.includes('minister') || lowerQ.includes('capital of') ||
+    lowerQ.includes('girlfriend') || lowerQ.includes('boyfriend') || lowerQ.includes('love') ||
+    lowerQ.includes('গান') || lowerQ.includes('কবিতা') || lowerQ.includes('কৌতুক') || lowerQ.includes('প্রেম') ||
+    lowerQ.includes('আবহাওয়া') || lowerQ.includes('রান্না') || lowerQ.includes('খেলা') || lowerQ.includes('রাজনীতি') ||
+    lowerQ.includes('चुटकुला') || lowerQ.includes('कविता') || lowerQ.includes('لطیفہ') || lowerQ.includes('شاعری') ||
+    lowerQ.includes('笑话') || lowerQ.includes('诗歌') || lowerQ.includes('ジョーク') || lowerQ.includes('詩');
+
+  if (isNonBusiness) {
+    lastDetectedIntent = 'general';
+    if (targetLang === 'bn') {
+      return `
+        <p><strong>【FinSight AI — বিজনেস ডিসিশন ইন্টেলিজেন্স স্কোপ】</strong></p>
+        <p>আমি <strong>FinSight AI</strong> — ক্ষুদ্র ও মাঝারি ব্যবসার (SME) আর্থিক সিদ্ধান্ত ও মুনাফা বৃদ্ধির জন্য নির্মিত একটি বিশেষজ্ঞ <strong>বিজনেস ডিসিশন কো-পাইলট</strong>। আমি সাধারণ বিনোদন, রাজনীতি বা ব্যবসা-বহির্ভূত অপ্রাসঙ্গিক প্রশ্নের উত্তর দিই না।</p>
+        <p><strong>দয়া করে আপনার ব্যবসা ও অর্থসংক্রান্ত যেকোনো প্রশ্ন করুন:</strong></p>
+        <ul style="margin: 4px 0 8px 18px; padding: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+          <li>আমাদের বর্তমান ক্যাশ ব্যালেন্স ও রানওয়ে কত দিন চলবে?</li>
+          <li>বিক্রি ও মুনাফা বাড়াতে কী কী পদক্ষেপ নেওয়া উচিত?</li>
+          <li>টার্গেট পূরণে আমাদের সাপ্তাহিক কত বিক্রি প্রয়োজন?</li>
+          <li>খরচ বা সরবরাহ সংকট তৈরি হলে ট্রেজারি কেমন থাকবে?</li>
+        </ul>
+        <div class="tool-badge-pill">[Verified by FinSightToolKit.domain_boundary_enforced]</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="switchDecisionModule('forecasts')">Open Forecaster</button>
+          <button class="ai-action-btn" onclick="switchDecisionModule('cashflow')">View Solvency Radar</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">Copy Advisory</button>
+        </div>
+      `;
+    } else {
+      return `
+        <p><strong>【FinSight AI — Business Domain Scope Notice】</strong></p>
+        <p>I am <strong>FinSight AI</strong>, an AI reasoning engine engineered strictly and exclusively for <strong>SME business decision intelligence, cashflow management, and financial optimization</strong>. I do not answer general non-business queries (such as entertainment, politics, or general trivia).</p>
+        <p><strong>Please ask any question related to your enterprise operations, such as:</strong></p>
+        <ul style="margin: 4px 0 8px 18px; padding: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+          <li>What is our current cash runway and statutory reserve buffer?</li>
+          <li>What strategic levers can we apply to increase sales and basket size?</li>
+          <li>How does compressing payment lag impact working capital?</li>
+          <li>How should we manage operating cost inflation?</li>
+        </ul>
+        <div class="tool-badge-pill">[Verified by FinSightToolKit.domain_boundary_enforced]</div>
+        <div class="ai-actions-row">
+          <button class="ai-action-btn" onclick="switchDecisionModule('forecasts')">Open Conformal Forecaster</button>
+          <button class="ai-action-btn" onclick="switchDecisionModule('cashflow')">View Solvency Radar</button>
+          <button class="ai-copy-btn" onclick="copyAnalysisText(this)">Copy Advisory</button>
         </div>
       `;
     }
@@ -3104,8 +3181,8 @@ function _computeCopilotResponseRaw(query) {
   // -------------------------------------------------------------
   if (targetLang === 'bn') {
     return `
-      <p><strong>【ট্রেজারি ডিসিশন ইন্টেলিজেন্স অ্যাডভাইজরি】</strong></p>
-      <p>আপনার অনুসন্ধানের প্রেক্ষিতে বর্তমান ব্যবসায়িক স্বাস্থ্য ও আর্থিক অবস্থান পর্যালোচনা করা হলো:</p>
+      <p><strong>【FinSight AI — ট্রেজারি ডিসিশন ইন্টেলিজেন্স অ্যাডভাইজরি】</strong></p>
+      <p>আমি <strong>FinSight AI</strong> — ক্ষুদ্র ও মাঝারি ব্যবসার আর্থিক সিদ্ধান্ত ও মুনাফা বৃদ্ধির জন্য নির্মিত আপনার বিশেষজ্ঞ বিজনেস কো-পাইলট। আমি শুধুমাত্র ব্যবসা ও অর্থসংক্রান্ত বিষয়ে সিদ্ধান্ত নিতে সাহায্য করি। নিচে আপনার বর্তমান ব্যবসায়িক অবস্থানের সারাংশ দেওয়া হলো:</p>
       <div class="ai-metric-grid">
         <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Projected Sales</div><div class="ai-metric-val">${fmtMoney(projRev)}</div></div>
         <div class="ai-metric-cell"><div class="ai-metric-lbl">Operating Surplus</div><div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div></div>
@@ -3195,8 +3272,8 @@ function _computeCopilotResponseRaw(query) {
     `;
   } else {
     return `
-      <p><strong>【Decision Intelligence Financial Advisory】</strong></p>
-      <p>In response to your query, here is an executive review of current enterprise health and liquidity:</p>
+      <p><strong>【FinSight AI — Enterprise Financial Advisory】</strong></p>
+      <p>I am <strong>FinSight AI</strong>, your enterprise financial decision copilot dedicated strictly to business decision intelligence. Here is your current business health snapshot:</p>
       <div class="ai-metric-grid">
         <div class="ai-metric-cell"><div class="ai-metric-lbl">30D Forecast Sales</div><div class="ai-metric-val">${fmtMoney(projRev)}</div></div>
         <div class="ai-metric-cell"><div class="ai-metric-lbl">Operating Surplus</div><div class="ai-metric-val">${fmtMoney(operatingSurplus)}</div></div>
