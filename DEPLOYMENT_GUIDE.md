@@ -5,22 +5,24 @@ This guide provides step-by-step instructions for deploying FinSight AI across l
 
 ---
 
-## 🏗️ System Architecture Overview
+## System Architecture Overview
 
 FinSight AI consists of two primary operational deployment modes:
 
-1. **Interactive Executive Web Application (`app.py`)**:
-   - High-aesthetic Streamlit dashboard with real-time scenario stress-testing sliders, Plotly cash runway quantile trajectories, and a zero-hallucination tool-grounded AI copilot.
-2. **Scheduled Batch & Risk Alerting Pipeline (`scripts/run_daily_inference.py`)**:
+1. **Interactive Executive Web Application (`dashboard/index.html` via `server.py`)**:
+   - Modern dark-themed decision intelligence platform with real-time scenario stress-testing sliders, interactive cash runway trajectories, and a 6-language zero-hallucination AI copilot.
+2. **Alternative Streamlit Dashboard (`app.py`)**:
+   - Streamlit interface with interactive widgets and Plotly cash runway quantile trajectories.
+3. **Scheduled Batch & Risk Alerting Pipeline (`scripts/run_daily_inference.py`)**:
    - Nightly batch runner that ingests recent POS sales, computes 30-day quantile autoregressive forecasts, evaluates deterministic GAAP cashflow transitions, and exports structured risk JSON payloads.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            FINSIGHT AI RUNTIME TOPOLOGY                     │
 ├───────────────────────────────┬─────────────────────────────────────────────┤
-│   Interactive Dashboard (UI)  │       Scheduled Daily Batch Job             │
-│   streamlit run app.py        │       python scripts/run_daily_inference.py │
-│   Port: 8501                  │       Runs: Cron / GitHub Actions @ 00:00   │
+│   Executive Dashboard (UI)    │       Scheduled Daily Batch Job             │
+│   python server.py            │       python scripts/run_daily_inference.py │
+│   Port: 8501 (dashboard/)     │       Runs: Cron / GitHub Actions @ 00:00   │
 └───────────────┬───────────────┴──────────────────────┬──────────────────────┘
                 │                                      │
                 ▼                                      ▼
@@ -32,7 +34,7 @@ FinSight AI consists of two primary operational deployment modes:
 
 ---
 
-## 🚀 Deployment Methods
+## Deployment Methods
 
 ### Method 1: Local & Internal Network (Fastest)
 
@@ -43,19 +45,45 @@ Run the dashboard directly on your workstation or internal company server using 
 # Example with Anaconda:
 conda activate base
 
-# 2. Install production dependencies
-pip install -r requirements.txt
+# 2. Launch the Executive Web Dashboard (dashboard/index.html):
+python server.py
+# Available at: http://localhost:8501
 
-# 3. Launch the Streamlit dashboard
-streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+# (Optional) To launch the Streamlit dashboard:
+# pip install -r requirements.txt
+# streamlit run app.py --server.port 8501 --server.address 0.0.0.0
 ```
 
-- **Local URL:** `http://localhost:8501`
+- **Executive Dashboard URL:** `http://localhost:8501`
 - **Network URL:** `http://<YOUR_LAN_IP>:8501`
 
 ---
 
-### Method 2: Docker Containerization (Recommended for Cloud)
+### Method 2: 1-Click Render Cloud Deployment (Executive Web Dashboard)
+
+This repository includes a pre-configured `render.yaml` blueprint to deploy the executive web dashboard (`dashboard/index.html`) on Render:
+
+#### Approach A: Automatic Render Web Service (via render.yaml blueprint)
+1. Log into **[render.com](https://render.com/)**.
+2. Click **New +** -> **Web Service** (or **Blueprint**).
+3. Connect your GitHub repository: `https://github.com/mdarmanaliashik/FinSight-AI`.
+4. Render automatically reads `render.yaml`:
+   - **Build Command:** `pip install --upgrade pip`
+   - **Start Command:** `python server.py`
+5. The live server automatically serves `dashboard/index.html` at your public Render URL (e.g., `https://finsight-ai.onrender.com`).
+
+#### Approach B: 100% Free Render Static Site (Instant, Zero Cold Starts)
+Since `dashboard/index.html` is completely self-contained in client-side JavaScript:
+1. In the **Render Dashboard**, click **New +** -> **Static Site**.
+2. Connect repository `mdarmanaliashik/FinSight-AI`.
+3. Set **Publish Directory:** `dashboard`
+4. Leave **Build Command** blank.
+5. Click **Create Static Site**.
+   - Deploys instantly to Render's global CDN with 0-second sleep latency.
+
+---
+
+### Method 3: Docker Containerization (Recommended for Cloud)
 
 A production-ready multi-stage `Dockerfile` and `docker-compose.yml` are provided in the repository root.
 
@@ -64,7 +92,7 @@ A production-ready multi-stage `Dockerfile` and `docker-compose.yml` are provide
 # Build the Docker image
 docker build -t finsight-ai:latest .
 
-# Run container with port forwarding
+# Run container with port forwarding (serves dashboard/index.html)
 docker run -d --name finsight_app -p 8501:8501 finsight-ai:latest
 
 # Check container status
@@ -85,7 +113,7 @@ docker compose down
 
 ---
 
-### Method 3: 1-Click Free Cloud Deployment (Streamlit Community Cloud)
+### Method 4: 1-Click Free Cloud Deployment (Streamlit Community Cloud)
 
 You can host FinSight AI publicly or privately for free with continuous Git deployment:
 
@@ -167,7 +195,7 @@ The workflow `.github/workflows/daily_monitoring.yml` is already committed:
 
 ---
 
-## 🔒 Production Invariants & Pre-Flight Checks
+## Production Invariants & Pre-Flight Checks
 
 Before deploying to live production, run the automated verification suite:
 

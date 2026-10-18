@@ -23,17 +23,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application source code and processed data
+# Copy application source code, processed data, and web dashboard
 COPY src/ /app/src/
 COPY data/processed/ /app/data/processed/
 COPY app.py /app/app.py
+COPY server.py /app/server.py
+COPY dashboard/ /app/dashboard/
+COPY static/ /app/static/
 
-# Expose Streamlit default port
+# Expose default port
 EXPOSE 8501
 
 # Container healthcheck
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl --fail http://localhost:8501/_stcore/health || exit 1
+    CMD curl --fail http://localhost:8501/health || exit 1
 
-# Launch Streamlit web dashboard
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Launch executive web dashboard
+ENTRYPOINT ["python", "server.py"]
