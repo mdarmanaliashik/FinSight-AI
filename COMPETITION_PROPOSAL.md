@@ -7,7 +7,8 @@
 *(Scope: "A finance copilot for small-business owners, offering financing-option matching, cash-flow management with alerts, and business financial analysis.")*  
 **Team Name:** FinSight AI Research Team  
 **Official Repository:** [https://github.com/mdarmanaliashik/FinSight-AI](https://github.com/mdarmanaliashik/FinSight-AI)  
-**Execution Environment & Tech Stack:** Python 3.11+, Streamlit, LightGBM, CatBoost, Scikit-Learn, Docker  
+**Live Production Deployment:** [https://finsight-ai-qwca.onrender.com](https://finsight-ai-qwca.onrender.com)  
+**Execution Environment & Tech Stack:** Python 3.11+, Vanilla JavaScript (ES6+), LightGBM, CatBoost, Scikit-Learn, Docker  
 
 ---
 

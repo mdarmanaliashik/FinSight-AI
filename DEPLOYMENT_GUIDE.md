@@ -70,7 +70,7 @@ This repository includes a pre-configured `render.yaml` blueprint to deploy the 
 4. Render automatically reads `render.yaml`:
    - **Build Command:** `pip install --upgrade pip`
    - **Start Command:** `python server.py`
-5. The live server automatically serves `dashboard/index.html` at your public Render URL (e.g., `https://finsight-ai.onrender.com`).
+5. The live server automatically serves `dashboard/index.html` at your public Render URL: [https://finsight-ai-qwca.onrender.com](https://finsight-ai-qwca.onrender.com).
 
 #### Approach B: 100% Free Render Static Site (Instant, Zero Cold Starts)
 Since `dashboard/index.html` is completely self-contained in client-side JavaScript:

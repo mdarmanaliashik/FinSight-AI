@@ -1,11 +1,13 @@
 # FinSight AI: Sovereign SME Financial Solvency, Runway Forecasting & Multilingual Grounded Copilot
 
+[![Live Demo: Render](https://img.shields.io/badge/Live%20Demo-Render%20Cloud-00c7b7.svg)](https://finsight-ai-qwca.onrender.com)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Tests: 15 Passed](https://img.shields.io/badge/Tests-15%2F15%20Passing-brightgreen.svg)](tests/)
 [![Hallucination Rate: 0.0%](https://img.shields.io/badge/Hallucination%20Rate-0.0%25-success.svg)](results/)
 [![Kaggle Grandmaster Architecture](https://img.shields.io/badge/Architecture-Neuro--Symbolic%20SME%20Solvency-gold.svg)](notebooks/)
 
+> **Live Production Deployment:** [https://finsight-ai-qwca.onrender.com](https://finsight-ai-qwca.onrender.com)  
 > **Why FinSight AI Matters:**  
 > More than 60% of e-commerce Small and Medium Enterprises (SMEs) fail within their first three years—not because of unmarketable products, but because of **silent cash-flow insolvency**. Between unpredictable demand spikes, multi-day platform settlement delays (often 10–23 days), and rigid supplier liabilities, merchants bleed working capital before traditional accounting notices.  
 > 
@@ -158,10 +160,16 @@ champion_model = joblib.load('models/olist_best_catboost_ratio.joblib')
 ```
 
 ### 4. Interactive Executive Dashboard
-```bash
-streamlit run app.py
-```
-Open `http://localhost:8501` to test the interactive scenario sliders, dynamic Phase 3 model selection, and multilingual tool-grounded copilot.
+- **Live Cloud Deployment:** [https://finsight-ai-qwca.onrender.com](https://finsight-ai-qwca.onrender.com)
+- **Local Run (Executive Dashboard):**
+  ```bash
+  python server.py
+  ```
+  Open `http://localhost:8501` to test the full decision intelligence dashboard, interactive scenario sliders, Chart.js cashflow ledger, and multilingual tool-grounded copilot.
+- **Alternative Streamlit Dashboard:**
+  ```bash
+  streamlit run app.py
+  ```
 
 ---
 
