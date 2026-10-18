@@ -9,122 +9,145 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Critical 3D App Layout Overrides */
-    :root {
-      --bg-app: #f4f6fa;
-      --bg-card: #ffffff;
-      --border-subtle: #e2e8f0;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --accent-blue: #2563eb;
-      --accent-emerald: #16a34a;
-    }
-    body {
-      background-color: var(--bg-app) !important;
-      color: var(--text-primary) !important;
-    }
-  </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
-  <div class="app-container">
-    <!-- PERSISTENT APP HEADER (DESKTOP APPLICATION SHELL) -->
-    <header class="app-header">
-      <div class="header-left">
-        <div class="logo-badge">
-          <div class="logo-icon">◈</div>
+  <div class="app-shell">
+    <!-- ============================================== -->
+    <!-- NATIVE LEFT APP SIDEBAR (PERSISTENT NAVIGATION) -->
+    <!-- ============================================== -->
+    <aside class="app-sidebar">
+      <!-- 1. BRAND IDENTITY & COHORT METADATA -->
+      <div class="sidebar-brand">
+        <div class="brand-logo-badge">
+          <div class="brand-logo-icon">◈</div>
           <div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span class="logo-title">FinSight AI</span>
-              <span class="logo-sub">DECISION INTELLIGENCE SYSTEM</span>
-            </div>
-            <div class="header-tagline">
-              An Empirical Framework Combining Conformal Quantile Forecasting and Grounded Solvency Reasoning
-            </div>
+            <div class="brand-title">FinSight AI</div>
+            <div class="brand-sub">DECISION INTELLIGENCE</div>
           </div>
         </div>
-      </div>
-      <div class="header-right">
-        <!-- EMPIRICAL DATASET BADGE -->
-        <div class="app-meta-pill">
+        <div class="sidebar-cohort-badge">
           Cohort: Olist Retail (B2C) · N=100k · Purged Embargo
         </div>
-        <!-- 3D CURRENCY SELECTOR -->
-        <div class="currency-toggle">
-          <button class="curr-btn active" id="curr-bdt" onclick="setCurrency('BDT')">৳ BDT</button>
-          <button class="curr-btn" id="curr-usd" onclick="setCurrency('USD')">$ USD</button>
-          <button class="curr-btn" id="curr-brl" onclick="setCurrency('BRL')">R$ BRL</button>
-          <button class="curr-btn" id="curr-cny" onclick="setCurrency('CNY')">¥ CNY</button>
-          <button class="curr-btn" id="curr-eur" onclick="setCurrency('EUR')">€ EUR</button>
-        </div>
-        <div class="status-badge">
-          <div class="status-pulse"></div> Zero-Leakage Audit · 80% Coverage Verified
-        </div>
-        <button class="cta-btn" onclick="connectBankModal()">Connect Banking API</button>
       </div>
-    </header>
 
-    <!-- 4-STEP ACADEMIC DECISION INTELLIGENCE WORKFLOW PIPELINE -->
-    <div class="workflow-step-bar">
-      <div class="step-item active" id="wf-step-1" onclick="switchDecisionModule('overview')" style="cursor: pointer;">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <span class="step-title">Diagnostic Baseline</span>
-          <span class="step-sub">Empirical run-rate, margin & reserves</span>
-        </div>
-      </div>
-      <span class="step-arrow">→</span>
-      <div class="step-item" id="wf-step-2" onclick="switchDecisionModule('forecasts')" style="cursor: pointer;">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <span class="step-title">Conformal Forecast</span>
-          <span class="step-sub">P10, P50, P90 prediction intervals</span>
-        </div>
-      </div>
-      <span class="step-arrow">→</span>
-      <div class="step-item" id="wf-step-3" onclick="switchDecisionModule('cashflow')" style="cursor: pointer;">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <span class="step-title">Solvency Radar</span>
-          <span class="step-sub">1.5d lead time early warning radar</span>
-        </div>
-      </div>
-      <span class="step-arrow">→</span>
-      <div class="step-item" id="wf-step-4" onclick="switchDecisionModule('scenarios')" style="cursor: pointer;">
-        <div class="step-num">04</div>
-        <div class="step-content">
-          <span class="step-title">Empirical Simulation</span>
-          <span class="step-sub">Exogenous shock & target synthesis</span>
-        </div>
-      </div>
-    </div>
+      <!-- 2. CORE WORKFLOW ENGINES (THE 4 APP MODULES + COPILOT) -->
+      <div class="sidebar-nav-section">
+        <div class="sidebar-nav-heading">Decision Engines</div>
+        <nav class="sidebar-nav-menu">
+          <button class="nav-item active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
+            <span class="nav-num">01</span>
+            <div class="nav-text">
+              <span class="nav-title">Diagnostic Cockpit</span>
+              <span class="nav-sub">Baseline Run-Rate & Liquidity</span>
+            </div>
+          </button>
 
-    <!-- PRIMARY 3D APP TABS -->
-    <div style="display: flex; justify-content: flex-start; margin-bottom: 22px;">
-      <div class="decision-intel-tabs">
-        <button class="d-tab active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
-          1. Diagnostic Cockpit
-        </button>
-        <button class="d-tab" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">
-          2. Conformal Forecaster
-        </button>
-        <button class="d-tab" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">
-          3. Solvency Risk Radar
-        </button>
-        <button class="d-tab" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">
-          4. Sensitivity Simulator
-        </button>
-        <button class="d-tab" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">
-          5. Decision Copilot
-        </button>
-      </div>
-    </div>
+          <button class="nav-item" id="tab-mod-forecasts" onclick="switchDecisionModule('forecasts')">
+            <span class="nav-num">02</span>
+            <div class="nav-text">
+              <span class="nav-title">Conformal Forecaster</span>
+              <span class="nav-sub">P10, P50, P90 Quantiles</span>
+            </div>
+          </button>
 
-    <!-- MAIN COMMERCIAL APP WORKSPACE -->
-    <div class="workspace-grid">
-      <!-- LEFT PRIMARY APPLICATION COLUMN -->
-      <main class="studio-column">
+          <button class="nav-item" id="tab-mod-cashflow" onclick="switchDecisionModule('cashflow')">
+            <span class="nav-num">03</span>
+            <div class="nav-text">
+              <span class="nav-title">Solvency Risk Radar</span>
+              <span class="nav-sub">1.5d Lead Time · Day Ledger</span>
+            </div>
+          </button>
+
+          <button class="nav-item" id="tab-mod-scenarios" onclick="switchDecisionModule('scenarios')">
+            <span class="nav-num">04</span>
+            <div class="nav-text">
+              <span class="nav-title">Sensitivity Simulator</span>
+              <span class="nav-sub">Stress-Testing & Target Gap</span>
+            </div>
+          </button>
+
+          <button class="nav-item" id="tab-mod-copilot" onclick="switchDecisionModule('copilot')">
+            <span class="nav-num">05</span>
+            <div class="nav-text">
+              <span class="nav-title">Decision Copilot</span>
+              <span class="nav-sub">Grounded ToolKit Reasoning</span>
+            </div>
+            <span class="nav-badge-pill">ACTIVE</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- 3. REAL-TIME SYSTEM TELEMETRY -->
+      <div class="sidebar-telemetry-box">
+        <div class="telemetry-box-header">
+          <span class="telemetry-box-title">System Telemetry</span>
+          <span class="telemetry-live-dot"></span>
+        </div>
+        <div class="sidebar-telemetry-row">
+          <span class="sb-lbl">Liquid Treasury:</span>
+          <span class="sb-val" id="sb-cash">৳180,000</span>
+        </div>
+        <div class="sidebar-telemetry-row">
+          <span class="sb-lbl">Solvency Buffer:</span>
+          <span class="sb-val safe" id="sb-cushion">+৳79,200 [SAFE]</span>
+        </div>
+        <div class="sidebar-telemetry-row">
+          <span class="sb-lbl">Early Warning:</span>
+          <span class="sb-val" style="color: var(--accent-cyan);">1.5 Days Lead</span>
+        </div>
+        <div class="sidebar-telemetry-row">
+          <span class="sb-lbl">Conformal Coverage:</span>
+          <span class="sb-val" style="color: var(--accent-emerald);">80% Guaranteed</span>
+        </div>
+      </div>
+
+      <!-- 4. SIDEBAR FOOTER ACTIONS -->
+      <div class="sidebar-footer">
+        <button class="sidebar-cta-btn" onclick="connectBankModal()">
+          Connect Banking API
+        </button>
+        <div class="sidebar-status-pill">
+          <div class="status-pulse"></div> Zero-Leakage Calibrated Engine
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============================================== -->
+    <!-- MAIN APPLICATION WORKSPACE -->
+    <!-- ============================================== -->
+    <div class="app-main">
+      <!-- TOP APPLICATION BAR -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <div class="topbar-breadcrumb">
+            <span class="breadcrumb-root">FinSight AI</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-active" id="topbar-active-title">Diagnostic Cockpit</span>
+          </div>
+          <div class="topbar-subtitle" id="topbar-active-sub">
+            Empirical baseline treasury health, revenue run-rate, and statutory reserve compliance.
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- 3D CURRENCY SELECTOR -->
+          <div class="currency-toggle">
+            <button class="curr-btn active" id="curr-bdt" onclick="setCurrency('BDT')">৳ BDT</button>
+            <button class="curr-btn" id="curr-usd" onclick="setCurrency('USD')">$ USD</button>
+            <button class="curr-btn" id="curr-brl" onclick="setCurrency('BRL')">R$ BRL</button>
+            <button class="curr-btn" id="curr-cny" onclick="setCurrency('CNY')">¥ CNY</button>
+            <button class="curr-btn" id="curr-eur" onclick="setCurrency('EUR')">€ EUR</button>
+          </div>
+
+          <div class="status-badge">
+            <div class="status-pulse"></div> Coverage: 80% Verified
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEWS CONTAINER -->
+      <main class="main-content-area">
         <!-- ============================================== -->
         <!-- VIEW 1: DIAGNOSTIC COCKPIT (MONITOR) -->
         <!-- ============================================== -->
@@ -169,43 +192,41 @@
           </section>
 
           <!-- EXECUTIVE COCKPIT SUMMARY CARD -->
-          <div class="control-matrix-card" style="margin-bottom: 20px;">
+          <div class="control-matrix-card">
             <div class="matrix-header">
-              <div class="matrix-title-group">
-                <div>
-                  <h2 class="matrix-title">Empirical Treasury Diagnostic Cockpit</h2>
-                  <p class="matrix-desc">Comprehensive SME status: current liquidity standing, recursive horizon outlook, and solvency posture.</p>
-                </div>
+              <div>
+                <h2 class="matrix-title">Empirical Treasury Diagnostic Cockpit</h2>
+                <p class="matrix-desc">Comprehensive SME status: current liquidity standing, recursive horizon outlook, and solvency posture.</p>
               </div>
-              <span class="risk-badge risk-badge-green" style="font-size: 11.5px; padding: 6px 14px;">● LIQUIDITY STANDING: SOLVENT</span>
+              <span class="risk-badge risk-badge-green" style="font-size: 11px; padding: 6px 14px;">LIQUIDITY STANDING: SOLVENT</span>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px;">
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 14px; padding: 18px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('forecasts')">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                  <span style="font-size: 13px; font-weight: 800; color: var(--text-primary);">Conformal Forecaster</span>
-                  <span style="font-size: 11px; font-weight: 700; color: var(--accent-blue);">Launch View →</span>
+            <div class="launchpad-grid">
+              <div class="launchpad-card" onclick="switchDecisionModule('forecasts')">
+                <div class="launchpad-header">
+                  <span class="launchpad-title">Conformal Forecaster</span>
+                  <span class="launchpad-link">Launch View →</span>
                 </div>
-                <div style="font-size: 19px; font-weight: 800; color: var(--accent-blue); font-family: var(--font-mono);">Multi-Horizon P50</div>
-                <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">P10 Floor ৳8,400 · P50 Median ৳14,000 · P90 Surge ৳21,000</div>
+                <div class="launchpad-val" style="color: var(--accent-blue);">Multi-Horizon P50</div>
+                <div class="launchpad-sub">P10 Floor ৳8,400 · P50 Median ৳14,000 · P90 Surge ৳21,000</div>
               </div>
 
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 14px; padding: 18px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('cashflow')">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                  <span style="font-size: 13px; font-weight: 800; color: var(--text-primary);">Solvency Radar & Ledger</span>
-                  <span style="font-size: 11px; font-weight: 700; color: var(--accent-emerald);">Audit Tab →</span>
+              <div class="launchpad-card" onclick="switchDecisionModule('cashflow')">
+                <div class="launchpad-header">
+                  <span class="launchpad-title">Solvency Radar & Ledger</span>
+                  <span class="launchpad-link" style="color: var(--accent-emerald);">Audit Tab →</span>
                 </div>
-                <div style="font-size: 19px; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono);">+৳79,200 Buffer</div>
-                <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Zero reserve breach · 10 days receivables turnover delay</div>
+                <div class="launchpad-val" style="color: var(--accent-emerald);">+৳79,200 Buffer</div>
+                <div class="launchpad-sub">Zero reserve breach · 10 days receivables turnover delay</div>
               </div>
 
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 14px; padding: 18px; cursor: pointer; transition: all 0.2s;" onclick="switchDecisionModule('scenarios')">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                  <span style="font-size: 13px; font-weight: 800; color: var(--text-primary);">Scenario Simulator</span>
-                  <span style="font-size: 11px; font-weight: 700; color: var(--accent-amber);">Simulate Tab →</span>
+              <div class="launchpad-card" onclick="switchDecisionModule('scenarios')">
+                <div class="launchpad-header">
+                  <span class="launchpad-title">Scenario Simulator</span>
+                  <span class="launchpad-link" style="color: var(--accent-amber);">Simulate Tab →</span>
                 </div>
-                <div style="font-size: 19px; font-weight: 800; color: var(--accent-amber); font-family: var(--font-mono);">৳500,000 Target</div>
-                <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Required growth gap: +19.05% · 4 execution strategies</div>
+                <div class="launchpad-val" style="color: var(--accent-amber);">৳500,000 Target</div>
+                <div class="launchpad-sub">Required growth gap: +19.05% · 4 execution strategies</div>
               </div>
             </div>
           </div>
@@ -214,23 +235,22 @@
         <!-- ============================================== -->
         <!-- VIEW 2: CONFORMAL FORECASTER (PREDICT) -->
         <!-- ============================================== -->
-        <div class="module-view" id="view-forecasts" style="display: none;">
-          <!-- 2. PREDICT: SALES TREND & CONFORMAL FORECAST STUDIO -->
+        <div class="module-view" id="view-forecasts">
           <div class="control-matrix-card" id="sec-forecast">
             <div class="matrix-header">
-              <div class="matrix-title-group">
-                <div>
-                  <h2 class="matrix-title">Multi-Horizon Quantile Conformal Forecaster</h2>
-                  <p class="matrix-desc">Leakage-free recursive sales forecast with calibrated empirical uncertainty bands (P10 Downside, P50 Median, P90 Surge).</p>
-                </div>
+              <div>
+                <h2 class="matrix-title">Multi-Horizon Quantile Conformal Forecaster</h2>
+                <p class="matrix-desc">Leakage-free recursive sales forecast with calibrated empirical uncertainty bands (P10 Downside, P50 Median, P90 Surge).</p>
               </div>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <span class="app-meta-pill">LightGBM Quantile Regressor · DM p = 0.0022</span>
+              <div>
+                <span class="sidebar-cohort-badge" style="color: var(--accent-blue); border-color: rgba(59, 130, 246, 0.3);">
+                  LightGBM Quantile Regressor · DM p = 0.0022
+                </span>
               </div>
             </div>
 
             <!-- TIME HORIZON SELECTOR -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
               <div class="currency-toggle">
                 <button class="curr-btn" id="btn-horizon-7" onclick="setHorizon(7)">7-Day Horizon</button>
                 <button class="curr-btn" id="btn-horizon-14" onclick="setHorizon(14)">14-Day Horizon</button>
@@ -242,31 +262,31 @@
             </div>
 
             <!-- 3 CONFORMAL STAT CAPSULES -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px;">
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-3d-recessed);">
-                <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 800;">P50 Central Tendency</div>
-                <div style="font-size: 18px; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono); margin-top: 2px;" id="h-stat-expected">৳14,000 / day</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Expected median trajectory</div>
+            <div class="conformal-stat-grid">
+              <div class="conformal-stat-card">
+                <div class="stat-capsule-lbl">P50 Central Tendency</div>
+                <div class="stat-capsule-val" style="color: var(--accent-emerald);" id="h-stat-expected">৳14,000 / day</div>
+                <div class="stat-capsule-sub">Expected median trajectory</div>
               </div>
 
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-3d-recessed);">
-                <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 800;">P10 Conservative Downside Floor</div>
-                <div style="font-size: 18px; font-weight: 800; color: var(--accent-amber); font-family: var(--font-mono); margin-top: 2px;" id="h-stat-p10">৳8,400 / day</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Worst-case 10th percentile bound</div>
+              <div class="conformal-stat-card">
+                <div class="stat-capsule-lbl">P10 Conservative Downside Floor</div>
+                <div class="stat-capsule-val" style="color: var(--accent-amber);" id="h-stat-p10">৳8,400 / day</div>
+                <div class="stat-capsule-sub">Worst-case 10th percentile bound</div>
               </div>
 
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-3d-recessed);">
-                <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 800;">P90 Optimistic Surge Ceiling</div>
-                <div style="font-size: 18px; font-weight: 800; color: var(--accent-blue); font-family: var(--font-mono); margin-top: 2px;" id="h-stat-p90">৳21,000 / day</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">High-demand 90th percentile ceiling</div>
+              <div class="conformal-stat-card">
+                <div class="stat-capsule-lbl">P90 Optimistic Surge Ceiling</div>
+                <div class="stat-capsule-val" style="color: var(--accent-cyan);" id="h-stat-p90">৳21,000 / day</div>
+                <div class="stat-capsule-sub">High-demand 90th percentile ceiling</div>
               </div>
             </div>
 
             <!-- CORE EMPIRICAL CHART CANVAS -->
-            <div style="position: relative; height: 350px; background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-3d-card);">
+            <div class="chart-canvas-container">
               <canvas id="businessForecastChart"></canvas>
             </div>
-            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 12px; text-align: center; font-family: var(--font-mono);">
+            <div class="chart-footnote">
               Empirical calibration: Conformal prediction bands derived from non-conformity scores on Chronological Test Holdout.
             </div>
           </div>
@@ -275,15 +295,12 @@
         <!-- ============================================== -->
         <!-- VIEW 3: SOLVENCY RISK RADAR & LEDGER (DETECT RISK) -->
         <!-- ============================================== -->
-        <div class="module-view" id="view-cashflow" style="display: none;">
-          <!-- 3. DETECT RISK: AUTONOMOUS RISK CENTER -->
+        <div class="module-view" id="view-cashflow">
           <div class="control-matrix-card" id="sec-risk">
             <div class="matrix-header">
-              <div class="matrix-title-group">
-                <div>
-                  <h2 class="matrix-title">Predictive Solvency Risk Radar & Early Warning Detection</h2>
-                  <p class="matrix-desc">Continuous algorithmic audit for statutory reserve breach, receivables settlement delay, and liquidity shocks (Recall: 97.7%, Lead Time: 1.5 Days).</p>
-                </div>
+              <div>
+                <h2 class="matrix-title">Predictive Solvency Risk Radar & Early Warning Detection</h2>
+                <p class="matrix-desc">Continuous algorithmic audit for statutory reserve breach, receivables settlement delay, and liquidity shocks (Recall: 97.7%, Lead Time: 1.5 Days).</p>
               </div>
               <div class="risk-live-indicator">
                 <span class="live-dot"></span>
@@ -295,7 +312,7 @@
               <div class="risk-card" id="risk-card-reserve">
                 <div class="risk-header-row">
                   <span class="risk-title">Reserve Cushion Margin (ΔC)</span>
-                  <span class="risk-badge risk-badge-green" id="badge-reserve-risk">● SAFE</span>
+                  <span class="risk-badge risk-badge-green" id="badge-reserve-risk">SAFE</span>
                 </div>
                 <div class="risk-val" id="val-reserve-cushion" style="color: var(--accent-emerald);">+৳79,200</div>
                 <div class="risk-sub" id="sub-reserve-cushion">Buffer above ৳260,400 reserve</div>
@@ -307,7 +324,7 @@
               <div class="risk-card">
                 <div class="risk-header-row">
                   <span class="risk-title">Demand Momentum Volatility</span>
-                  <span class="risk-badge risk-badge-green" id="badge-sales-risk">● STABLE</span>
+                  <span class="risk-badge risk-badge-green" id="badge-sales-risk">STABLE</span>
                 </div>
                 <div class="risk-val" id="val-sales-risk">0% Shift</div>
                 <div class="risk-sub">Historical trend momentum aligned</div>
@@ -319,7 +336,7 @@
               <div class="risk-card">
                 <div class="risk-header-row">
                   <span class="risk-title">Receivables Settlement Delay</span>
-                  <span class="risk-badge risk-badge-amber" id="badge-lag-risk">● 10D DELAY</span>
+                  <span class="risk-badge risk-badge-amber" id="badge-lag-risk">10D DELAY</span>
                 </div>
                 <div class="risk-val" id="val-lag-risk">10 Days Lag</div>
                 <div class="risk-sub">Working capital payout exposure</div>
@@ -331,7 +348,7 @@
               <div class="risk-card">
                 <div class="risk-header-row">
                   <span class="risk-title">Operating Cost Ratio (COGS)</span>
-                  <span class="risk-badge risk-badge-green" id="badge-cost-risk">● 62% COGS</span>
+                  <span class="risk-badge risk-badge-green" id="badge-cost-risk">62% COGS</span>
                 </div>
                 <div class="risk-val" id="val-cost-risk">62.0%</div>
                 <div class="risk-sub">Gross margin retained at 38%</div>
@@ -343,17 +360,17 @@
           </div>
 
           <!-- 30-DAY DAY-BY-DAY CASHFLOW & SOLVENCY LEDGER -->
-          <div class="ledger-container" id="sec-ledger" style="margin-top: 22px;">
+          <div class="ledger-container" id="sec-ledger">
             <div class="matrix-header">
               <div>
-                <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+                <h3 style="font-size: 16px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
                   Granular Day-by-Day Deterministic Cashflow Ledger
                 </h3>
                 <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
                   Deterministic integer-cent accounting: daily inflow, operational disbursements, closing balance, and statutory reserve compliance.
                 </p>
               </div>
-              <span class="app-meta-pill">
+              <span class="sidebar-cohort-badge" style="color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.3);">
                 Deterministic Engine · Variance = 0.0
               </span>
             </div>
@@ -382,15 +399,12 @@
         <!-- ============================================== -->
         <!-- VIEW 4: SENSITIVITY SIMULATOR (RECOMMEND ACTIONS) -->
         <!-- ============================================== -->
-        <div class="module-view" id="view-scenarios" style="display: none;">
-          <!-- SCENARIO SIMULATOR: WHAT-IF STUDIO -->
+        <div class="module-view" id="view-scenarios">
           <div class="control-matrix-card" id="sec-simulator">
             <div class="matrix-header">
-              <div class="matrix-title-group">
-                <div>
-                  <h2 class="matrix-title">Exogenous Sensitivity Simulator & Solvency Stress-Testing</h2>
-                  <p class="matrix-desc">Deterministic zero-variance simulation (Variance = 0.000) under exogenous revenue contractions, cost inflation, and settlement shifts.</p>
-                </div>
+              <div>
+                <h2 class="matrix-title">Exogenous Sensitivity Simulator & Solvency Stress-Testing</h2>
+                <p class="matrix-desc">Deterministic zero-variance simulation (Variance = 0.000) under exogenous revenue contractions, cost inflation, and settlement shifts.</p>
               </div>
               <button class="action-outline-btn" onclick="resetControls()">
                 Reset Baseline
@@ -442,34 +456,34 @@
             </div>
 
             <!-- SIMULATOR REACTIVE OUTPUT TILES -->
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px;">
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow-3d-recessed);">
-                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; font-weight: 700;">Projected Monthly Operating Surplus</div>
-                <div style="font-size: 22px; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono);" id="sim-operating-surplus">৳159,600</div>
-                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 3px;">Pre-tax operational cash generation</div>
+            <div class="sim-output-grid">
+              <div class="sim-output-tile">
+                <div class="sim-tile-lbl">Projected Monthly Operating Surplus</div>
+                <div class="sim-tile-val" style="color: var(--accent-emerald);" id="sim-operating-surplus">৳159,600</div>
+                <div class="sim-tile-sub">Pre-tax operational cash generation</div>
               </div>
 
-              <div style="background: var(--bg-recessed); border: 1px solid var(--border-subtle); border-top: 1px solid #cbd5e1; border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow-3d-recessed);">
-                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; font-weight: 700;">Surplus Buffer After Reserve Set-Aside</div>
-                <div style="font-size: 22px; font-weight: 800; color: var(--accent-blue); font-family: var(--font-mono);" id="sim-cash-after-reserve">৳79,200</div>
-                <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 3px;">Net treasury liquidity retained</div>
+              <div class="sim-output-tile">
+                <div class="sim-tile-lbl">Surplus Buffer After Reserve Set-Aside</div>
+                <div class="sim-tile-val" style="color: var(--accent-blue);" id="sim-cash-after-reserve">৳79,200</div>
+                <div class="sim-tile-sub">Net treasury liquidity retained</div>
               </div>
             </div>
 
             <!-- DYNAMIC SHORTFALL ALERT BANNER -->
-            <div id="sim-alert-banner" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 18px; margin-top: 16px; display: flex; align-items: center; gap: 12px;">
-              <span id="sim-alert-icon" style="font-weight: 800; font-family: var(--font-mono); font-size: 11.5px; background: #dcfce7; padding: 3px 8px; border-radius: 5px;">[SAFE]</span>
-              <div style="font-size: 12.5px; color: #166534;" id="sim-alert-text">
+            <div id="sim-alert-banner" class="sim-alert-box" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
+              <span id="sim-alert-icon" style="font-weight: 800; font-family: var(--font-mono); font-size: 11px; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 4px 10px; border-radius: 6px;">[SAFE]</span>
+              <div style="font-size: 12.5px; color: #a7f3d0;" id="sim-alert-text">
                 <strong>Adequate Solvency Standing:</strong> Available liquid cash and operational surplus satisfy the required statutory reserve cushion.
               </div>
             </div>
           </div>
 
-          <!-- 4. RECOMMEND ACTIONS: BUSINESS TARGET PLANNER & ACTIONABLE STRATEGY -->
+          <!-- TARGET PLANNER & ACTIONABLE STRATEGY -->
           <div class="target-planner-box" id="sec-target-planner">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
               <div>
-                <h3 style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.01em;">
+                <h3 style="font-size: 17px; font-weight: 800; color: #ffffff; margin: 0; letter-spacing: -0.01em;">
                   Target Revenue Optimization & Empirical Growth Gap
                 </h3>
                 <p style="font-size: 12px; color: var(--text-secondary); margin: 4px 0 0 0;">
@@ -480,7 +494,7 @@
                 <button class="action-outline-btn" id="btn-toggle-planner" onclick="toggleTargetPlanner()">
                   Toggle Section
                 </button>
-                <button class="cta-btn" onclick="generateTargetStrategy()">
+                <button class="sidebar-cta-btn" style="width: auto; padding: 8px 18px;" onclick="generateTargetStrategy()">
                   Synthesize Execution Strategy
                 </button>
               </div>
@@ -548,16 +562,16 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- VIEW 5: DECISION COPILOT (AI ADVISOR - STREAMLINED) -->
+        <!-- VIEW 5: DECISION COPILOT (STANDALONE CONVERSATIONAL AI) -->
         <!-- ============================================== -->
-        <div class="module-view" id="view-copilot" style="display: none;">
+        <div class="module-view" id="view-copilot">
           <div class="advisor-chat-studio-card">
             <!-- COPILOT HEADER -->
             <div class="studio-chat-header">
               <div style="display: flex; align-items: center; gap: 14px;">
                 <div class="copilot-avatar">◈</div>
                 <div>
-                  <h3 style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin: 0;">
+                  <h3 style="font-size: 17px; font-weight: 800; color: #ffffff; margin: 0;">
                     FinSight Grounded Decision Copilot
                   </h3>
                   <span style="font-size: 12px; color: var(--text-secondary);">
@@ -582,13 +596,13 @@
             <!-- ACADEMIC REAL-TIME TELEMETRY BAR -->
             <div class="academic-telemetry-strip">
               <div>
-                <span>GROUNDING: <strong>FinSightToolKit (Deterministic)</strong></span>
-                <span style="margin: 0 8px; color: #cbd5e1;">|</span>
-                <span>LEAD TIME: <strong>1.5 Days Early Warning</strong></span>
+                <span>GROUNDING: <strong style="color: #38bdf8;">FinSightToolKit (Deterministic)</strong></span>
+                <span style="margin: 0 10px; color: rgba(255, 255, 255, 0.15);">|</span>
+                <span>LEAD TIME: <strong style="color: #34d399;">1.5 Days Early Warning</strong></span>
               </div>
               <div>
                 <span>TREASURY: <strong id="telemetry-cash-adv">৳180,000</strong></span>
-                <span style="margin: 0 8px; color: #cbd5e1;">|</span>
+                <span style="margin: 0 10px; color: rgba(255, 255, 255, 0.15);">|</span>
                 <span>SOLVENCY BUFFER: <strong id="telemetry-cushion-adv" style="color: var(--accent-emerald);">+৳79,200</strong></span>
               </div>
             </div>
@@ -658,97 +672,17 @@
                 <input type="text" id="copilot-user-input" placeholder="আর্থিক ও সলভেন্সি প্রশ্ন লিখুন (যেমন: 'বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে কি?')..." onkeydown="handleCopilotKey(event)">
               </div>
               <button class="copilot-send-btn" onclick="sendCopilotMessage()" id="btn-send-copilot">
-                <span>Evaluate</span>
+                Evaluate
               </button>
             </div>
           </div>
         </div>
       </main>
 
-      <!-- RIGHT COLUMN: CONTEXTUAL SIDEBAR COPILOT -->
-      <aside>
-        <div class="copilot-panel" id="copilot-panel-sidebar">
-          <div class="copilot-header-bar">
-            <div class="copilot-identity">
-              <div class="copilot-avatar">◈</div>
-              <div>
-                <h3 class="copilot-title-text">Decision Copilot</h3>
-                <span class="copilot-sub-text">Empirical Financial Reasoning</span>
-              </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <button class="icon-action-btn" onclick="clearCopilotChat()" title="Reset session">
-                Reset
-              </button>
-              <div class="currency-toggle">
-                <button class="curr-btn active" id="clang-bn" onclick="setCopilotLanguage('bn')">বাং</button>
-                <button class="curr-btn" id="clang-en" onclick="setCopilotLanguage('en')">EN</button>
-                <button class="curr-btn" id="clang-zh" onclick="setCopilotLanguage('zh')">中</button>
-                <button class="curr-btn" id="clang-es" onclick="setCopilotLanguage('es')">ES</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- REAL-TIME TELEMETRY STRIP -->
-          <div class="copilot-telemetry-strip">
-            <div class="telemetry-item">
-              <span class="t-dot"></span>
-              <span>Model Grounded</span>
-            </div>
-            <div class="telemetry-values">
-              <span>Cash: <strong id="telemetry-cash">৳180,000</strong></span>
-              <span>•</span>
-              <span>Buffer: <strong id="telemetry-cushion" style="color: var(--accent-emerald);">+৳79,200</strong></span>
-            </div>
-          </div>
-
-          <!-- QUICK INQUIRY CHIPS -->
-          <div class="quick-prompts-bar">
-            <span class="quick-title">Quick Solvency Audits:</span>
-            <div class="quick-chips-grid">
-              <button class="quick-chip" onclick="askCopilot('বিক্রি ২০% কমলে আমাদের কি ক্যাশ ঘাটতি হবে?')">
-                <span>বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে?</span>
-              </button>
-              <button class="quick-chip" onclick="askCopilot('টার্গেট রেভেনিউ পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?')">
-                <span>টার্গেট পূরণে কী কৌশল নেব?</span>
-              </button>
-              <button class="quick-chip" onclick="askCopilot('আমাদের বর্তমান ক্যাশ ব্যালেন্স ও রানওয়ে কত দিন চলবে?')">
-                <span>ক্যাশ রানওয়ে কত দিন চলবে?</span>
-              </button>
-              <button class="quick-chip" onclick="askCopilot('যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?')">
-                <span>কস্ট ৭০% হলে বাফার কত?</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- CHAT LOG CONTAINER -->
-          <div class="chat-history-log" id="copilot-chat-history-sidebar">
-            <div class="chat-entry bot-entry">
-              <div class="copilot-avatar" style="width: 28px; height: 28px; font-size: 14px;">◈</div>
-              <div class="entry-bubble" style="font-size: 12.5px;">
-                <p><strong>Grounded Solvency Copilot Online.</strong></p>
-                <p>Deterministic financial engine grounded on <code>FinSightToolKit</code>.</p>
-                <div class="tool-badge-pill">[Verified · Lead Time: 1.5d]</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- INPUT COMPOSER -->
-          <div class="chat-compose-bar">
-            <div class="input-inner-wrap">
-              <input type="text" id="copilot-user-input-sidebar" placeholder="Ask financial question..." onkeydown="handleSidebarKey(event)">
-            </div>
-            <button class="copilot-send-btn" onclick="sendSidebarMessage()" id="btn-send-copilot-sidebar">
-              <span>Send</span>
-            </button>
-          </div>
-        </div>
-      </aside>
+      <footer class="app-footer">
+        FinSight AI © 2026 · An Empirical Decision Intelligence Framework for SMEs · Zero-Leakage Calibrated Engine
+      </footer>
     </div>
-
-    <footer style="text-align: center; padding: 28px 0 16px 0; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border-subtle); margin-top: 36px; font-family: var(--font-mono);">
-      FinSight AI © 2026 · An Empirical Decision Intelligence Framework for SMEs · Zero-Leakage Calibrated Engine
-    </footer>
   </div>
 
   <script src="app.js"></script>

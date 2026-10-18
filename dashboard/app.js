@@ -96,7 +96,7 @@ function setForecastHorizonDays(days) {
 function switchDecisionModule(mod) {
   const tabs = ['overview', 'forecasts', 'cashflow', 'scenarios', 'copilot'];
   tabs.forEach(m => {
-    // 1. Toggle tab button active state
+    // 1. Toggle sidebar nav item active state
     const btn = document.getElementById(`tab-mod-${m}`);
     if (btn) btn.classList.toggle('active', m === mod);
 
@@ -107,48 +107,51 @@ function switchDecisionModule(mod) {
     }
   });
 
-  // 3. Keep 4-Step workflow bar synchronized
-  const stepMap = {
-    overview: 1,
-    forecasts: 2,
-    cashflow: 3,
-    scenarios: 4,
-    copilot: 1
-  };
-  [1, 2, 3, 4].forEach(s => {
-    const stepEl = document.getElementById(`wf-step-${s}`);
-    if (stepEl) {
-      stepEl.classList.toggle('active', s <= (stepMap[mod] || 1));
+  // 3. Update topbar breadcrumb title and descriptive subtitle
+  const titleMap = {
+    overview: {
+      title: 'Diagnostic Cockpit',
+      sub: 'Empirical baseline treasury health, revenue run-rate, and statutory reserve compliance.'
+    },
+    forecasts: {
+      title: 'Conformal Forecaster',
+      sub: 'Multi-horizon probabilistic sales forecasting with calibrated uncertainty bands (P10, P50, P90).'
+    },
+    cashflow: {
+      title: 'Solvency Risk Radar & Ledger',
+      sub: 'Continuous algorithmic audit for liquidity shortfall, receivables delay, and statutory reserve preservation.'
+    },
+    scenarios: {
+      title: 'Sensitivity Simulator & Strategy Roadmap',
+      sub: 'Zero-variance deterministic stress-testing against demand contraction, cost inflation, and target revenue gaps.'
+    },
+    copilot: {
+      title: 'Grounded Decision Copilot',
+      sub: 'Deterministic tool-grounded financial reasoning assistant powered by FinSightToolKit.'
     }
-  });
+  };
+
+  const meta = titleMap[mod] || titleMap.overview;
+  const topTitle = document.getElementById('topbar-active-title');
+  if (topTitle) topTitle.textContent = meta.title;
+  const topSub = document.getElementById('topbar-active-sub');
+  if (topSub) topSub.textContent = meta.sub;
 
   // 4. Resize Chart.js canvas whenever forecast or overview is shown
   if (mod === 'forecasts' || mod === 'overview') {
     if (businessForecastChart) {
       setTimeout(() => {
         businessForecastChart.resize();
-      }, 30);
+      }, 50);
     }
   }
 
-  // 5. Workspace grid full-width toggle for standalone AI Advisor
-  const workspaceGrid = document.querySelector('.workspace-grid');
-  if (workspaceGrid) {
-    if (mod === 'copilot') {
-      workspaceGrid.classList.add('full-width-view');
-    } else {
-      workspaceGrid.classList.remove('full-width-view');
-    }
-  }
-
-  // 6. Special Copilot focus
+  // 5. Special Copilot focus
   if (mod === 'copilot') {
     const input = document.getElementById('copilot-user-input');
     if (input) {
       setTimeout(() => input.focus(), 80);
     }
-  } else {
-    window.scrollTo({ top: 100, behavior: 'smooth' });
   }
 }
 
@@ -235,6 +238,15 @@ function recomputeBusinessEngine() {
   document.getElementById('kpi-current-cash').textContent = fmtMoney(availableCashBDT);
   document.getElementById('kpi-reserve-target').textContent = fmtMoney(reserveTargetBDT);
   document.getElementById('kpi-reserve-sub').textContent = `Based on modeled costs (${costRatioPct}%)`;
+
+  // Synchronize Left Sidebar Telemetry
+  const sbCash = document.getElementById('sb-cash');
+  if (sbCash) sbCash.textContent = fmtMoney(availableCashBDT);
+  const sbCushion = document.getElementById('sb-cushion');
+  if (sbCushion) {
+    sbCushion.textContent = `${isReserveSafe ? '+' : ''}${fmtMoney(cashAfterReserveBDT)} [${isReserveSafe ? 'SAFE' : 'DEFICIT'}]`;
+    sbCushion.style.color = isReserveSafe ? 'var(--accent-emerald)' : '#f43f5e';
+  }
 
   // Synchronize AI Advisor Studio Telemetry
   const advTelCash = document.getElementById('telemetry-cash-adv');
@@ -462,17 +474,17 @@ function renderPredictiveChart(monthlyRevenueBDT, numDays) {
         legend: {
           position: 'top',
           labels: {
-            color: '#334155',
+            color: '#94a3b8',
             font: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
             boxWidth: 12,
             padding: 14
           }
         },
         tooltip: {
-          backgroundColor: '#ffffff',
-          titleColor: '#0f172a',
-          bodyColor: '#334155',
-          borderColor: '#e2e8f0',
+          backgroundColor: '#0f172a',
+          titleColor: '#ffffff',
+          bodyColor: '#cbd5e1',
+          borderColor: 'rgba(255, 255, 255, 0.15)',
           borderWidth: 1,
           padding: 12,
           boxPadding: 6,
@@ -484,13 +496,13 @@ function renderPredictiveChart(monthlyRevenueBDT, numDays) {
       },
       scales: {
         x: {
-          grid: { color: 'rgba(0, 0, 0, 0.05)' },
-          ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 11, weight: '600' } }
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 11, weight: '600' } }
         },
         y: {
-          grid: { color: 'rgba(0, 0, 0, 0.05)' },
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
           ticks: {
-            color: '#64748b',
+            color: '#94a3b8',
             font: { family: 'JetBrains Mono', size: 11, weight: '600' },
             callback: (val) => `${c.symbol}${val.toLocaleString()}`
           }
