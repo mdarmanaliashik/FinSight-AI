@@ -15,6 +15,21 @@
 
 ---
 
+## Interactive Executive Dashboard
+
+- **Live Cloud Deployment:** [https://finsight-ai-qwca.onrender.com](https://finsight-ai-qwca.onrender.com)
+- **Local Run (Executive Dashboard):**
+  ```bash
+  python server.py
+  ```
+  Open `http://localhost:8501` to test the full decision intelligence dashboard, interactive scenario sliders, Chart.js cashflow ledger, and multilingual tool-grounded copilot.
+- **Alternative Streamlit Dashboard:**
+  ```bash
+  streamlit run app.py
+  ```
+
+---
+
 ```
                        ┌───────────────────────────────────────────────┐
                        │           FinSight AI Architecture            │
@@ -159,17 +174,15 @@ champion_model = joblib.load('models/olist_best_catboost_ratio.joblib')
 # forecasted_sales = pred_ratio * rolling_trend_ma7
 ```
 
-### 4. Interactive Executive Dashboard
-- **Live Cloud Deployment:** [https://finsight-ai-qwca.onrender.com](https://finsight-ai-qwca.onrender.com)
-- **Local Run (Executive Dashboard):**
-  ```bash
-  python server.py
-  ```
-  Open `http://localhost:8501` to test the full decision intelligence dashboard, interactive scenario sliders, Chart.js cashflow ledger, and multilingual tool-grounded copilot.
-- **Alternative Streamlit Dashboard:**
-  ```bash
-  streamlit run app.py
-  ```
+### 4. Launching the Dashboards Locally
+```bash
+# Executive Decision Intelligence Web Server (serves dashboard/index.html)
+python server.py
+
+# Alternative Streamlit Application
+streamlit run app.py
+```
+Open `http://localhost:8501` in your browser. (For live cloud demo, see [Live Cloud Deployment](https://finsight-ai-qwca.onrender.com)).
 
 ---
 
