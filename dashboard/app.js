@@ -1602,6 +1602,10 @@ function detectScriptLanguage(text, fallback) {
     if (fallback === 'ja') return 'ja';
     return 'zh'; // Chinese
   }
+  // Detect phonetic Banglish phrasing
+  if (/(\b(ki|korte|kora|korbo|pabo|uchit|amar|amader|kemon|cholche|bhalo|hobe|koto|taka|bariye|komiye|lagbe|dorkar|ache|shob|thik|kivabe)\b)/i.test(text)) {
+    return 'bn';
+  }
   return fallback || 'en';
 }
 
@@ -2974,24 +2978,29 @@ function _computeCopilotResponseRaw(query) {
   }
 
   // -------------------------------------------------------------
-  // INTENT 11: Sales Growth & Business Expansion Levers
+  // INTENT 11: Sales Growth & Business Expansion / Improvement Levers
   // -------------------------------------------------------------
   const isSalesGrowth = lowerQ.includes('increase sales') || lowerQ.includes('boost sales') || lowerQ.includes('grow business') ||
     lowerQ.includes('sales growth') || lowerQ.includes('how to grow') || lowerQ.includes('more orders') ||
+    lowerQ.includes('improve') || lowerQ.includes('improvement') || lowerQ.includes('how to improve') || lowerQ.includes('better') ||
     lowerQ.includes('বিক্রি বাড়ানো') || lowerQ.includes('সেলস বাড়ানো') || lowerQ.includes('ব্যবসা বড় করা') || lowerQ.includes('গ্রোথ') ||
     lowerQ.includes('কীভাবে বিক্রি বাড়াব') || lowerQ.includes('বিক্রি বৃদ্ধি') ||
+    lowerQ.includes('উন্নতি') || lowerQ.includes('উন্নতি করব') || lowerQ.includes('উন্নতি করা') || lowerQ.includes('কী করলে') ||
+    lowerQ.includes('কি করলে') || lowerQ.includes('কী করা উচিত') || lowerQ.includes('কি করা উচিত') || lowerQ.includes('উন্নতি করার উপায়') ||
     lowerQ.includes('sales barabo') || lowerQ.includes('grow kora') || lowerQ.includes('business boro') ||
-    lowerQ.includes('बिक्री कैसे बढ़ाएं') || lowerQ.includes('व्यापार बढ़ाएं') ||
-    lowerQ.includes('سیلز کیسے بڑھائیں') || lowerQ.includes('کاروبار بڑھائیں') ||
-    lowerQ.includes('如何增加销售') || lowerQ.includes('扩大业务') ||
-    lowerQ.includes('売上を伸ばす') || lowerQ.includes('事業拡大');
+    lowerQ.includes('ki korle') || lowerQ.includes('kivabe improve') || lowerQ.includes('improve korbo') || lowerQ.includes('korte pabo') ||
+    lowerQ.includes('improve korte') || lowerQ.includes('ki kora jay') ||
+    lowerQ.includes('बिक्री कैसे बढ़ाएं') || lowerQ.includes('व्यापार बढ़ाएं') || lowerQ.includes('सुधार') ||
+    lowerQ.includes('سیلز کیسے بڑھائیں') || lowerQ.includes('کاروبار بڑھائیں') || lowerQ.includes('بہتری') ||
+    lowerQ.includes('如何增加销售') || lowerQ.includes('扩大业务') || lowerQ.includes('提升') || lowerQ.includes('改进') ||
+    lowerQ.includes('売上を伸ばす') || lowerQ.includes('事業拡大') || lowerQ.includes('改善');
 
   if (isSalesGrowth) {
     lastDetectedIntent = 'sales_growth';
     if (targetLang === 'bn') {
       return `
-        <p><strong>【বিক্রি বৃদ্ধি ও টেকসই প্রবৃদ্ধির কৌশলগত লিভার】</strong></p>
-        <p>ইকোনোমেট্রিক ও রিটেইল অপ্টিমাইজেশন মডেল অনুযায়ী বিক্রি বাড়ানোর ৩টি মূল চালিকাশক্তি:</p>
+        <p><strong>【ব্যবসার সামগ্রিক পারফরম্যান্স ও বিক্রি বৃদ্ধির কৌশলগত লিভার (Improvement Levers)】</strong></p>
+        <p>ইকোনোমেট্রিক ও রিটেইল অপ্টিমাইজেশন মডেল অনুযায়ী আপনার ব্যবসা ইম্প্রুভ (উন্নতি) করার ৩টি প্রমাণিত চালিকাশক্তি:</p>
         <div class="ai-metric-grid">
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Current Monthly Sales</div><div class="ai-metric-val">${fmtMoney(projRev)}</div></div>
           <div class="ai-metric-cell"><div class="ai-metric-lbl">Target Gap</div><div class="ai-metric-val" style="color: var(--accent-cyan);">+${fmtMoney(Math.max(0, targetVal - projRev))}</div></div>
