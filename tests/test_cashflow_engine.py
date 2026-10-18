@@ -8,7 +8,10 @@ and absolute accounting conservation laws.
 
 import os
 import sys
-import pytest
+try:
+    import pytest
+except ImportError:
+    pytest = None
 import numpy as np
 import pandas as pd
 
@@ -228,4 +231,16 @@ def test_calculate_risk_metrics():
 
 
 if __name__ == "__main__":
-    pytest.main(["-v", __file__])
+    if pytest is not None:
+        pytest.main(["-v", __file__])
+    else:
+        print("Running tests without pytest runner...")
+        test_zero_inflow_runway()
+        test_hand_calculated_golden_ledger()
+        test_settlement_shift_conservation()
+        test_idempotency()
+        test_scenario_shock_monotonicity()
+        test_calculate_risk_metrics()
+        print("\nALL CASHFLOW ENGINE TESTS PASSED (100% SUCCESS)!")
+
+

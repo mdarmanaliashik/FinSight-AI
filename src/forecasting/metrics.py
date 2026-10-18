@@ -132,3 +132,59 @@ def calculate_forecasting_metrics(
         metrics["Mean_Interval_Width"] = round(mean_width, 2)
 
     return metrics
+
+
+def calculate_conformal_exceedance_probability(
+    target_sales: float,
+    p10: float,
+    p50: float,
+    p90: float
+) -> float:
+    """
+    Computes empirical exceedance probability P(Sales >= target_sales)
+    using piecewise-linear CDF interpolation between calibrated quantiles P10, P50, and P90.
+    """
+    t = float(target_sales)
+    m_p10 = float(p10)
+    m_p50 = float(p50)
+    m_p90 = float(p90)
+
+    if t <= m_p10:
+        ratio = max(0.0, t / (m_p10 if m_p10 > 0 else 1.0))
+        prob = 90.0 + (1.0 - ratio) * 9.9
+    elif t <= m_p50:
+        denom = max(1e-6, m_p50 - m_p10)
+        prob = 90.0 - ((t - m_p10) / denom) * 40.0
+    elif t <= m_p90:
+        denom = max(1e-6, m_p90 - m_p50)
+        prob = 50.0 - ((t - m_p50) / denom) * 40.0
+    else:
+        excess = (t - m_p90) / (m_p90 if m_p90 > 0 else 1.0)
+        prob = max(0.1, 10.0 * np.exp(-excess * 2.0))
+
+    return round(float(np.clip(prob, 0.1, 99.9)), 2)
+
+
+def evaluate_conformal_coverage(
+    y_true: np.ndarray,
+    y_p10: np.ndarray,
+    y_p90: np.ndarray
+) -> Dict[str, float]:
+    """
+    Evaluates exact empirical coverage percentage (PICP) and interval width (MPIW)
+    for [P10, P90] conformal interval.
+    """
+    y_t = np.asarray(y_true, dtype=float)
+    y_l = np.asarray(y_p10, dtype=float)
+    y_u = np.asarray(y_p90, dtype=float)
+    in_bounds = (y_t >= y_l) & (y_t <= y_u)
+    return {
+        "empirical_coverage_pct": round(float(np.mean(in_bounds) * 100.0), 2),
+        "mean_interval_width": round(float(np.mean(y_u - y_l)), 2),
+        "left_tail_breach_pct": round(float(np.mean(y_t < y_l) * 100.0), 2),
+        "right_tail_surge_pct": round(float(np.mean(y_t > y_u) * 100.0), 2),
+    }
+
+# Backward compatibility alias
+calculate_forecast_metrics = calculate_forecasting_metrics
+

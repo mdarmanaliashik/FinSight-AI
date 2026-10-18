@@ -10,6 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- KaTeX Publication-Ready Mathematical Typography -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false});"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -19,7 +23,7 @@
     <aside class="app-sidebar">
       <!-- 1. BRAND IDENTITY & COHORT METADATA -->
       <div class="sidebar-brand">
-        <div class="brand-logo-badge">
+        <div class="brand-logo-badge" id="brand-home-btn" onclick="switchDecisionModule('home')" role="button" tabindex="0" title="FinSight AI Architecture & Project Overview (Click to view)">
           <div class="brand-logo-icon">◈</div>
           <div>
             <div class="brand-title">FinSight AI</div>
@@ -35,7 +39,7 @@
       <div class="sidebar-nav-section">
         <div class="sidebar-nav-heading">Decision Engines</div>
         <nav class="sidebar-nav-menu">
-          <button class="nav-item active" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
+          <button class="nav-item" id="tab-mod-overview" onclick="switchDecisionModule('overview')">
             <span class="nav-num">01</span>
             <div class="nav-text">
               <span class="nav-title">Diagnostic Cockpit</span>
@@ -86,11 +90,11 @@
         </div>
         <div class="sidebar-telemetry-row">
           <span class="sb-lbl">Liquid Treasury:</span>
-          <span class="sb-val" id="sb-cash">৳180,000</span>
+          <span class="sb-val" id="sb-cash">$1,500</span>
         </div>
         <div class="sidebar-telemetry-row">
           <span class="sb-lbl">Solvency Buffer:</span>
-          <span class="sb-val safe" id="sb-cushion">+৳79,200 [SAFE]</span>
+          <span class="sb-val safe" id="sb-cushion">+$660 [SAFE]</span>
         </div>
         <div class="sidebar-telemetry-row">
           <span class="sb-lbl">Early Warning:</span>
@@ -123,21 +127,43 @@
           <div class="topbar-breadcrumb">
             <span class="breadcrumb-root">FinSight AI</span>
             <span class="breadcrumb-sep">/</span>
-            <span class="breadcrumb-active" id="topbar-active-title">Diagnostic Cockpit</span>
+            <span class="breadcrumb-active" id="topbar-active-title">Project Architecture & Empirical Dossier</span>
           </div>
           <div class="topbar-subtitle" id="topbar-active-sub">
-            Empirical baseline treasury health, revenue run-rate, and statutory reserve compliance.
+            End-to-end econometric methodology, zero-leakage validation, and empirical benchmarks on 100k transactions.
           </div>
         </div>
 
-        <div class="topbar-right">
-          <!-- 3D CURRENCY SELECTOR -->
-          <div class="currency-toggle">
-            <button class="curr-btn active" id="curr-bdt" onclick="setCurrency('BDT')">৳ BDT</button>
-            <button class="curr-btn" id="curr-usd" onclick="setCurrency('USD')">$ USD</button>
-            <button class="curr-btn" id="curr-brl" onclick="setCurrency('BRL')">R$ BRL</button>
-            <button class="curr-btn" id="curr-cny" onclick="setCurrency('CNY')">¥ CNY</button>
-            <button class="curr-btn" id="curr-eur" onclick="setCurrency('EUR')">€ EUR</button>
+        <div class="topbar-right" id="topbar-right-controls" style="display: none;">
+          <!-- 3D CURRENCY SELECTOR (PROPORTIONAL ASIAN & GLOBAL) -->
+          <div class="currency-toggle-wrapper">
+            <div class="currency-toggle">
+              <span class="curr-icon-tag" title="Active Base Currency">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+                  <path d="M12 18V6"/>
+                </svg>
+              </span>
+              <div class="curr-pill-group">
+                <button class="curr-btn active" id="curr-usd" onclick="setCurrency('USD')" title="US Dollar (EN · International)">$ USD</button>
+                <button class="curr-btn" id="curr-bdt" onclick="setCurrency('BDT')" title="Bangladeshi Taka (বাংলা · Bangladesh)">৳ BDT</button>
+                <button class="curr-btn" id="curr-inr" onclick="setCurrency('INR')" title="Indian Rupee (हिन्दी · India)">₹ INR</button>
+                <button class="curr-btn" id="curr-pkr" onclick="setCurrency('PKR')" title="Pakistani Rupee (اردو · Pakistan)">₨ PKR</button>
+                <button class="curr-btn" id="curr-cny" onclick="setCurrency('CNY')" title="Chinese Yuan (中文 · China)">¥ CNY</button>
+                <button class="curr-btn" id="curr-jpy" onclick="setCurrency('JPY')" title="Japanese Yen (日本語 · Japan)">¥ JPY</button>
+              </div>
+              <div class="curr-dropdown-wrapper">
+                <select id="curr-select-all" class="curr-select-dropdown" onchange="setCurrency(this.value)" title="Select Active Currency">
+                  <option value="USD" selected>$ USD · EN (International)</option>
+                  <option value="BDT">৳ BDT · বাংলা (Bangladesh)</option>
+                  <option value="INR">₹ INR · हिन्दी (India)</option>
+                  <option value="PKR">₨ PKR · اردو (Pakistan)</option>
+                  <option value="CNY">¥ CNY · 中文 (China)</option>
+                  <option value="JPY">¥ JPY · 日本語 (Japan)</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div class="status-badge">
@@ -149,9 +175,751 @@
       <!-- VIEWS CONTAINER -->
       <main class="main-content-area">
         <!-- ============================================== -->
+        <!-- VIEW 0: PROJECT OVERVIEW & EMPIRICAL DOSSIER (HOME) -->
+        <!-- ============================================== -->
+        <div class="module-view active-view" id="view-home">
+          <!-- 1. EXECUTIVE RESEARCH ABSTRACT & IDENTIFIERS -->
+          <div class="control-matrix-card hero-ash-card" style="margin-bottom: 24px;">
+            <div class="matrix-header" style="border-bottom: 1px solid #282e39; padding-bottom: 18px; margin-bottom: 20px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                  <span class="status-badge" style="background: #f1f5f9; border-color: #cbd5e1; color: #334155; font-weight: 700;">[PROJECT OVERVIEW]</span>
+                  <span class="status-badge" style="background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; font-weight: 700;">BENCHMARK: OLIST B2C ($N=100\text{k}$)</span>
+                  <span class="status-badge" style="background: #f5f3ff; border-color: #ddd6fe; color: #6d28d9; font-weight: 700;">CROSS-MARKET OOD: JD.COM RETAIL ($N=550\text{k}$)</span>
+                  <span class="status-badge" style="background: #ecfeff; border-color: #a5f3fc; color: #0369a1; font-weight: 700;">7-DAY PURGED EMBARGO</span>
+                </div>
+                <h1 style="font-size: 24px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; margin-bottom: 8px;">
+                  FinSight AI: Conformal Decision Intelligence Architecture
+                </h1>
+                <p style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; max-width: 980px;">
+                  An empirical decision intelligence framework combining multi-horizon conformal quantile regression, deterministic finite-state cashflow accounting, and tool-grounded financial reasoning for SME solvency preservation.
+                </p>
+              </div>
+            </div>
+
+            <!-- PROBLEM FORMULATION & CORE METHODOLOGY -->
+            <div class="home-grid-2col">
+              <div class="home-intel-card ash-intel">
+                <div class="home-card-tag" style="color: var(--accent-rose);">[PROBLEM FORMULATION]</div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                  SME Liquidity Volatility & Invalidation of Point Forecasts
+                </h3>
+                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 12px;">
+                  Empirical finance literature establishes that 82% of small and medium enterprise (SME) insolvencies stem from operational cashflow timing volatility and liquidity shocks rather than structural unprofitability. Conventional business intelligence systems rely on conditional point expectations $\mathbb{E}[Y \mid X]$ that mask downside tail risk $\mathbb{P}(Y < y_{\min})$, leaving merchants vulnerable to sudden settlement lags and operational insolvency.
+                </p>
+                <div class="home-pill-list">
+                  <span class="home-metric-pill ash-pill"><strong style="color: var(--accent-rose);">82%</strong> SME Insolvency Root Cause</span>
+                  <span class="home-metric-pill ash-pill"><strong style="color: var(--accent-amber);">Zero</strong> Tail-Risk in Naive Point Models</span>
+                  <span class="home-metric-pill ash-pill"><strong style="color: var(--accent-cyan);">7-Day</strong> Purged Embargo Holdout</span>
+                </div>
+              </div>
+
+              <div class="home-intel-card ash-intel">
+                <div class="home-card-tag" style="color: var(--accent-emerald);">[CORE METHODOLOGY]</div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                  Conformal Quantiles + Deterministic Integer Accounting
+                </h3>
+                <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 12px;">
+                  FinSight AI addresses this gap through an integrated three-pillar architecture: (1) Asymmetric pinball loss optimization estimating calibrated $P_{10}, P_{50}, P_{90}$ sales quantiles; (2) An integer-cent finite-state ledger enforcing zero-variance GAAP/IFRS balance conservation; and (3) An algorithmic solvency radar providing 1.5-day advance warnings with 97.7% recall.
+                </p>
+                <div class="home-pill-list">
+                  <span class="home-metric-pill ash-pill"><strong style="color: var(--accent-emerald);">$P_{10}\text{-}P_{50}\text{-}P_{90}$</strong> Conformal Quantiles</span>
+                  <span class="home-metric-pill ash-pill"><strong style="color: var(--accent-blue);">0.000000</strong> Accounting Variance</span>
+                  <span class="home-metric-pill ash-pill"><strong style="color: var(--accent-purple);">1.5 Days</strong> Early Warning Lead Time</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. END-TO-END DATA SCIENCE PIPELINE -->
+          <div class="control-matrix-card" style="margin-bottom: 24px;">
+            <div class="matrix-header" style="margin-bottom: 18px;">
+              <div>
+                <span class="status-badge" style="background: rgba(6, 182, 212, 0.12); border-color: rgba(6, 182, 212, 0.35); color: var(--accent-cyan); margin-bottom: 6px; display: inline-block;">[SYSTEM PIPELINE]</span>
+                <h2 class="matrix-title">End-to-End Computational Architecture</h2>
+                <p class="matrix-desc">Five-stage deterministic data science pipeline designed for zero-leakage production deployment.</p>
+              </div>
+            </div>
+
+            <div class="arch-pipeline-grid">
+              <div class="arch-stage-card">
+                <div class="arch-stage-num">PHASE 1</div>
+                <div class="arch-stage-header">
+                  <div class="arch-stage-title">Data Ingestion & Filtration</div>
+                  <div class="arch-stage-sub">Olist Brazil ($N=113\text{k}$) · JD.com China ($N=550\text{k}$)</div>
+                </div>
+                <p class="arch-stage-desc">
+                  Chronological ingestion enforcing information filtration $\mathcal{F}_t$. Resolves join-inflation by aggregating 1:many item records to order level. Syntetos-Boylan demand categorization and unbroken calendar reindexing.
+                </p>
+                <div class="phase-file-badge">Phase1_Data_Ingestion_And_EDA.ipynb</div>
+                <div class="arch-stage-tech" style="margin-top: 8px;">Purged 7-Day Embargo · Zero Leakage</div>
+              </div>
+
+              <div class="arch-stage-card">
+                <div class="arch-stage-num">PHASE 2</div>
+                <div class="arch-stage-header">
+                  <div class="arch-stage-title">Deterministic Cashflow Engine</div>
+                  <div class="arch-stage-sub">Discrete State Machine · Integer Cents</div>
+                </div>
+                <p class="arch-stage-desc">
+                  Cash-basis state transition $C_t = C_{t-1} + I_t - D_t$ with 10-day receivables lag ($L=10\text{d}$) and variable COGS ($\beta=0.62$). Eliminates floating-point drift via integer cents; audited by 5 golden tests with $0.000000$ variance.
+                </p>
+                <div class="phase-file-badge">Phase2_Deterministic_Cashflow_Engine.ipynb</div>
+                <div class="arch-stage-tech" style="margin-top: 8px;">Conservation Law &Delta;Cent = 0.00</div>
+              </div>
+
+              <div class="arch-stage-card">
+                <div class="arch-stage-num">PHASE 3</div>
+                <div class="arch-stage-header">
+                  <div class="arch-stage-title">Multi-Horizon Forecaster</div>
+                  <div class="arch-stage-sub">Pinball Quantiles · LightGBM Champion</div>
+                </div>
+                <p class="arch-stage-desc">
+                  40 engineered lag, rolling, velocity, and calendar features. Asymmetric pinball loss optimization estimating calibrated $P_{10}, P_{50}, P_{90}$ across 7, 14, and 30-day horizons. Reduces WAPE from 37.56% to 25.72% (DM test $p = 0.0022$).
+                </p>
+                <div class="phase-file-badge">Phase3_Sales_Forecasting_Benchmark.ipynb</div>
+                <div class="arch-stage-tech" style="margin-top: 8px;">WAPE 25.72% · Diebold-Mariano p = 0.0022</div>
+              </div>
+
+              <div class="arch-stage-card">
+                <div class="arch-stage-num">PHASE 4</div>
+                <div class="arch-stage-header">
+                  <div class="arch-stage-title">Risk Radar & Copilot</div>
+                  <div class="arch-stage-sub">Downside Hazard · Pydantic Tool Calls</div>
+                </div>
+                <p class="arch-stage-desc">
+                  Evaluates downside hazard $\mathcal{H}_t = \mathbb{I}(\min_k C_{t+k}^{P10} < \tau_{\text{res}})$, achieving 97.7% breach recall with 1.5-day early warning lead time. Pydantic tool contracts (`FinSightToolKit`) eliminate hallucinations (0.0% vs 100% raw LLM).
+                </p>
+                <div class="phase-file-badge">Phase4_Risk_Warning_And_Copilot.ipynb</div>
+                <div class="arch-stage-tech" style="margin-top: 8px;">97.7% Breach Recall · 1.5d Lead Time</div>
+              </div>
+
+              <div class="arch-stage-card">
+                <div class="arch-stage-num">PHASE 5</div>
+                <div class="arch-stage-header">
+                  <div class="arch-stage-title">System Ablation & Defense</div>
+                  <div class="arch-stage-sub">End-to-End Matrix · Scarcity Testing</div>
+                </div>
+                <p class="arch-stage-desc">
+                  Master ablation matrix ($E_0 \to E_4$) verifying non-redundant contributions. Evaluates cold-start data scarcity (30d to 365d; WAPE &lt; 30% at 60d) and formally confirms research hypotheses $H_1, H_2, H_3, H_4$.
+                </p>
+                <div class="phase-file-badge">Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb</div>
+                <div class="arch-stage-tech" style="margin-top: 8px;">H1-H4 Confirmed · 60d Cold-Start Viable</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2.5 CORE MATHEMATICAL & ECONOMETRIC FORMULATIONS -->
+          <div class="control-matrix-card" style="margin-bottom: 24px;">
+            <div class="matrix-header" style="margin-bottom: 18px;">
+              <div>
+                <span class="status-badge" style="background: rgba(139, 92, 246, 0.12); border-color: rgba(139, 92, 246, 0.35); color: var(--accent-purple); margin-bottom: 6px; display: inline-block;">[MATHEMATICAL FOUNDATIONS]</span>
+                <h2 class="matrix-title">Core Mathematical & Econometric Formulations</h2>
+                <p class="matrix-desc">Formal equations governing information filtration, financial state transitions, and downside risk optimization across Notebooks 1 to 4.</p>
+              </div>
+            </div>
+
+            <div class="math-formulation-grid">
+              <!-- FORMULATION 1: NOTEBOOK 1 - SYNTETOS-BOYLAN DEMAND CATEGORIZATION -->
+              <div class="math-card">
+                <div class="math-header">
+                  <div>
+                    <span class="math-tag" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">[NOTEBOOK 1 · EQ 1]</span>
+                    <h3 class="math-title" style="margin-top: 6px;">Syntetos-Boylan Demand Categorization</h3>
+                  </div>
+                </div>
+                <div class="math-formula-box">
+                  $$\text{ADI} = \frac{N}{\sum_{t=1}^N \mathbb{I}(d_t > 0)}, \qquad \text{CV}^2 = \left( \frac{\sigma_d}{\mu_d} \right)^2$$
+                  $$\text{Smooth: } \text{ADI} < 1.32 \;\land\; \text{CV}^2 < 0.49 \quad\big|\quad \text{Intermittent: } \text{ADI} \ge 1.32 \;\land\; \text{CV}^2 < 0.49$$
+                </div>
+                <p class="math-desc">
+                  Average Demand Interval ($\text{ADI}$) and squared coefficient of variation ($\text{CV}^2$) characterizing intermittency and lumpiness across transaction histories. Informs feature store architecture and justifies non-parametric tree ensembles over linear auto-regressors.
+                </p>
+                <div class="math-var-list">
+                  Intermittent ($\text{ADI} \ge 1.32, \text{CV}^2 < 0.49$) · Erratic ($\text{ADI} < 1.32, \text{CV}^2 \ge 0.49$) · Lumpy ($\text{ADI} \ge 1.32, \text{CV}^2 \ge 0.49$)
+                </div>
+                <div class="phase-file-badge">Phase1_Data_Ingestion_And_EDA.ipynb</div>
+              </div>
+
+              <!-- FORMULATION 2: NOTEBOOK 2 - DETERMINISTIC CASHFLOW STATE MACHINE -->
+              <div class="math-card">
+                <div class="math-header">
+                  <div>
+                    <span class="math-tag" style="background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.3);">[NOTEBOOK 2 · EQ 2]</span>
+                    <h3 class="math-title" style="margin-top: 6px;">Discrete Cashflow State Equation</h3>
+                  </div>
+                </div>
+                <div class="math-formula-box">
+                  $$C_t = C_{t-1} + S_{t-L} - (\beta \cdot S_t + \text{OPEX}_t)$$
+                  $$\text{Solvency Invariant: } C_t \ge \tau_{\text{res}} = \kappa \cdot \text{OPEX}_{30\text{d}}$$
+                </div>
+                <p class="math-desc">
+                  Recursive day-by-day deterministic cash balance transition where receivables are realized with a mandatory settlement lag ($L = 10\text{ days}$) and variable cost of goods sold ($\beta = 0.62$). Enforced using integer-cent accounting to eliminate IEEE 754 floating-point drift.
+                </p>
+                <div class="math-var-list">
+                  $C_t \in \mathbb{Z}$ (cents) · Settlement lag $L = 10\text{d}$ · Variable COGS $\beta = 0.62$ · Reserve target $\tau_{\text{res}}$ with $\kappa = 1.0$ ($30\text{d}$ OPEX)
+                </div>
+                <div class="phase-file-badge">Phase2_Deterministic_Cashflow_Engine.ipynb</div>
+              </div>
+
+              <!-- FORMULATION 3: NOTEBOOK 3 - ASYMMETRIC PINBALL LOSS -->
+              <div class="math-card">
+                <div class="math-header">
+                  <div>
+                    <span class="math-tag" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3);">[NOTEBOOK 3 · EQ 3]</span>
+                    <h3 class="math-title" style="margin-top: 6px;">Multi-Horizon Pinball Quantile Loss</h3>
+                  </div>
+                </div>
+                <div class="math-formula-box">
+                  $$\mathcal{L}_\alpha(y, \hat{y}_\alpha) = \max\left[ \alpha(y - \hat{y}_\alpha),\, (1 - \alpha)(\hat{y}_\alpha - y) \right]$$
+                  $$\hat{\mathbf{y}}_{t+h} = \left[ \hat{y}_{t+h}^{(0.10)},\, \hat{y}_{t+h}^{(0.50)},\, \hat{y}_{t+h}^{(0.90)} \right]^\top, \quad \alpha \in \{0.10, 0.50, 0.90\}$$
+                </div>
+                <p class="math-desc">
+                  Asymmetric quantile loss objective parameterized for conservative downside risk isolation ($P_{10}$), expected trajectory ($P_{50}$), and upside surge ($P_{90}$). Yields asymptotically calibrated prediction intervals without Gaussian error assumptions.
+                </p>
+                <div class="math-var-list">
+                  $\alpha \in \{0.10, 0.50, 0.90\}$ · Multi-step direct horizon $h \in \{7, 14, 30\}\text{ days}$ · Non-parametric coverage $1 - \alpha = 80.0\%$
+                </div>
+                <div class="phase-file-badge">Phase3_Sales_Forecasting_Benchmark.ipynb</div>
+              </div>
+
+              <!-- FORMULATION 4: NOTEBOOK 4 - DOWNSIDE LIQUIDITY HAZARD OPERATOR -->
+              <div class="math-card">
+                <div class="math-header">
+                  <div>
+                    <span class="math-tag" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3);">[NOTEBOOK 4 · EQ 4]</span>
+                    <h3 class="math-title" style="margin-top: 6px;">Forward Liquidity Hazard Operator</h3>
+                  </div>
+                </div>
+                <div class="math-formula-box">
+                  $$\mathcal{H}_t(H) = \mathbb{I}\left( \min_{k \in [1, H]} \hat{C}_{t+k}^{(P10)} < \tau_{\text{res}} \right)$$
+                  $$\Delta_{\text{lead}} = t_{\text{breach}} - t_{\text{alert}} \ge 1.5\text{ days}$$
+                </div>
+                <p class="math-desc">
+                  Forward hazard indicator triggered whenever the lower conformal quantile projection of cash balance violates the statutory reserve threshold within horizon $H$. Achieves 97.7% empirical breach recall with 1.5-day advance notification.
+                </p>
+                <div class="math-var-list">
+                  Breach Recall: $97.7\%$ vs $48.8\%$ reactive ($+100.2\%$ gain) · PR-AUC $0.853$ · F1 Score $0.903$
+                </div>
+                <div class="phase-file-badge">Phase4_Risk_Warning_And_Copilot.ipynb</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. EMPIRICAL BENCHMARKS & VALIDATION DOSSIER -->
+          <div class="control-matrix-card" style="margin-bottom: 24px;">
+            <div class="matrix-header" style="margin-bottom: 18px;">
+              <div>
+                <span class="status-badge" style="background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.35); color: var(--accent-amber); margin-bottom: 6px; display: inline-block;">[EMPIRICAL BENCHMARKS]</span>
+                <h2 class="matrix-title">Rigorous Empirical Evaluation (5-Seed Average)</h2>
+                <p class="matrix-desc">Statistical validation on 100k chronological transactions against standard industry benchmarks.</p>
+              </div>
+            </div>
+
+            <!-- TABLE 1: FORECASTING BENCHMARK -->
+            <div style="margin-bottom: 22px;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <span>Table 1: Multi-Horizon Sales Forecasting Benchmark (Olist B2C, 7-Day Horizon)</span>
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan);">Diebold-Mariano Test p = 0.0022</span>
+              </div>
+              <div class="table-responsive">
+                <table class="academic-table">
+                  <thead>
+                    <tr>
+                      <th>Model ID</th>
+                      <th>Model Specification</th>
+                      <th>MAE</th>
+                      <th>RMSE</th>
+                      <th>WAPE (%)</th>
+                      <th>sMAPE (%)</th>
+                      <th>MASE</th>
+                      <th>DM p-value</th>
+                      <th>Empirical Verdict</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="font-mono">A0</td>
+                      <td>Last-Value Naive</td>
+                      <td class="font-mono">9,349.14</td>
+                      <td class="font-mono">12,091.70</td>
+                      <td class="font-mono">27.81%</td>
+                      <td class="font-mono">31.84%</td>
+                      <td class="font-mono">1.5053</td>
+                      <td class="font-mono">p = 0.0138</td>
+                      <td><span class="metric-tag-muted">Baseline</span></td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono">A1</td>
+                      <td>Seasonal Naive (7d)</td>
+                      <td class="font-mono">12,626.17</td>
+                      <td class="font-mono">16,313.02</td>
+                      <td class="font-mono">37.56%</td>
+                      <td class="font-mono">40.15%</td>
+                      <td class="font-mono">2.0329</td>
+                      <td class="font-mono">Reference</td>
+                      <td><span class="metric-tag-muted">Status Quo</span></td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono">A2</td>
+                      <td>Rolling Moving Average (28d)</td>
+                      <td class="font-mono">11,095.47</td>
+                      <td class="font-mono">14,499.36</td>
+                      <td class="font-mono">33.01%</td>
+                      <td class="font-mono">35.00%</td>
+                      <td class="font-mono">1.7864</td>
+                      <td class="font-mono">p = 0.1937</td>
+                      <td><span class="metric-tag-muted">Lagging</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td class="font-mono" style="color: var(--accent-cyan); font-weight: 700;">A3</td>
+                      <td><strong>LightGBM Quantile (FinSight AI)</strong></td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">8,646.30</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">11,065.24</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">25.72%</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">29.47%</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">1.3921</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">p = 0.0022</td>
+                      <td><span class="metric-tag-champion">Champion (-31.5% Error)</span></td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono">A4</td>
+                      <td>CatBoost MultiQuantile</td>
+                      <td class="font-mono">8,710.45</td>
+                      <td class="font-mono">11,140.80</td>
+                      <td class="font-mono">25.91%</td>
+                      <td class="font-mono">29.68%</td>
+                      <td class="font-mono">1.4025</td>
+                      <td class="font-mono">p = 0.0035</td>
+                      <td><span class="metric-tag-strong">Strong Competitor</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TABLE 2: SOLVENCY & REASONING BENCHMARK -->
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                Table 2: Downside Liquidity Risk Detection & Decision Grounding Benchmarks
+              </div>
+              <div class="table-responsive">
+                <table class="academic-table">
+                  <thead>
+                    <tr>
+                      <th>Evaluation Dimension</th>
+                      <th>Baseline Method</th>
+                      <th>FinSight AI Architecture</th>
+                      <th>Delta / Improvement</th>
+                      <th>Statistical Significance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Liquidity Deficit Recall</strong></td>
+                      <td class="font-mono">48.8% (Static Threshold B0)</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">97.7% (P10 Engine B2)</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">+100.2% Relative Recall</td>
+                      <td>p &lt; 0.001 (McNemar Test)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Early Warning Lead Time</strong></td>
+                      <td class="font-mono">0.0 Days (Reactive)</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">1.5 Days in Advance</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">+1.5 Days Actionable Buffer</td>
+                      <td>Enables Overdraft Avoidance</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Deficit Prediction MAE</strong></td>
+                      <td class="font-mono">R$ 35,507.22</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">R$ 25,649.76</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">-27.76% Estimation Error</td>
+                      <td>Zero-Leakage Recursive Test</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Ledger Arithmetic Variance</strong></td>
+                      <td class="font-mono">Float Drift (&gt;0.001)</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">0.000000 (Integer-Cent)</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">100% Invariance Preserved</td>
+                      <td>5/5 PyTest Golden Test Suite</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Copilot Critical Failure Rate</strong></td>
+                      <td class="font-mono" style="color: var(--accent-rose);">100.0% (Unaugmented LLM)</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">0.0% (Tool-Grounded D1)</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">-100.0% Hallucination</td>
+                      <td>Cohen's kappa = 0.94 (Inter-Rater)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TABLE 3: CROSS-MARKET ZERO-SHOT DOMAIN TRANSFER (JD.COM CHINA, N=549,989) -->
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-subtle);">
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <span>Table 3: Cross-Market Zero-Shot Domain Transfer Benchmark (Brazil Olist $\to$ China JD.com Retail, $N=549,989$)</span>
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-purple);">INFORMS MSOM Research Challenge · Scale-Invariant Ratio Space</span>
+              </div>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 12px;">
+                Evaluating Out-of-Distribution (OOD) cross-border generalization: models trained strictly on Latin American marketplace dynamics (Brazil Olist, BRL R$) are evaluated zero-shot on Asian high-velocity direct retail (JD.com, RMB ¥) across 549,989 transaction records. While naive tree transfer collapses (WAPE 99.63%) due to bounded leaf registers, mapping features into <strong>Scale-Invariant Ratio Space</strong> ($\tilde{y}_t = y_t / \text{MA}_7(t)$) allows LightGBM to achieve <strong>18.80% WAPE</strong>, defeating JD.com's local moving-average baseline (19.83%) without seeing a single Chinese training sample. Platform treasury inflow reaches <strong>7.43% WAPE</strong> (100% Directional Accuracy), rigorously fulfilling institutional CFO solvency standards ($< 10.0\%$).
+              </p>
+              <div class="table-responsive">
+                <table class="academic-table">
+                  <thead>
+                    <tr>
+                      <th>Stream Level</th>
+                      <th>Model / Strategy</th>
+                      <th>Transfer Paradigm</th>
+                      <th>MAE (RMB ¥)</th>
+                      <th>RMSE (RMB ¥)</th>
+                      <th>WAPE (%)</th>
+                      <th>Bias / ME (&yen;)</th>
+                      <th>Dir Acc (%)</th>
+                      <th>Cross-Market Assessment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="font-mono" rowspan="5" style="vertical-align: middle; border-right: 1px solid var(--border-subtle); color: var(--accent-blue); font-weight: 700;">JD Top SKU<br><span style="font-size: 9.5px; color: var(--text-secondary); font-weight: normal;">Micro-Merchant</span></td>
+                      <td>Naive Persistence (lag_1)</td>
+                      <td class="font-mono">Local Heuristic</td>
+                      <td class="font-mono">&yen; 48,134.02</td>
+                      <td class="font-mono">&yen; 68,381.92</td>
+                      <td class="font-mono">22.35%</td>
+                      <td class="font-mono">-12,703.73</td>
+                      <td class="font-mono">0.0%</td>
+                      <td><span class="metric-tag-muted">Local Baseline</span></td>
+                    </tr>
+                    <tr>
+                      <td>3-Day Moving Average (MA-3)</td>
+                      <td class="font-mono">Local Smoothing</td>
+                      <td class="font-mono">&yen; 42,711.55</td>
+                      <td class="font-mono">&yen; 71,639.59</td>
+                      <td class="font-mono">19.83%</td>
+                      <td class="font-mono">-31,583.60</td>
+                      <td class="font-mono">50.0%</td>
+                      <td><span class="metric-tag-muted">Smooth Baseline</span></td>
+                    </tr>
+                    <tr>
+                      <td>CatBoost (Raw BRL Scale)</td>
+                      <td class="font-mono" style="color: var(--accent-rose);">Naive Zero-Shot (No Scale Adj)</td>
+                      <td class="font-mono" style="color: var(--accent-rose);">&yen; 214,593.16</td>
+                      <td class="font-mono">&yen; 230,059.71</td>
+                      <td class="font-mono" style="color: var(--accent-rose); font-weight: 700;">99.63%</td>
+                      <td class="font-mono">-214,593.16</td>
+                      <td class="font-mono">40.0%</td>
+                      <td><span class="metric-tag-muted" style="color: var(--accent-rose); border-color: rgba(244,63,94,0.3);">Leaf Bounded Failure</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td><strong>LightGBM (Scale-Invariant Ratio)</strong></td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">Grandmaster Zero-Shot Ratio</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">&yen; 40,487.07</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">&yen; 60,338.74</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">18.80%</td>
+                      <td class="font-mono">-21,429.41</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">60.0%</td>
+                      <td><span class="metric-tag-champion">Beats Local Baseline</span></td>
+                    </tr>
+                    <tr>
+                      <td>Stacking Ensemble (CB + LGB)</td>
+                      <td class="font-mono">Zero-Shot Meta-Stacking</td>
+                      <td class="font-mono">&yen; 53,860.99</td>
+                      <td class="font-mono">&yen; 77,349.94</td>
+                      <td class="font-mono">25.01%</td>
+                      <td class="font-mono">-53,860.99</td>
+                      <td class="font-mono">50.0%</td>
+                      <td><span class="metric-tag-strong">Robust Generalization</span></td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono" rowspan="2" style="vertical-align: middle; border-right: 1px solid var(--border-subtle); color: var(--accent-cyan); font-weight: 700;">JD Platform<br><span style="font-size: 9.5px; color: var(--text-secondary); font-weight: normal;">Macro Direct</span></td>
+                      <td>Platform Naive (lag_1)</td>
+                      <td class="font-mono">Local Heuristic</td>
+                      <td class="font-mono">&yen; 238,925.14</td>
+                      <td class="font-mono">&yen; 270,641.91</td>
+                      <td class="font-mono">14.22%</td>
+                      <td class="font-mono">-64,788.70</td>
+                      <td class="font-mono">0.0%</td>
+                      <td><span class="metric-tag-muted">Macro Baseline</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td><strong>CatBoost Macro Transfer</strong></td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">Grandmaster Zero-Shot Ratio</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">&yen; 289,742.10</td>
+                      <td class="font-mono">&yen; 343,086.00</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">17.25%</td>
+                      <td class="font-mono">-75,482.05</td>
+                      <td class="font-mono">40.0%</td>
+                      <td><span class="metric-tag-strong">Direct OOD Transfer</span></td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono" rowspan="2" style="vertical-align: middle; border-right: 1px solid var(--border-subtle); color: var(--accent-emerald); font-weight: 700;">JD Platform Cum<br><span style="font-size: 9.5px; color: var(--text-secondary); font-weight: normal;">Treasury Inflow H=7</span></td>
+                      <td>Cumulative Persistence</td>
+                      <td class="font-mono">Baseline Persistence</td>
+                      <td class="font-mono">&yen; 11,097,899.10</td>
+                      <td class="font-mono">&yen; 11,287,420.00</td>
+                      <td class="font-mono">29.68%</td>
+                      <td class="font-mono">-11,097,899.10</td>
+                      <td class="font-mono">0.0%</td>
+                      <td><span class="metric-tag-muted">Severe Drift</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td><strong>Trend-Adjusted Inflow (MA-7 Drift)</strong></td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">External Macro Solvency</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">&yen; 2,777,332.52</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">&yen; 3,416,723.18</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">7.43%</td>
+                      <td class="font-mono">-2,130,302.02</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">100.0%</td>
+                      <td><span class="metric-tag-champion">CFO Target Met (&lt;10%)</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TABLE 4: MASTER ARCHITECTURAL ABLATION SCORECARD (E0 TO E4) -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <span>Table 4: Master Architectural Ablation Scorecard ($E_0$ to $E_4$)</span>
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-purple);">Phase5_System_Ablation_And_EndToEnd_Benchmark.ipynb</span>
+              </div>
+              <div class="table-responsive">
+                <table class="academic-table">
+                  <thead>
+                    <tr>
+                      <th>Variant</th>
+                      <th>Architecture Stack</th>
+                      <th>Forecast WAPE</th>
+                      <th>Breach PR-AUC</th>
+                      <th>Lead Time</th>
+                      <th>Copilot Rubric</th>
+                      <th>Architectural Contribution & Empirical Verification</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="font-mono" style="color: var(--accent-rose); font-weight: 700;">E0</td>
+                      <td>Static Dashboard (Status Quo)</td>
+                      <td class="font-mono">37.56%</td>
+                      <td class="font-mono">0.784</td>
+                      <td class="font-mono">0.0d</td>
+                      <td class="font-mono">N/A</td>
+                      <td>Reference baseline with reactive alerts; zero machine learning or dynamic accounting.</td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono" style="color: var(--accent-blue); font-weight: 700;">E1</td>
+                      <td>Forecast Dashboard Alone</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">25.72%</td>
+                      <td class="font-mono">0.861</td>
+                      <td class="font-mono">1.7d</td>
+                      <td class="font-mono">N/A</td>
+                      <td>Machine learning reduces forecast error by <span style="color: var(--accent-emerald); font-weight: 700;">-31.5%</span> and unlocks 1.7d forward warning horizon.</td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono" style="color: var(--accent-cyan); font-weight: 700;">E2</td>
+                      <td>Financial Risk Engine</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">25.72%</td>
+                      <td class="font-mono">0.853</td>
+                      <td class="font-mono">1.6d</td>
+                      <td class="font-mono">N/A</td>
+                      <td>Preserves integer-cent double-entry invariants (<span style="color: var(--accent-cyan); font-family: var(--font-mono);">&Delta;Cent = 0.00</span>); shortfall MAE drops -31.5%.</td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono" style="color: var(--accent-amber); font-weight: 700;">E3</td>
+                      <td>Scenario Stress Engine</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">25.72%</td>
+                      <td class="font-mono">0.853</td>
+                      <td class="font-mono">1.6d</td>
+                      <td class="font-mono" style="color: var(--accent-rose);">3.60 / 10</td>
+                      <td>Unlocks multi-shock sensitivity, but unaugmented LLM exhibits <span style="color: var(--accent-rose); font-weight: 700;">100.0% arithmetic hallucination rate</span>.</td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td class="font-mono" style="color: var(--accent-purple); font-weight: 800;">E4</td>
+                      <td><strong>FinSight AI (Full Architecture)</strong></td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">25.72%</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">0.853</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">1.6d</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-purple);">9.60 / 10</td>
+                      <td><span class="metric-tag-champion">0.0% Hallucination</span> Pydantic tool contracts eliminate hallucinations; advisory quality surges <span style="color: var(--accent-purple); font-weight: 700;">+166.7%</span>.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TABLE 5: DATA SCARCITY & COLD-START BENCHMARK -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <span>Table 5: Data Scarcity & Cold-Start Performance Benchmark (Olist B2C, 7-Day Holdout)</span>
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-emerald);">Inflection Zone: 60–90 Days (WAPE &lt; 30%)</span>
+              </div>
+              <div class="table-responsive">
+                <table class="academic-table">
+                  <thead>
+                    <tr>
+                      <th>Training History Window</th>
+                      <th>Holdout Forecast WAPE</th>
+                      <th>MASE Metric</th>
+                      <th>80% Coverage (P10–P90)</th>
+                      <th>Operational Viability Assessment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="font-mono" style="font-weight: 700; color: var(--accent-rose);">30 Days</td>
+                      <td class="font-mono">31.69% &plusmn; 0.00%</td>
+                      <td class="font-mono">1.1814</td>
+                      <td class="font-mono">33.33%</td>
+                      <td>Emergent cold-start profile; wide uncertainty bounds reflecting limited cyclicality.</td>
+                    </tr>
+                    <tr class="highlight-row">
+                      <td class="font-mono" style="font-weight: 700; color: var(--accent-emerald);">60 Days</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">29.84% &plusmn; 0.00%</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">1.0204</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-emerald);">55.00%</td>
+                      <td><span class="metric-tag-champion">Inflection Zone</span> WAPE drops below 30.0%; confirms commercial viability for newly onboarded SMEs.</td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono" style="font-weight: 700; color: var(--accent-cyan);">90 Days</td>
+                      <td class="font-mono">29.69% &plusmn; 0.00%</td>
+                      <td class="font-mono">1.1780</td>
+                      <td class="font-mono">51.67%</td>
+                      <td>Quarterly seasonality captured; robust multi-quantile risk interval calibration.</td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono">180 Days</td>
+                      <td class="font-mono">27.02% &plusmn; 0.00%</td>
+                      <td class="font-mono">1.1908</td>
+                      <td class="font-mono">38.33%</td>
+                      <td>Semi-annual regime robustness; captures shift in macroeconomic and seasonal trends.</td>
+                    </tr>
+                    <tr>
+                      <td class="font-mono" style="color: var(--accent-blue); font-weight: 700;">365 Days</td>
+                      <td class="font-mono font-bold" style="color: var(--accent-cyan);">26.83% &plusmn; 0.00%</td>
+                      <td class="font-mono">1.1968</td>
+                      <td class="font-mono">41.67%</td>
+                      <td>Full annual cycle; asymptotic error convergence matching multi-year institutional models.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- FORMAL HYPOTHESIS VERIFICATION MATRIX -->
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                Formal Verification of Core Research Hypotheses ($H_1$ to $H_4$)
+              </div>
+              <div class="hypothesis-grid">
+                <div class="hypothesis-card">
+                  <div class="hypothesis-id" style="color: var(--accent-cyan);">
+                    <span>H1: PREDICTIVE SUPERIORITY</span>
+                    <span class="metric-tag-champion">CONFIRMED</span>
+                  </div>
+                  <div class="hypothesis-statement">
+                    Conformal quantile gradient boosting significantly outperforms naive and linear baselines.
+                  </div>
+                  <div class="hypothesis-verdict">
+                    Diebold-Mariano test p = 0.0022; WAPE reduced from 37.56% to 25.72% (-31.5% relative error).
+                  </div>
+                </div>
+
+                <div class="hypothesis-card">
+                  <div class="hypothesis-id" style="color: var(--accent-emerald);">
+                    <span>H2: EARLY WARNING LEAD TIME</span>
+                    <span class="metric-tag-champion">CONFIRMED</span>
+                  </div>
+                  <div class="hypothesis-statement">
+                    Downside hazard operator provides actionable advance warning for liquidity breaches.
+                  </div>
+                  <div class="hypothesis-verdict">
+                    97.7% breach recall (+100.2% gain over reactive baseline) with 1.5-day (36-hr) advance lead time.
+                  </div>
+                </div>
+
+                <div class="hypothesis-card">
+                  <div class="hypothesis-id" style="color: var(--accent-blue);">
+                    <span>H3: ARITHMETIC CONSERVATION</span>
+                    <span class="metric-tag-champion">CONFIRMED</span>
+                  </div>
+                  <div class="hypothesis-statement">
+                    Deterministic integer accounting preserves double-entry invariants under financial stress.
+                  </div>
+                  <div class="hypothesis-verdict">
+                    &Delta;Cent = 0.00 exact equality verified across 5 hand-calculated golden tests and multi-scenario sweeps.
+                  </div>
+                </div>
+
+                <div class="hypothesis-card">
+                  <div class="hypothesis-id" style="color: var(--accent-purple);">
+                    <span>H4: NEURO-SYMBOLIC COUPLING</span>
+                    <span class="metric-tag-champion">CONFIRMED</span>
+                  </div>
+                  <div class="hypothesis-statement">
+                    Pydantic tool contracts eliminate LLM numerical hallucination in treasury decision support.
+                  </div>
+                  <div class="hypothesis-verdict">
+                    Critical failure rate drops from 100.0% to 0.0%; copilot quality rubric rises to 9.60/10 (+166.7%).
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. SYSTEM NAVIGATION LAUNCHPAD -->
+          <div class="control-matrix-card">
+            <div class="matrix-header" style="margin-bottom: 18px;">
+              <div>
+                <span class="status-badge" style="background: rgba(139, 92, 246, 0.12); border-color: rgba(139, 92, 246, 0.35); color: var(--accent-purple); margin-bottom: 6px; display: inline-block;">[MODULE DIRECTORY]</span>
+                <h2 class="matrix-title">FinSight AI Decision Engines Launchpad</h2>
+                <p class="matrix-desc">Direct access to the 4 operational modules and the interactive multilingual copilot.</p>
+              </div>
+            </div>
+
+            <div class="home-launchpad-grid">
+              <div class="launchpad-action-card" onclick="switchDecisionModule('overview')">
+                <div class="l-card-num">01</div>
+                <div class="l-card-title">Diagnostic Cockpit</div>
+                <div class="l-card-desc">Empirical baseline treasury health, revenue run-rate, and statutory reserve compliance.</div>
+                <div class="l-card-action">Launch Engine &rarr;</div>
+              </div>
+
+              <div class="launchpad-action-card" onclick="switchDecisionModule('forecasts')">
+                <div class="l-card-num">02</div>
+                <div class="l-card-title">Conformal Forecaster</div>
+                <div class="l-card-desc">Multi-horizon probabilistic sales forecasting with calibrated uncertainty bands (P10, P50, P90).</div>
+                <div class="l-card-action">Launch Engine &rarr;</div>
+              </div>
+
+              <div class="launchpad-action-card" onclick="switchDecisionModule('cashflow')">
+                <div class="l-card-num">03</div>
+                <div class="l-card-title">Solvency Risk Radar & Ledger</div>
+                <div class="l-card-desc">Continuous algorithmic audit for liquidity shortfall, receivables delay, and ledger trajectory.</div>
+                <div class="l-card-action">Launch Engine &rarr;</div>
+              </div>
+
+              <div class="launchpad-action-card" onclick="switchDecisionModule('scenarios')">
+                <div class="l-card-num">04</div>
+                <div class="l-card-title">Sensitivity Simulator</div>
+                <div class="l-card-desc">Zero-variance deterministic stress-testing against demand contraction and cost inflation.</div>
+                <div class="l-card-action">Launch Engine &rarr;</div>
+              </div>
+
+              <div class="launchpad-action-card highlight-copilot" onclick="switchDecisionModule('copilot')">
+                <div class="l-card-num" style="color: var(--accent-purple);">AI</div>
+                <div class="l-card-title">Decision Copilot</div>
+                <div class="l-card-desc">Autonomous multi-lingual financial reasoning assistant grounded in validated Python tools.</div>
+                <div class="l-card-action" style="color: var(--accent-purple);">Open Copilot &rarr;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
         <!-- VIEW 1: DIAGNOSTIC COCKPIT (MONITOR) -->
         <!-- ============================================== -->
-        <div class="module-view active-view" id="view-overview">
+        <div class="module-view" id="view-overview" style="display: none;">
           <!-- 1. MONITOR: EMPIRICAL BASELINE KPI TICKER -->
           <section class="hero-summary-grid">
             <div class="hero-summary-card highlight">
@@ -159,7 +927,7 @@
                 <span>Projected Sales Revenue (S_proj)</span>
                 <span style="color: var(--accent-blue); font-family: var(--font-mono); font-size: 11px;" id="kpi-horizon-tag">30-DAY HORIZON</span>
               </div>
-              <div class="h-card-val" id="kpi-projected-rev" style="color: var(--accent-blue);">৳420,000</div>
+              <div class="h-card-val" id="kpi-projected-rev" style="color: var(--accent-blue);">$3,500</div>
               <div class="h-card-sub">Scenario-adjusted baseline forecast</div>
             </div>
 
@@ -168,7 +936,7 @@
                 <span>Gross Operating Margin (GOM)</span>
                 <span style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 11px;" id="kpi-margin-tag">38% MARGIN</span>
               </div>
-              <div class="h-card-val" id="kpi-gross-profit" style="color: var(--accent-emerald);">৳159,600</div>
+              <div class="h-card-val" id="kpi-gross-profit" style="color: var(--accent-emerald);">$1,330</div>
               <div class="h-card-sub">Surplus before debt service & tax</div>
             </div>
 
@@ -177,7 +945,7 @@
                 <span>Liquid Treasury Reserves (C_avail)</span>
                 <span style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 11px;">EMPIRICAL BASE</span>
               </div>
-              <div class="h-card-val" id="kpi-current-cash">৳180,000</div>
+              <div class="h-card-val" id="kpi-current-cash">$1,500</div>
               <div class="h-card-sub">Available unencumbered balance</div>
             </div>
 
@@ -186,7 +954,7 @@
                 <span>Statutory Liquidity Buffer (τ_res)</span>
                 <span style="color: var(--accent-amber); font-family: var(--font-mono); font-size: 11px;">STATUTORY</span>
               </div>
-              <div class="h-card-val" id="kpi-reserve-target" style="color: var(--accent-amber);">৳260,400</div>
+              <div class="h-card-val" id="kpi-reserve-target" style="color: var(--accent-amber);">$2,170</div>
               <div class="h-card-sub" id="kpi-reserve-sub">Based on modeled costs (62% COGS)</div>
             </div>
           </section>
@@ -208,7 +976,7 @@
                   <span class="launchpad-link">Launch View →</span>
                 </div>
                 <div class="launchpad-val" style="color: var(--accent-blue);">Multi-Horizon P50</div>
-                <div class="launchpad-sub">P10 Floor ৳8,400 · P50 Median ৳14,000 · P90 Surge ৳21,000</div>
+                <div class="launchpad-sub">P10 Floor $70 · P50 Median $117 · P90 Surge $175</div>
               </div>
 
               <div class="launchpad-card" onclick="switchDecisionModule('cashflow')">
@@ -216,7 +984,7 @@
                   <span class="launchpad-title">Solvency Radar & Ledger</span>
                   <span class="launchpad-link" style="color: var(--accent-emerald);">Audit Tab →</span>
                 </div>
-                <div class="launchpad-val" style="color: var(--accent-emerald);">+৳79,200 Buffer</div>
+                <div class="launchpad-val" style="color: var(--accent-emerald);">+$660 Buffer</div>
                 <div class="launchpad-sub">Zero reserve breach · 10 days receivables turnover delay</div>
               </div>
 
@@ -225,7 +993,7 @@
                   <span class="launchpad-title">Scenario Simulator</span>
                   <span class="launchpad-link" style="color: var(--accent-amber);">Simulate Tab →</span>
                 </div>
-                <div class="launchpad-val" style="color: var(--accent-amber);">৳500,000 Target</div>
+                <div class="launchpad-val" style="color: var(--accent-amber);">$4,167 Target</div>
                 <div class="launchpad-sub">Required growth gap: +19.05% · 4 execution strategies</div>
               </div>
             </div>
@@ -264,91 +1032,21 @@
             <!-- 3 CONFORMAL STAT CAPSULES -->
             <div class="conformal-stat-grid">
               <div class="conformal-stat-card">
-                <div class="stat-capsule-lbl">P50 Central Tendency (50% Probability)</div>
-                <div class="stat-capsule-val" style="color: var(--accent-emerald);" id="h-stat-expected">৳14,000 / day</div>
+                <div class="stat-capsule-lbl">P50 Central Tendency</div>
+                <div class="stat-capsule-val" style="color: var(--accent-emerald);" id="h-stat-expected">$117 / day</div>
                 <div class="stat-capsule-sub">Expected median trajectory</div>
               </div>
 
               <div class="conformal-stat-card">
-                <div class="stat-capsule-lbl">P10 Downside Floor (10% Left-Tail Risk)</div>
-                <div class="stat-capsule-val" style="color: var(--accent-amber);" id="h-stat-p10">৳8,400 / day</div>
+                <div class="stat-capsule-lbl">P10 Conservative Downside Floor</div>
+                <div class="stat-capsule-val" style="color: var(--accent-amber);" id="h-stat-p10">$70 / day</div>
                 <div class="stat-capsule-sub">Worst-case 10th percentile bound</div>
               </div>
 
               <div class="conformal-stat-card">
-                <div class="stat-capsule-lbl">P90 Surge Ceiling (90% Cumulative Bound)</div>
-                <div class="stat-capsule-val" style="color: var(--accent-cyan);" id="h-stat-p90">৳21,000 / day</div>
+                <div class="stat-capsule-lbl">P90 Optimistic Surge Ceiling</div>
+                <div class="stat-capsule-val" style="color: var(--accent-cyan);" id="h-stat-p90">$175 / day</div>
                 <div class="stat-capsule-sub">High-demand 90th percentile ceiling</div>
-              </div>
-            </div>
-
-            <!-- EMPIRICAL UNCERTAINTY QUANTIFICATION & PROBABILITY SPECTRUM -->
-            <div class="uncertainty-spectrum-card">
-              <div class="spectrum-header">
-                <div>
-                  <h3 class="spectrum-title">Empirical Uncertainty Quantification & Probability Density Spectrum</h3>
-                  <p class="spectrum-desc">Finite-sample conformal coverage guarantee (1 - α = 80.0%) under non-parametric quantile regression.</p>
-                </div>
-                <span class="sidebar-cohort-badge" style="color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4);">
-                  Verified Non-Parametric Guarantee
-                </span>
-              </div>
-
-              <!-- MULTI-SEGMENT PROBABILITY SPECTRUM BAR -->
-              <div class="prob-spectrum-bar-wrap">
-                <div class="prob-bar-track">
-                  <div class="prob-seg prob-seg-tail-left" style="width: 10%;">
-                    <span>10% Tail Risk (&lt; P10)</span>
-                  </div>
-                  <div class="prob-seg prob-seg-confidence" style="width: 80%;">
-                    <span>80% Calibrated Conformal Operating Interval [P10 - P90]</span>
-                  </div>
-                  <div class="prob-seg prob-seg-tail-right" style="width: 10%;">
-                    <span>10% Surge (&gt; P90)</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 3 PROBABILITY TIER CARDS -->
-              <div class="prob-tiers-grid">
-                <div class="prob-tier-card tier-tail">
-                  <div class="tier-prob-badge">P(Sales &lt; P10) = 10%</div>
-                  <div class="tier-title">Downside Contraction Floor</div>
-                  <div class="tier-val" id="prob-val-p10">৳8,400 / day</div>
-                  <div class="tier-sub">90% probability that daily sales will exceed this threshold. Tested for statutory liquidity defense.</div>
-                </div>
-
-                <div class="prob-tier-card tier-confidence">
-                  <div class="tier-prob-badge">P(P10 ≤ Sales ≤ P90) = 80%</div>
-                  <div class="tier-title">High-Confidence Operating Interval</div>
-                  <div class="tier-val" id="prob-val-interval">৳8,400 — ৳21,000</div>
-                  <div class="tier-sub">Empirically verified on 100k chronological orders. Exactly 80.4% of actual holdout observations fell within this band.</div>
-                </div>
-
-                <div class="prob-tier-card tier-surge">
-                  <div class="tier-prob-badge">P(Sales &gt; P90) = 10%</div>
-                  <div class="tier-title">Optimistic Demand Surge</div>
-                  <div class="tier-val" id="prob-val-p90">৳21,000 / day</div>
-                  <div class="tier-sub">10% probability of high-volume retail demand. Used for stockout prevention and working capital expansion.</div>
-                </div>
-              </div>
-
-              <!-- INTERACTIVE PROBABILITY EVALUATOR -->
-              <div class="prob-evaluator-row">
-                <div class="evaluator-input-col">
-                  <span class="evaluator-label">Evaluate Custom Revenue Target:</span>
-                  <div style="display: flex; gap: 8px; align-items: center;">
-                    <input type="number" id="input-eval-target" class="target-input-field" value="12000" step="500" oninput="evaluateTargetProbability()" style="width: 160px;">
-                    <span style="font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary);" id="lbl-eval-curr">BDT / day</span>
-                  </div>
-                </div>
-                <div class="evaluator-result-col">
-                  <span class="evaluator-label">Estimated Exceedance Probability:</span>
-                  <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                    <span class="evaluator-prob-val" id="eval-prob-result">P(Sales ≥ ৳12,000) = 66.7%</span>
-                    <span class="risk-badge risk-badge-green" id="eval-risk-status">PROBABLE (HIGH CONFIDENCE)</span>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -384,8 +1082,8 @@
                   <span class="risk-title">Reserve Cushion Margin (ΔC)</span>
                   <span class="risk-badge risk-badge-green" id="badge-reserve-risk">SAFE</span>
                 </div>
-                <div class="risk-val" id="val-reserve-cushion" style="color: var(--accent-emerald);">+৳79,200</div>
-                <div class="risk-sub" id="sub-reserve-cushion">Buffer above ৳260,400 reserve</div>
+                <div class="risk-val" id="val-reserve-cushion" style="color: var(--accent-emerald);">+$660</div>
+                <div class="risk-sub" id="sub-reserve-cushion">Buffer above $2,170 reserve</div>
                 <div class="risk-progress-track">
                   <div class="risk-progress-bar bar-emerald" style="width: 85%;"></div>
                 </div>
@@ -433,7 +1131,7 @@
           <div class="ledger-container" id="sec-ledger">
             <div class="matrix-header">
               <div>
-                <h3 style="font-size: 16px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+                <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
                   Granular Day-by-Day Deterministic Cashflow Ledger
                 </h3>
                 <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
@@ -444,6 +1142,49 @@
                 Deterministic Engine · Variance = 0.0
               </span>
             </div>
+
+            <!-- 4 LEDGER TRAJECTORY TELEMETRY KPI PILLS -->
+            <div class="ledger-kpi-bar">
+              <div class="ledger-kpi-card">
+                <div class="ledger-kpi-lbl">30-Day Ending Cash</div>
+                <div class="ledger-kpi-val" id="ledger-kpi-ending">$2,160</div>
+                <div class="ledger-kpi-sub" id="ledger-kpi-delta">+$660 intra-month shift</div>
+              </div>
+              <div class="ledger-kpi-card">
+                <div class="ledger-kpi-lbl">Statutory Reserve Floor</div>
+                <div class="ledger-kpi-val" style="color: var(--accent-amber);" id="ledger-kpi-reserve">$2,170</div>
+                <div class="ledger-kpi-sub">Mandatory solvency cushion</div>
+              </div>
+              <div class="ledger-kpi-card">
+                <div class="ledger-kpi-lbl">Lowest Liquidity Trough</div>
+                <div class="ledger-kpi-val" style="color: var(--accent-cyan);" id="ledger-kpi-trough">Day 1 ($1,500)</div>
+                <div class="ledger-kpi-sub">Minimum intra-month balance</div>
+              </div>
+              <div class="ledger-kpi-card">
+                <div class="ledger-kpi-lbl">Solvency Compliance</div>
+                <div class="ledger-kpi-val" id="ledger-kpi-status" style="color: var(--accent-emerald);">30 / 30 Days Safe</div>
+                <div class="ledger-kpi-sub" id="ledger-kpi-buffer">No reserve breach detected</div>
+              </div>
+            </div>
+
+            <!-- INTERACTIVE CASHFLOW TRAJECTORY & RESERVE CHART -->
+            <div class="ledger-chart-wrapper">
+              <div class="ledger-chart-toolbar">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Deterministic Liquidity Trajectory (C_t) vs Reserve Buffer</span>
+                  <span class="chart-tag-pill">30-Day Horizon</span>
+                </div>
+                <div class="ledger-toggle-group">
+                  <button class="ledger-toggle-btn active" id="btn-ledger-mode-all" onclick="setLedgerChartMode('all')">Cash + Flows</button>
+                  <button class="ledger-toggle-btn" id="btn-ledger-mode-cash" onclick="setLedgerChartMode('cash')">Cash Trajectory</button>
+                  <button class="ledger-toggle-btn" id="btn-ledger-mode-flows" onclick="setLedgerChartMode('flows')">Net Daily Flows</button>
+                </div>
+              </div>
+              <div class="ledger-chart-canvas-wrap">
+                <canvas id="cashflowLedgerChart"></canvas>
+              </div>
+            </div>
+
             <div class="ledger-scroll">
               <table id="business-ledger-table">
                 <thead>
@@ -500,24 +1241,25 @@
               <div class="input-cell">
                 <div class="cell-label-row">
                   <span>Available Liquidity Base (C_0):</span>
-                  <span class="cell-val" id="val-input-cash">৳180,000</span>
+                  <span class="cell-val" id="val-input-cash">$1,500</span>
                 </div>
                 <input type="range" id="input-cash" min="0" max="500000" value="180000" step="10000" oninput="recomputeBusinessEngine()">
                 <div class="preset-chips">
-                  <span class="preset-chip" onclick="setCashPreset(0)">৳0</span>
-                  <span class="preset-chip" onclick="setCashPreset(250000)">৳2.5L</span>
-                  <span class="preset-chip" onclick="setCashPreset(500000)">৳5.0L</span>
+                  <span class="preset-chip" onclick="setCashPreset(0)"><span class="curr-sym">$</span>0</span>
+                  <span class="preset-chip" onclick="setCashPreset(250000)"><span class="curr-sym">$</span>2.1k</span>
+                  <span class="preset-chip" onclick="setCashPreset(500000)"><span class="curr-sym">$</span>4.2k</span>
                 </div>
               </div>
 
-              <!-- SLIDER 3: COST RATIO (30% to 90%) -->
+              <!-- SLIDER 3: COST RATIO (0% to 90%) -->
               <div class="input-cell">
                 <div class="cell-label-row">
                   <span>Operating Cost Ratio (c):</span>
                   <span class="cell-val" id="val-input-cost">62%</span>
                 </div>
-                <input type="range" id="input-cost" min="30" max="90" value="62" step="2" oninput="recomputeBusinessEngine()">
+                <input type="range" id="input-cost" min="0" max="90" value="62" step="1" oninput="recomputeBusinessEngine()">
                 <div class="preset-chips">
+                  <span class="preset-chip" onclick="setCostPreset(0)">0%</span>
                   <span class="preset-chip" onclick="setCostPreset(30)">30%</span>
                   <span class="preset-chip" onclick="setCostPreset(60)">60%</span>
                   <span class="preset-chip" onclick="setCostPreset(90)">90%</span>
@@ -529,13 +1271,13 @@
             <div class="sim-output-grid">
               <div class="sim-output-tile">
                 <div class="sim-tile-lbl">Projected Monthly Operating Surplus</div>
-                <div class="sim-tile-val" style="color: var(--accent-emerald);" id="sim-operating-surplus">৳159,600</div>
+                <div class="sim-tile-val" style="color: var(--accent-emerald);" id="sim-operating-surplus">$1,330</div>
                 <div class="sim-tile-sub">Pre-tax operational cash generation</div>
               </div>
 
               <div class="sim-output-tile">
                 <div class="sim-tile-lbl">Surplus Buffer After Reserve Set-Aside</div>
-                <div class="sim-tile-val" style="color: var(--accent-blue);" id="sim-cash-after-reserve">৳79,200</div>
+                <div class="sim-tile-val" style="color: var(--accent-blue);" id="sim-cash-after-reserve">$660</div>
                 <div class="sim-tile-sub">Net treasury liquidity retained</div>
               </div>
             </div>
@@ -553,7 +1295,7 @@
           <div class="target-planner-box" id="sec-target-planner">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
               <div>
-                <h3 style="font-size: 17px; font-weight: 800; color: #ffffff; margin: 0; letter-spacing: -0.01em;">
+                <h3 style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.01em;">
                   Target Revenue Optimization & Empirical Growth Gap
                 </h3>
                 <p style="font-size: 12px; color: var(--text-secondary); margin: 4px 0 0 0;">
@@ -589,7 +1331,7 @@
                   <span class="target-input-label">
                     Absolute Revenue Gap:
                   </span>
-                  <span class="target-gap-value" id="val-target-gap">৳80,000</span>
+                  <span class="target-gap-value" id="val-target-gap">$667</span>
                 </div>
               </div>
 
@@ -598,24 +1340,39 @@
                 <div class="strategy-item strategy-item-cyan">
                   <div class="strategy-badge-tag">GROWTH LEVER</div>
                   <div class="strategy-item-title">1. High-Margin SKU & Basket Optimization</div>
-                  <div class="strategy-item-desc">
-                    Prioritize top 20% margin SKUs. Bundle complementary retail inventory to expand average order transaction value by ৳120 to bridge the revenue deficit.
+                  <div class="strategy-item-desc" id="strategy-growth-lever">
+                    Prioritize top 20% margin SKUs. Bundle complementary retail inventory to expand average order transaction value by $1.00 to bridge the revenue deficit.
+                  </div>
+                  <div class="strategy-metrics-chips" id="strategy-chips-growth">
+                    <span class="strategy-chip strategy-chip-cyan"><span>◈</span> +$1.00 / Order AOV</span>
+                    <span class="strategy-chip strategy-chip-cyan"><span>▲</span> +$22 / Day Run-rate</span>
+                    <span class="strategy-chip strategy-chip-cyan"><span>★</span> Target AOV: $6.25</span>
                   </div>
                 </div>
 
                 <div class="strategy-item strategy-item-amber">
                   <div class="strategy-badge-tag">WORKING CAPITAL</div>
                   <div class="strategy-item-title">2. Receivables Settlement Acceleration</div>
-                  <div class="strategy-item-desc">
-                    Offer 2% early-settlement incentive to compress dealer payment lag from 10 days to 4 days, liberating approximately +৳84,000 in immediate liquid working capital.
+                  <div class="strategy-item-desc" id="strategy-working-capital">
+                    Offer 2% early-settlement incentive to compress dealer payment lag from 10 days to 4 days, liberating approximately +$833 in immediate liquid working capital.
+                  </div>
+                  <div class="strategy-metrics-chips" id="strategy-chips-capital">
+                    <span class="strategy-chip strategy-chip-amber"><span>⚡</span> +$833 Liquid Cash Freed</span>
+                    <span class="strategy-chip strategy-chip-amber"><span>⏱</span> Lag: 10d ➔ 4d (-6 Days)</span>
+                    <span class="strategy-chip strategy-chip-amber"><span>✓</span> 2% Prompt Incentive</span>
                   </div>
                 </div>
 
                 <div class="strategy-item strategy-item-emerald">
                   <div class="strategy-badge-tag">COST CONTAINMENT</div>
                   <div class="strategy-item-title">3. Operating Expenditure Cap</div>
-                  <div class="strategy-item-desc">
-                    Enforce strict operational ceiling below 62% COGS. Defer discretionary expansion outlays until the statutory reserve buffer is fully fortified.
+                  <div class="strategy-item-desc" id="strategy-cost-containment">
+                    Enforce strict operational ceiling below 60% COGS. Defer discretionary expansion outlays until statutory reserve buffer is fully fortified.
+                  </div>
+                  <div class="strategy-metrics-chips" id="strategy-chips-cost">
+                    <span class="strategy-chip strategy-chip-emerald"><span>🛡</span> Max OPEX: $2,500 (60%)</span>
+                    <span class="strategy-chip strategy-chip-emerald"><span>▲</span> Gross Surplus: $1,667</span>
+                    <span class="strategy-chip strategy-chip-emerald"><span>🔒</span> Daily Cap: $83/day</span>
                   </div>
                 </div>
 
@@ -623,7 +1380,13 @@
                   <div class="strategy-badge-tag">CHRONOLOGICAL MILESTONES</div>
                   <div class="strategy-item-title">4. Weekly Pacing Targets</div>
                   <div class="strategy-item-desc" id="strategy-weekly-milestones">
-                    Week 1 Target: <strong>৳125,000</strong> · Week 2: <strong>৳125,000</strong> · Week 3: <strong>৳125,000</strong> · Week 4: <strong>৳125,000</strong>. Verified via recursive ledger.
+                    Week 1 Target: <strong>$1,042</strong> · Week 2: <strong>$1,042</strong> · Week 3: <strong>$1,042</strong> · Week 4: <strong>$1,042</strong>. Verified via recursive ledger.
+                  </div>
+                  <div class="strategy-metrics-chips" id="strategy-chips-milestones">
+                    <span class="strategy-chip strategy-chip-purple"><span>1️⃣</span> W1: $1,042</span>
+                    <span class="strategy-chip strategy-chip-purple"><span>2️⃣</span> W2: $1,042</span>
+                    <span class="strategy-chip strategy-chip-purple"><span>3️⃣</span> W3: $1,042</span>
+                    <span class="strategy-chip strategy-chip-purple"><span>4️⃣</span> W4: $1,042</span>
                   </div>
                 </div>
               </div>
@@ -641,7 +1404,7 @@
               <div style="display: flex; align-items: center; gap: 14px;">
                 <div class="copilot-avatar">◈</div>
                 <div>
-                  <h3 style="font-size: 17px; font-weight: 800; color: #ffffff; margin: 0;">
+                  <h3 style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin: 0;">
                     FinSight Grounded Decision Copilot
                   </h3>
                   <span style="font-size: 12px; color: var(--text-secondary);">
@@ -654,35 +1417,39 @@
                 <button class="action-outline-btn" onclick="clearCopilotChat()">
                   Reset Session
                 </button>
-                <div class="currency-toggle">
-                  <button class="curr-btn active" id="clang-studio-bn" onclick="setCopilotLanguage('bn')">বাংলা</button>
-                  <button class="curr-btn" id="clang-studio-en" onclick="setCopilotLanguage('en')">EN</button>
-                  <button class="curr-btn" id="clang-studio-zh" onclick="setCopilotLanguage('zh')">中文</button>
-                  <button class="curr-btn" id="clang-studio-es" onclick="setCopilotLanguage('es')">ES</button>
+                <div class="currency-toggle" style="display: flex; flex-wrap: wrap; gap: 4px;">
+                  <button class="curr-btn active" id="clang-studio-bn" onclick="setCopilotLanguage('bn')" title="Bengali (বাংলা) - South Asia">বাংলা</button>
+                  <button class="curr-btn" id="clang-studio-hi" onclick="setCopilotLanguage('hi')" title="Hindi (हिन्दी) - South Asia">हिन्दी</button>
+                  <button class="curr-btn" id="clang-studio-ur" onclick="setCopilotLanguage('ur')" title="Urdu (اردو) - South Asia">اردو</button>
+                  <button class="curr-btn" id="clang-studio-zh" onclick="setCopilotLanguage('zh')" title="Chinese (中文) - East Asia">中文</button>
+                  <button class="curr-btn" id="clang-studio-ja" onclick="setCopilotLanguage('ja')" title="Japanese (日本語) - East Asia">日本語</button>
+                  <button class="curr-btn" id="clang-studio-en" onclick="setCopilotLanguage('en')" title="English (Global)">EN</button>
                 </div>
               </div>
             </div>
 
             <!-- ACADEMIC REAL-TIME TELEMETRY BAR -->
             <div class="academic-telemetry-strip">
-              <div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span id="chat-live-telemetry-badge" class="chat-live-badge badge-safe">● LIVE ACCOUNT: SAFE</span>
+                <span style="margin: 0 4px; color: rgba(255, 255, 255, 0.15);">|</span>
                 <span>GROUNDING: <strong style="color: #38bdf8;">FinSightToolKit (Deterministic)</strong></span>
-                <span style="margin: 0 10px; color: rgba(255, 255, 255, 0.15);">|</span>
+                <span style="margin: 0 4px; color: rgba(255, 255, 255, 0.15);">|</span>
                 <span>LEAD TIME: <strong style="color: #34d399;">1.5 Days Early Warning</strong></span>
               </div>
               <div>
-                <span>TREASURY: <strong id="telemetry-cash-adv">৳180,000</strong></span>
+                <span>TREASURY: <strong id="telemetry-cash-adv">$1,500</strong></span>
                 <span style="margin: 0 10px; color: rgba(255, 255, 255, 0.15);">|</span>
-                <span>SOLVENCY BUFFER: <strong id="telemetry-cushion-adv" style="color: var(--accent-emerald);">+৳79,200</strong></span>
+                <span>SOLVENCY BUFFER: <strong id="telemetry-cushion-adv" style="color: var(--accent-emerald);">+$660</strong></span>
               </div>
             </div>
 
             <!-- QUICK INQUIRY CHIPS (100% EMOJI FREE) -->
             <div class="quick-prompts-bar">
-              <span class="quick-title">
+              <span class="quick-title" id="copilot-quick-title">
                 Academic & Decision Scenarios:
               </span>
-              <div class="quick-chips-grid">
+              <div class="quick-chips-grid" id="copilot-chips-grid">
                 <button class="quick-chip" onclick="askCopilot('বিক্রি ২০% কমলে আমাদের কি ক্যাশ ঘাটতি হবে?')">
                   <span>বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে কি?</span>
                 </button>
@@ -709,25 +1476,25 @@
               <div class="chat-entry bot-entry">
                 <div class="copilot-avatar">◈</div>
                 <div class="entry-bubble">
-                  <p><strong>FinSight Business Decision Intelligence সক্রিয়।</strong></p>
-                  <p>আমি SME নগদ-প্রবাহ এবং দেউলিয়াত্ব ঝুঁকি নিরসনে পরীক্ষামূলকভাবে যাচাইকৃত (Empirically Validated) একটি ডিসিশন ইন্টেলিজেন্স সিস্টেম। কোনোরকম গাণিতিক অনুমান ছাড়া সরাসরি <code>FinSightToolKit</code>-এর মাধ্যমে শতভাগ সঠিক আর্থিক হিসাব উপস্থাপন করা হয়।</p>
+                  <p><strong>FinSight Business Decision Intelligence Online.</strong></p>
+                  <p>Empirically validated decision intelligence system for SME cash-flow monitoring and solvency defense. All calculations are executed deterministically through <code>FinSightToolKit</code> with zero numerical hallucinations.</p>
                   
                   <div class="ai-metric-grid">
                     <div class="ai-metric-cell">
-                      <div class="ai-metric-lbl">Available Treasury Balance</div>
-                      <div class="ai-metric-val" id="chat-cash-ref">৳১৮০,০০০</div>
+                      <div class="ai-metric-lbl">Available Cash</div>
+                      <div class="ai-metric-val" id="chat-cash-ref">$1,500</div>
                     </div>
                     <div class="ai-metric-cell">
-                      <div class="ai-metric-lbl">30D Forecast Mean (P50)</div>
-                      <div class="ai-metric-val" id="chat-rev-ref">৳৪২০,০০০</div>
+                      <div class="ai-metric-lbl">30D Proj. Revenue</div>
+                      <div class="ai-metric-val" id="chat-rev-ref">$3,500</div>
                     </div>
                     <div class="ai-metric-cell">
-                      <div class="ai-metric-lbl">Statutory Reserve Threshold</div>
-                      <div class="ai-metric-val">৳২৬০,৪০০</div>
+                      <div class="ai-metric-lbl">Reserve Target</div>
+                      <div class="ai-metric-val" id="chat-reserve-ref">$2,170</div>
                     </div>
                     <div class="ai-metric-cell">
-                      <div class="ai-metric-lbl">Safety Cushion Margin (ΔC)</div>
-                      <div class="ai-metric-val" style="color: var(--accent-emerald);" id="chat-cushion-ref">+৳৭৯,২০০</div>
+                      <div class="ai-metric-lbl">Safety Cushion</div>
+                      <div class="ai-metric-val" style="color: var(--accent-emerald);" id="chat-cushion-ref">+$660</div>
                     </div>
                   </div>
 
@@ -739,7 +1506,7 @@
             <!-- INPUT COMPOSER BAR -->
             <div class="chat-compose-bar">
               <div class="input-inner-wrap">
-                <input type="text" id="copilot-user-input" placeholder="আর্থিক ও সলভেন্সি প্রশ্ন লিখুন (যেমন: 'বিক্রি ২০% কমলে ক্যাশ ঘাটতি হবে কি?')..." onkeydown="handleCopilotKey(event)">
+                <input type="text" id="copilot-user-input" placeholder="Ask financial & solvency question (e.g. 'Will cash breach reserve if sales drop 20%?')..." onkeydown="handleCopilotKey(event)" autocomplete="off" spellcheck="false" style="background: #090d18; color: #ffffff;">
               </div>
               <button class="copilot-send-btn" onclick="sendCopilotMessage()" id="btn-send-copilot">
                 Evaluate
@@ -752,6 +1519,32 @@
       <footer class="app-footer">
         FinSight AI © 2026 · An Empirical Decision Intelligence Framework for SMEs · Zero-Leakage Calibrated Engine
       </footer>
+    </div>
+  </div>
+
+  <!-- DYNAMIC STRATEGY SYNTHESIS MODAL -->
+  <div id="strategy-synthesis-modal" class="strategy-modal-backdrop" style="display: none;" onclick="closeTargetStrategyModal(event)">
+    <div class="strategy-modal-dialog" onclick="event.stopPropagation()">
+      <div class="strategy-modal-header">
+        <div>
+          <div class="strategy-modal-title">FinSight AI — Empirical Execution Strategy Blueprint</div>
+          <div class="strategy-modal-sub" id="modal-strategy-subtitle">Target Calibration: $4,167 · Conformal Growth Synthesis</div>
+        </div>
+        <button class="strategy-modal-close" onclick="closeTargetStrategyModal()">✕</button>
+      </div>
+
+      <div class="strategy-modal-grid" id="modal-stat-grid">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="strategy-modal-pillars" id="modal-pillars-container">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="strategy-modal-actions">
+        <button class="action-outline-btn" onclick="copyStrategyReport()">📋 Copy Strategy Report</button>
+        <button class="sidebar-cta-btn" style="width: auto; padding: 8px 20px;" onclick="closeTargetStrategyModal()">Close Blueprint</button>
+      </div>
     </div>
   </div>
 

@@ -4,7 +4,27 @@ Verifies language detection, parameter extraction, and deterministic tool dispat
 across English, Bengali, Hindi, Urdu, Chinese, and Japanese.
 """
 
-import pytest
+try:
+    import pytest
+except ImportError:
+    class _MockPytest:
+        def fixture(self, fn):
+            return fn
+        def mark(self):
+            return self
+        class _Mark:
+            def parametrize(self, *args, **kwargs):
+                def decorator(fn):
+                    return fn
+                return decorator
+        mark = _Mark()
+    pytest = _MockPytest()
+import os
+import sys
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 import numpy as np
 import pandas as pd
 from src.cashflow.engine import SMEConfig
@@ -63,3 +83,67 @@ def test_multilingual_dispatch_and_grounding(mock_copilot_agent, prompt, expecte
     # Verify response contains exact currency numbers
     assert "R$" in ans
     assert len(ans) > 50
+
+
+def test_conformal_uncertainty_dispatch_bn(mock_copilot_agent):
+    prompt = "আমাদের বিক্রির পূর্বাভাসে অনিশ্চয়তা এবং ৮০% কভারেজের সম্ভাবনা কত?"
+    ans, tools, ctx = mock_copilot_agent.route_and_execute(prompt)
+    assert ctx["detected_language"] == "bn"
+    tool_names = [t["name"] for t in tools]
+    assert "evaluate_conformal_uncertainty" in tool_names
+    assert "uncertainty" in ctx
+    assert ctx["uncertainty"]["conformal_coverage_pct"] == 80.0
+    assert "৮০" in ans or "80" in ans
+    assert "P10" in ans
+    assert "P90" in ans
+
+
+def test_conformal_uncertainty_dispatch_en_with_target(mock_copilot_agent):
+    prompt = "What is the probability of achieving daily sales above 20000 under uncertainty?"
+    ans, tools, ctx = mock_copilot_agent.route_and_execute(prompt)
+    assert ctx["detected_language"] == "en"
+    tool_names = [t["name"] for t in tools]
+    assert "evaluate_conformal_uncertainty" in tool_names
+    assert "uncertainty" in ctx
+    unc = ctx["uncertainty"]
+    assert unc["target_daily_sales"] == 20000.0
+    assert unc["target_exceedance_probability_pct"] is not None
+    assert "Probability" in ans or "probability" in ans
+    assert "Conformal Uncertainty" in ans
+
+
+if __name__ == '__main__':
+    print("Testing language detection...")
+    test_language_detection()
+    print("[OK] test_language_detection passed!")
+
+    print("Testing digit normalization...")
+    test_normalize_digits()
+    print("[OK] test_normalize_digits passed!")
+
+    print("Testing copilot agent dispatch across all Asian languages...")
+    agent = mock_copilot_agent()
+
+    prompts = [
+        ("যদি আগামী মাসে আমাদের বিক্রি ২০% কমে এবং খরচ ১৫% বাড়ে, তবে কত লোন লাগবে?", "bn"),
+        ("যদি মার্কেটপ্লেস প্রাপ্য টাকা দিতে ৭ দিন দেরি করে, কী হবে?", "bn"),
+        ("अगर बिक्री में 20% की गिरावट आती है और लागत 15% बढ़ जाती है, तो कितना लोन चाहिए?", "hi"),
+        ("اگر فروخت میں 20 فیصد کمی واقع ہو تو کتنا قرض درکار ہوگا؟", "ur"),
+        ("如果下个月销售额下降20%且成本上升15%，我们需要借多少短期贷款？", "zh"),
+        ("来月の売上が20%減少し、仕入原価が15%上昇した場合、いくらの短期融資が必要ですか？", "ja"),
+        ("If sales drop by 20% and supplier costs rise by 15%, how much credit line is required?", "en")
+    ]
+    for p, l in prompts:
+        test_multilingual_dispatch_and_grounding(agent, p, l)
+        print(f"  [OK] {l}: Passed dispatch and grounding!")
+
+    print("Testing conformal uncertainty dispatch (Bengali)...")
+    test_conformal_uncertainty_dispatch_bn(agent)
+    print("[OK] test_conformal_uncertainty_dispatch_bn passed!")
+
+    print("Testing conformal uncertainty dispatch (English)...")
+    test_conformal_uncertainty_dispatch_en_with_target(agent)
+    print("[OK] test_conformal_uncertainty_dispatch_en_with_target passed!")
+
+    print("\nALL MULTILINGUAL ASIAN COPILOT TESTS PASSED (100% SUCCESS)!")
+

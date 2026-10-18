@@ -409,21 +409,96 @@ with col_studio:
 # 7. AI Copilot Chat Interface (Right Column)
 # -----------------------------------------------------------------------------
 with col_copilot:
-    st.markdown("### 💬 FinSight AI Copilot")
-    st.caption("Explainable Financial Decision Advisor · 100% Zero-Hallucination")
+    st.markdown("### FinSight AI Copilot")
+    st.caption("Explainable Financial Decision Intelligence · Conformal Uncertainty & 100% Zero-Hallucination")
 
+    lang_opts = ["বাংলা (bn)", "हिन्दी (hi)", "اردو (ur)", "中文 (zh)", "日本語 (ja)", "English (en)"]
+    selected_lang = st.radio("Copilot Asian Language", lang_opts, horizontal=True, label_visibility="collapsed")
+    lang_code = selected_lang.split("(")[-1].replace(")", "").strip()
+
+    sample_q = None
     mq1, mq2 = st.columns(2)
     mq3, mq4 = st.columns(2)
-    sample_q = None
+    mq5, mq6 = st.columns(2)
 
-    if mq1.button("🇧🇩 বিক্রি ২০% কমলে ঘাটতি?", use_container_width=True):
-        sample_q = "যদি আগামী মাসে আমাদের বিক্রি ২০% কমে তবে কি রিজার্ভ ঘাটতি হবে?"
-    if mq2.button("🇺🇸 -20% Sales Drop Risk?", use_container_width=True):
-        sample_q = "Will our cash balance breach the reserve threshold if sales decline by 20%?"
-    if mq3.button("🇧🇩 টার্গেট পূরণে কী কৌশল?", use_container_width=True):
-        sample_q = "মাসিক টার্গেট পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?"
-    if mq4.button("🇧🇩 খরচ ৭০% হলে বাফার কত?", use_container_width=True):
-        sample_q = "যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?"
+    if lang_code == "bn":
+        if mq1.button("বিক্রি ২০% কমলে ঘাটতি?", use_container_width=True):
+            sample_q = "যদি আগামী মাসে আমাদের বিক্রি ২০% কমে তবে কি রিজার্ভ ঘাটতি হবে?"
+        if mq2.button("৮০% কভারেজ ও অনিশ্চয়তা?", use_container_width=True):
+            sample_q = "আমাদের বিক্রির পূর্বাভাসে অনিশ্চয়তা এবং ৮০% কভারেজের সম্ভাবনা কত?"
+        if mq3.button("টার্গেট পূরণে কী কৌশল?", use_container_width=True):
+            sample_q = "মাসিক টার্গেট পূরণ করতে আমাদের কী কৌশল নেওয়া উচিত?"
+        if mq4.button("দৈনিক ২০,০০০ বিক্রির সম্ভাবনা?", use_container_width=True):
+            sample_q = "দৈনিক বিক্রি ২০,০০০ টাকা অতিক্রম করার সম্ভাবনা কত?"
+        if mq5.button("খরচ ৭০% হলে বাফার কত?", use_container_width=True):
+            sample_q = "যদি কস্ট রেশিও ৭০% হয় তবে আমাদের লিকুইডিটি বাফার কত থাকবে?"
+        if mq6.button("পেমেন্ট ল্যাগ ৪ দিনে সংকোচন", use_container_width=True):
+            sample_q = "পেমেন্ট ডিলে ১০ দিন থেকে কমিয়ে ৪ দিনে আনলে ক্যাশ ফ্লোতে কী উন্নতি হবে?"
+    elif lang_code == "hi":
+        if mq1.button("बिक्री 20% गिरने पर घाटा?", use_container_width=True):
+            sample_q = "अगर बिक्री में 20% की गिरावट आती है और लागत 15% बढ़ जाती है, तो कितना लोन चाहिए?"
+        if mq2.button("80% कवरेज व अनिश्चितता?", use_container_width=True):
+            sample_q = "हमारी बिक्री के पूर्वानुमान में अनिश्चितता और 80% कवरेज की क्या संभावना है?"
+        if mq3.button("लक्ष्य प्राप्ति की रणनीति?", use_container_width=True):
+            sample_q = "मासिक लक्ष्य पूरा करने के लिए हमें क्या रणनीतिक कदम उठाने चाहिए?"
+        if mq4.button("दैनिक 20,000 बिक्री संभावना?", use_container_width=True):
+            sample_q = "दैनिक बिक्री 20,000 रुपये से अधिक होने की प्रायिकता क्या है?"
+        if mq5.button("लागत 70% होने पर बफर?", use_container_width=True):
+            sample_q = "यदि लागत अनुपात 70% हो जाए तो हमारा तरलता बफर कितना रहेगा?"
+        if mq6.button("भुगतान चक्र 4 दिन में?", use_container_width=True):
+            sample_q = "भुगतान चक्र 10 दिन से घटाकर 4 दिन करने पर कितनी कार्यशील पूंजी मुक्त होगी?"
+    elif lang_code == "ur":
+        if mq1.button("سیلز 20% گرنے پر نقصان؟", use_container_width=True):
+            sample_q = "اگر فروخت میں 20 فیصد کمی واقع ہو تو کتنا قرض درکار ہوگا؟"
+        if mq2.button("80% کوریج اور غیر یقینی؟", use_container_width=True):
+            sample_q = "فروخت کی پیشین گوئی میں غیر یقینی صورتحال اور 80 فیصد کوریج کا کیا امکان ہے؟"
+        if mq3.button("ہدف کی حکمت عملی؟", use_container_width=True):
+            sample_q = "ماہانہ ہدف حاصل کرنے کے لیے کیا حکمت عملی اختیار کرنی چاہیے؟"
+        if mq4.button("یومیہ 20,000 فروخت امکان؟", use_container_width=True):
+            sample_q = "یومیہ فروخت 20,000 سے زیادہ ہونے کا امکان کتنا ہے؟"
+        if mq5.button("لاگت 70% ہونے پر بفر؟", use_container_width=True):
+            sample_q = "اگر اخراجات کا تناسب 70 فیصد ہو جائے تو کیش بفر کتنا رہے گا؟"
+        if mq6.button("وصولی میں تاخیر کی کمی", use_container_width=True):
+            sample_q = "ادائیگی کی تاخیر کو 10 دن سے کم کر کے 4 دن کرنے پر کیا فائدہ ہوگا؟"
+    elif lang_code == "zh":
+        if mq1.button("销售额下降20%缺口？", use_container_width=True):
+            sample_q = "如果下个月销售额下降20%且成本上升15%，我们需要借多少短期贷款？"
+        if mq2.button("80%置信覆盖与不确定性？", use_container_width=True):
+            sample_q = "销售预测的不确定性区间以及80%保形覆盖的概率是多少？"
+        if mq3.button("营收目标落地策略？", use_container_width=True):
+            sample_q = "为了实现月度营收目标，我们应采取哪些具体的执行策略？"
+        if mq4.button("日销超20,000概率？", use_container_width=True):
+            sample_q = "每日销售额超越20,000元的目标达成概率是多少？"
+        if mq5.button("成本率70%安全底线？", use_container_width=True):
+            sample_q = "如果运营成本率达到70%，我们的安全储备金缓冲还剩多少？"
+        if mq6.button("账期压缩至4天释放现金", use_container_width=True):
+            sample_q = "将应收账款收款周期从10天压缩至4天能释放多少流动资金？"
+    elif lang_code == "ja":
+        if mq1.button("売上20%減少で不足？", use_container_width=True):
+            sample_q = "来月の売上が20%減少し、仕入原価が15%上昇した場合、いくらの短期融资が必要ですか？"
+        if mq2.button("80%カバレッジと不確実性？", use_container_width=True):
+            sample_q = "売上予測における不確実性区間および80%コンフォーマルカバレッジの達成確率は？"
+        if mq3.button("売上目標達成のアクション？", use_container_width=True):
+            sample_q = "月間売上目標を達成するために推奨される実行ロードマップは？"
+        if mq4.button("日次20,000超過確率？", use_container_width=True):
+            sample_q = "日次売上が20,000円を上回る目標達成確率はどの程度ですか？"
+        if mq5.button("原価率70%時のバッファ？", use_container_width=True):
+            sample_q = "もし原価率が70%に上昇した場合、手元資金クッションは維持できますか？"
+        if mq6.button("回収サイト4日への短縮", use_container_width=True):
+            sample_q = "売掛金回収ラグを10日から4日に短縮した場合、解放される運転資金はいくらですか？"
+    else:
+        if mq1.button("20% sales drop shortfall?", use_container_width=True):
+            sample_q = "If sales drop by 20% and supplier costs rise by 15%, how much credit line is required?"
+        if mq2.button("80% Coverage Uncertainty?", use_container_width=True):
+            sample_q = "What is the probability of achieving daily sales above 20000 under uncertainty?"
+        if mq3.button("Target Revenue Roadmap?", use_container_width=True):
+            sample_q = "What actionable strategy should we implement to achieve our monthly target revenue?"
+        if mq4.button("Prob of Sales > 20,000?", use_container_width=True):
+            sample_q = "What is the probability of achieving daily sales above 20000 under uncertainty?"
+        if mq5.button("70% Cost Ratio Shock?", use_container_width=True):
+            sample_q = "If our operational cost ratio rises to 70%, what safety cushion remains?"
+        if mq6.button("Compress Lag from 10D to 4D", use_container_width=True):
+            sample_q = "What liquidity is liberated by compressing dealer collection lag from 10 days to 4 days?"
 
     if "messages" not in st.session_state:
         st.session_state.messages = [
@@ -443,11 +518,19 @@ with col_copilot:
         for msg in st.session_state.messages:
             with st.chat_message(msg["role"]):
                 if msg.get("tools"):
-                    tool_html = "".join([f'<span class="tool-badge">⚙️ {t}</span>' for t in msg["tools"]])
+                    tool_html = "".join([f'<span class="tool-badge">[Tool] {t}</span>' for t in msg["tools"]])
                     st.markdown(tool_html, unsafe_allow_html=True)
                 st.markdown(msg["content"])
 
-    user_input = st.chat_input("আর্থিক প্রশ্ন জিজ্ঞাসা করুন (যেমন: 'বিক্রি ২০% কমলে ক্যাশ কত থাকবে?')...")
+    placeholders = {
+        "bn": "আর্থিক প্রশ্ন জিজ্ঞাসা করুন (যেমন: 'বিক্রি ২০% কমলে ক্যাশ কত থাকবে?')...",
+        "hi": "वित्तीय प्रश्न पूछें (जैसे: 'अगर बिक्री 20% गिर जाए तो क्या घाटा होगा?')...",
+        "ur": "مالی سوال درج کریں (جیسے: 'اگر فروخت 20 فیصد کم ہو جائے تو کیا کیش کا نقصان ہوگا؟')...",
+        "zh": "输入财务决策问题（例如：'如果销售额下降20%，是否会出现资金缺口？'）...",
+        "ja": "財務・経営上の質問を入力（例: '売上が20%減少した場合、資金不足になりますか？'）...",
+        "en": "Ask financial question (e.g., 'Will cash breach reserve if sales drop 20%?')..."
+    }
+    user_input = st.chat_input(placeholders.get(lang_code, placeholders["bn"]))
     query_to_run = sample_q or user_input
 
     if query_to_run:
