@@ -72,4 +72,5 @@ data/raw/
 
 # Word documents
 *.docx
+!FinSight_AI_Technical_Documentation.docx
 
