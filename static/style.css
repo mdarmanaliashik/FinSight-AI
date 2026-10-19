@@ -2954,3 +2954,687 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: translateY(0);
 }
 
+/* ==========================================================================
+   FinSight AI — Comprehensive Responsive Architecture
+   Dedicated Interfaces for: Mobile (Phones), Tablet, and Laptop/Desktop
+   ========================================================================== */
+
+/* -------------------------------------------------------------
+   1. Base Responsive Components & Utilities
+   ------------------------------------------------------------- */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(3, 7, 18, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-close-btn {
+  display: none;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  color: #f8fafc;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.sidebar-close-btn:hover {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: rgba(244, 63, 94, 0.4);
+  color: #f43f5e;
+}
+
+/* Mobile Sticky Top Header */
+.mobile-top-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  background: #0b101c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  background: #111726;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #f8fafc;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+.mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mobile-top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-curr-select {
+  background: #111726;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Mobile Fixed Bottom Navigation Bar */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(11, 16, 28, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.6);
+  z-index: 997;
+  padding: 0 4px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.bnav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 8px 2px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bnav-icon {
+  transition: transform 0.18s ease, stroke 0.18s ease;
+}
+
+.bnav-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.bnav-item:hover, .bnav-item:focus {
+  color: #f8fafc;
+}
+
+.bnav-item:active {
+  transform: scale(0.92);
+}
+
+.bnav-item.active {
+  color: #38bdf8;
+}
+
+.bnav-item.active .bnav-icon {
+  stroke: #38bdf8;
+  transform: translateY(-1.5px);
+}
+
+.bnav-item.active .bnav-label {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+/* KaTeX Publication Math & Tables Mobile Scroller */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 8px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* -------------------------------------------------------------
+   2. LAPTOP & LARGE DESKTOP (width >= 1024px)
+   ------------------------------------------------------------- */
+@media screen and (min-width: 1024px) {
+  .app-shell {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+  }
+
+  .mobile-top-bar {
+    display: none !important;
+  }
+
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+
+  .sidebar-backdrop {
+    display: none !important;
+  }
+
+  .sidebar-close-btn {
+    display: none !important;
+  }
+
+  .app-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    transform: none !important;
+    display: flex !important;
+  }
+}
+
+/* -------------------------------------------------------------
+   3. TABLET INTERFACE (768px <= width <= 1023px)
+   ------------------------------------------------------------- */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .app-sidebar {
+    width: 230px;
+    padding: 20px 12px;
+  }
+
+  .brand-title {
+    font-size: 17px;
+  }
+
+  .brand-sub {
+    font-size: 8.5px;
+  }
+
+  .nav-item {
+    padding: 9px 10px;
+    gap: 8px;
+  }
+
+  .nav-title {
+    font-size: 12px;
+  }
+
+  .nav-sub {
+    font-size: 9.5px;
+  }
+
+  .app-main {
+    padding: 20px 22px 50px;
+  }
+
+  .mobile-top-bar {
+    display: none !important;
+  }
+
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+
+  .sidebar-backdrop {
+    display: none !important;
+  }
+
+  .sidebar-close-btn {
+    display: none !important;
+  }
+
+  /* Tablet Grids */
+  .hero-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .launchpad-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .conformal-stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .risk-center-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .ledger-kpi-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .input-slider-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .arch-pipeline-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .home-launchpad-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .hypothesis-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .math-formulation-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .strategy-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .app-topbar {
+    padding: 14px 20px;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .curr-pill-group {
+    display: none;
+  }
+
+  .curr-dropdown-wrapper {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .chart-canvas-container {
+    height: 340px;
+  }
+
+  .ledger-chart-canvas-wrap {
+    height: 270px;
+  }
+}
+
+/* -------------------------------------------------------------
+   4. MOBILE PHONE INTERFACE (width <= 767px)
+   ------------------------------------------------------------- */
+@media screen and (max-width: 767px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Off-Canvas Slide-over Sidebar Drawer */
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 86vw;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 6px 0 32px rgba(0, 0, 0, 0.75);
+    padding: 24px 16px 90px 16px;
+    overflow-y: auto;
+  }
+
+  .app-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  /* Display Mobile Top Bar and Bottom Bar */
+  .mobile-top-bar {
+    display: flex;
+    margin: -14px -14px 16px -14px;
+    padding: 12px 14px;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+  }
+
+  /* Workspace Padding for Thumb Accessibility */
+  .app-main {
+    padding: 14px 14px 86px 14px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Hide Desktop Topbar on Mobile */
+  .app-topbar {
+    display: none !important;
+  }
+
+  /* KPI Grid: Clean 2x2 on Mobile */
+  .hero-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .hero-summary-card {
+    padding: 14px 12px;
+    border-radius: 14px;
+  }
+
+  .h-card-val {
+    font-size: 19px;
+  }
+
+  .h-card-label {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  .h-card-sub {
+    font-size: 10px;
+  }
+
+  .control-matrix-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+
+  .matrix-header {
+    margin-bottom: 12px;
+  }
+
+  .matrix-title {
+    font-size: 16px;
+  }
+
+  .matrix-desc {
+    font-size: 11.5px;
+  }
+
+  /* Launchpad & Risk Cards: Stacked or 2-column */
+  .launchpad-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .conformal-stat-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .risk-center-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .risk-card {
+    padding: 14px 12px;
+  }
+
+  .risk-val {
+    font-size: 17px;
+  }
+
+  .ledger-kpi-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .ledger-kpi-card {
+    padding: 10px 12px;
+  }
+
+  .ledger-kpi-val {
+    font-size: 15px;
+  }
+
+  /* Sliders: Full Width with Large Touch Thumb Target */
+  .input-slider-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .input-cell {
+    padding: 14px 16px;
+  }
+
+  input[type="range"] {
+    height: 10px;
+    margin: 12px 0 16px;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .sim-output-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .sim-tile-val {
+    font-size: 20px;
+  }
+
+  /* Home Architecture Views: Stacked */
+  .home-grid-2col {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .arch-pipeline-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .home-launchpad-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hypothesis-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .math-formulation-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .strategy-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Chart Containers on Mobile */
+  .chart-canvas-container {
+    height: 280px;
+    padding: 12px 10px;
+    border-radius: 14px;
+  }
+
+  .ledger-chart-canvas-wrap {
+    height: 250px;
+  }
+
+  .ledger-container {
+    padding: 16px 12px;
+  }
+
+  .ledger-chart-wrapper {
+    padding: 14px 10px;
+  }
+
+  /* Decision Copilot Mobile Chat Studio */
+  .advisor-chat-studio-card {
+    border-radius: 14px;
+  }
+
+  .studio-chat-header {
+    padding: 14px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .academic-telemetry-strip {
+    padding: 8px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 10px;
+  }
+
+  .quick-prompts-bar {
+    padding: 10px 12px;
+  }
+
+  .studio-chat-history-log {
+    padding: 16px 12px;
+    min-height: 280px;
+    max-height: 380px;
+  }
+
+  .chat-entry {
+    max-width: 95%;
+  }
+
+  .chat-compose-bar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .copilot-send-btn {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  /* Day Ledger Table Scrolling */
+  .ledger-scroll {
+    max-height: 380px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table#business-ledger-table th,
+  table#business-ledger-table td {
+    padding: 8px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  /* App Footer */
+  .app-footer {
+    padding: 16px 12px;
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.5;
+  }
+}
+
+/* -------------------------------------------------------------
+   5. COMPACT PHONE (< 400px, e.g. iPhone SE)
+   ------------------------------------------------------------- */
+@media screen and (max-width: 400px) {
+  .hero-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-center-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ledger-kpi-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .bnav-label {
+    font-size: 8.5px;
+  }
+}
+
+

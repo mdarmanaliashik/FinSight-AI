@@ -152,6 +152,12 @@ function setCurrency(curr) {
     selectEl.value = curr;
   }
 
+  // Sync mobile topbar select dropdown
+  const mobileSelectEl = document.getElementById('mobile-curr-select');
+  if (mobileSelectEl) {
+    mobileSelectEl.value = curr;
+  }
+
   const targetLabel = document.getElementById('curr-target-label');
   if (targetLabel) targetLabel.textContent = CURRENCIES[curr].label;
 
@@ -168,6 +174,19 @@ function setCurrency(curr) {
   if (history && history.querySelectorAll('.chat-entry').length <= 1) {
     history.innerHTML = getWelcomeMessageHtml(copilotLang);
   }
+}
+
+// -------------------------------------------------------------
+// Mobile Sidebar Drawer Controller
+// -------------------------------------------------------------
+function toggleMobileSidebar(force) {
+  const sidebar = document.querySelector('.app-sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (!sidebar) return;
+  const isOpen = typeof force === 'boolean' ? force : !sidebar.classList.contains('mobile-open');
+  sidebar.classList.toggle('mobile-open', isOpen);
+  if (backdrop) backdrop.classList.toggle('active', isOpen);
+  document.body.classList.toggle('sidebar-locked', isOpen);
 }
 
 // -------------------------------------------------------------
@@ -207,7 +226,14 @@ function switchDecisionModule(mod, shouldScrollTop = true) {
       view.style.display = (m === mod) ? 'block' : 'none';
       view.classList.toggle('active-view', m === mod);
     }
+
+    // 3. Toggle mobile bottom navigation active state
+    const bnav = document.getElementById(`bnav-${m}`);
+    if (bnav) bnav.classList.toggle('active', m === mod);
   });
+
+  // Automatically close mobile off-canvas drawer on module select
+  toggleMobileSidebar(false);
 
   // Toggle brand logo active state for Home view
   const brandBtn = document.getElementById('brand-home-btn');
