@@ -105,7 +105,7 @@ All research notebooks are fully executed and pre-rendered with interactive Plot
 
 ---
 
-## Phase 3 Benchmark Results
+
 
 ### 1. Primary Forecasting Task: Micro-SME Tactical Daily Sales (Holdout Horizon $H = 225$ Days)
 
