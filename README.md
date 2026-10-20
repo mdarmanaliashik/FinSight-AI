@@ -229,5 +229,5 @@ Navigate to `http://localhost:8501` in a web browser. The live cloud deployment 
 ## Data Provenance & Licensing
 
 - **Olist Brazilian E-Commerce Dataset:** Olist & André Sionek. DOI: [10.5281/zenodo.10515152](https://doi.org/10.5281/zenodo.10515152). Licensed under CC BY-NC-SA 4.0.
-- **JD.com Retail Dataset:** Asian e-commerce transaction repository comprising 550,000 verified purchase records.
+- **JD.com Retail Dataset:** Asian e-commerce transaction repository comprising 550,000 verified purchase records. **[https://huggingface.co/datasets/a6687543/MSOM_Data_Driven_Challenge_2020/tree/main]**
 - **Codebase Licence:** Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
